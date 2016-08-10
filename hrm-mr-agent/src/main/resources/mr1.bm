@@ -1,0 +1,32 @@
+###########################################################
+
+RULE Monitoring MapReduce Job ID
+CLASS org.apache.hadoop.mapreduce.Job
+METHOD monitorAndPrintJob
+AT ENTRY
+BIND buffer = $*
+IF true
+DO org.apache.hadoop.mapred.MapReduceJobAgent.start(buffer)
+ENDRULE
+
+###########################################################
+
+RULE Monitoring Pig MapReduce Job ID
+CLASS org.apache.hadoop.mapred.jobcontrol.Job
+METHOD getAssignedJobID
+AT EXIT
+BIND jobId = $!;
+IF true
+DO org.opencloudengine.garuda.agent.mapreduce.PigMapReduceJobAgent.start(jobId)
+ENDRULE
+
+###########################################################
+
+RULE Monitoring Hive MapReduce Job ID
+CLASS org.apache.hadoop.hive.ql.exec.mr.HadoopJobExecHelper
+METHOD progress
+AT ENTRY
+BIND buffer = $*
+IF true
+DO org.apache.hadoop.mapred.HiveMapReduceJobAgent.start(buffer)
+ENDRULE

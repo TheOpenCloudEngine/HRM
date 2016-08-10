@@ -1,0 +1,67 @@
+###########################################################
+
+# RULE Monitoring Application ID
+# CLASS org.apache.hadoop.yarn.api.ClientRMProtocol
+# CLASS org.apache.hadoop.yarn.api.ApplicationClientProtocol
+# METHOD submitApplication
+# AT ENTRY
+# BIND buffer = $*
+# IF true
+# DO org.opencloudengine.garuda.agent.mapreduce.YarnApplicationAgent.start(buffer)
+# ENDRULE
+
+###########################################################
+
+RULE Monitoring Application ID
+# CLASS org.apache.hadoop.yarn.api.ClientRMProtocol
+CLASS org.apache.hadoop.yarn.api.records.ApplicationSubmissionContext
+METHOD getApplicationId
+AT EXIT
+BIND buffer = $1
+IF true
+DO org.opencloudengine.garuda.agent.mapreduce.YarnApplicationAgent.start(buffer)
+ENDRULE
+
+###########################################################
+
+RULE Monitoring Application ID 2
+CLASS org.apache.hadoop.yarn.client.api.impl.YarnClientImpl
+METHOD submitApplication
+AT INVOKE org.apache.hadoop.yarn.api.records.ApplicationSubmissionContext.getApplicationId()
+BIND buffer = $@
+IF true
+DO org.opencloudengine.garuda.agent.mapreduce.YarnApplicationAgent.start(buffer)
+ENDRULE
+
+###########################################################
+
+RULE Monitoring MapReduce Job ID
+CLASS org.apache.hadoop.mapreduce.Job
+METHOD monitorAndPrintJob
+AT ENTRY
+BIND buffer = $*
+IF true
+DO org.apache.hadoop.mapred.MapReduceJobAgent.start(buffer)
+ENDRULE
+
+###########################################################
+
+RULE Monitoring Pig MapReduce Job ID
+CLASS org.apache.hadoop.mapred.jobcontrol.Job
+METHOD getAssignedJobID
+AT EXIT
+BIND jobId = $!;
+IF true
+DO org.opencloudengine.garuda.agent.mapreduce.PigMapReduceJobAgent.start(jobId)
+ENDRULE
+
+###########################################################
+
+RULE Monitoring Hive MapReduce Job ID
+CLASS org.apache.hadoop.hive.ql.exec.mr.HadoopJobExecHelper
+METHOD progress
+AT ENTRY
+BIND buffer = $*
+IF true
+DO org.apache.hadoop.mapred.HiveMapReduceJobAgent.start(buffer)
+ENDRULE

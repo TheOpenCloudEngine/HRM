@@ -1,0 +1,123 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<project xmlns="http://maven.apache.org/POM/4.0.0"
+         xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
+         xsi:schemaLocation="http://maven.apache.org/POM/4.0.0 http://maven.apache.org/xsd/maven-4.0.0.xsd">
+    <parent>
+        <artifactId>HRM</artifactId>
+        <groupId>org.opencloudengine.garuda</groupId>
+        <version>0.0.1-SNAPSHOT</version>
+    </parent>
+    <modelVersion>4.0.0</modelVersion>
+
+    <artifactId>hrm-mr-agent</artifactId>
+    <packaging>jar</packaging>
+    <version>2.1.0-SNAPSHOT</version>
+    <name>HRM - MapReduce Job Agent</name>
+    <url>http://www.uengine.org</url>
+
+    <properties>
+        <java.version>1.7</java.version>
+        <output.encoding>UTF-8</output.encoding>
+
+        <!-- Byteman -->
+        <byteman.version>2.2.1</byteman.version>
+    </properties>
+
+    <build>
+        <plugins>
+            <plugin>
+                <groupId>org.apache.maven.plugins</groupId>
+                <artifactId>maven-compiler-plugin</artifactId>
+                <configuration>
+                    <source>${java.version}</source>
+                    <target>${java.version}</target>
+                    <encoding>${output.encoding}</encoding>
+                </configuration>
+            </plugin>
+
+            <plugin>
+                <groupId>org.apache.maven.plugins</groupId>
+                <artifactId>maven-jar-plugin</artifactId>
+                <configuration>
+                    <archive>
+                        <manifestFile>src/main/resources/META-INF/MANIFEST.MF</manifestFile>
+                    </archive>
+                </configuration>
+            </plugin>
+
+            <plugin>
+                <groupId>org.apache.maven.plugins</groupId>
+                <artifactId>maven-dependency-plugin</artifactId>
+                <version>2.4</version>
+                <executions>
+                    <execution>
+                        <id>unpack</id>
+                        <phase>test</phase>
+                        <goals>
+                            <goal>unpack</goal>
+                        </goals>
+                        <configuration>
+                            <outputDirectory>${project.build.outputDirectory}</outputDirectory>
+                            <artifactItems>
+                                <artifactItem>
+                                    <groupId>org.jboss.byteman</groupId>
+                                    <artifactId>byteman</artifactId>
+                                    <version>${byteman.version}</version>
+                                </artifactItem>
+                            </artifactItems>
+                        </configuration>
+                    </execution>
+                </executions>
+            </plugin>
+        </plugins>
+    </build>
+
+    <dependencies>
+    </dependencies>
+
+    <profiles>
+        <!--
+            Cloudera CDH 5.2.3
+            http://www.cloudera.com/content/cloudera/en/documentation/core/v5-2-x/topics/cdh_vd_cdh5_maven_repo.html
+        -->
+        <profile>
+            <id>cdh523</id>
+            <activation>
+                <activeByDefault>true</activeByDefault>
+                <property>
+                    <name>cdh523</name>
+                </property>
+            </activation>
+            <dependencies>
+                <dependency>
+                    <groupId>org.apache.hive</groupId>
+                    <artifactId>hive-common</artifactId>
+                    <version>${hive.version}</version>
+                    <scope>provided</scope>
+                </dependency>
+
+                <dependency>
+                    <groupId>org.apache.hive</groupId>
+                    <artifactId>hive-metastore</artifactId>
+                    <version>${hive.version}</version>
+                    <scope>provided</scope>
+                </dependency>
+
+                <dependency>
+                    <groupId>org.apache.hadoop</groupId>
+                    <artifactId>hadoop-common</artifactId>
+                    <version>2.6.0</version>
+                    <scope>provided</scope>
+                </dependency>
+
+                <dependency>
+                    <groupId>org.apache.hadoop</groupId>
+                    <artifactId>hadoop-mapreduce-client-jobclient</artifactId>
+                    <version>2.6.0</version>
+                    <scope>provided</scope>
+                </dependency>
+            </dependencies>
+        </profile>
+    </profiles>
+
+</project>

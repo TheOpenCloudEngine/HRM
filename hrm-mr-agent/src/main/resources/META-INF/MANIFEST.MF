@@ -1,0 +1,9 @@
+Manifest-Version: 1.0
+Archiver-Version: Plexus Archiver
+Created-By: Apache Maven
+Built-By: Cloudine
+Build-Jdk: 1.6.0
+Agent-Class: org.jboss.byteman.agent.Main
+Can-Redefine-Classes: true
+Can-Retransform-Classes: true
+Premain-Class: org.jboss.byteman.agent.Main
