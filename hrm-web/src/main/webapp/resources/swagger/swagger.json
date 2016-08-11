@@ -1,0 +1,1591 @@
+{
+  "swagger": "2.0",
+  "info": {
+    "title": "HRM",
+    "description": "Hadoop Remote Management",
+    "version": "1.0.0"
+  },
+  "host": "localhost:8080",
+  "schemes": [
+    "http"
+  ],
+  "basePath": "/rest/v1",
+  "produces": [
+    "application/json"
+  ],
+  "paths": {
+    "/{user}/hdfs/file": {
+      "get": {
+        "summary": "read file",
+        "description": "read file",
+        "parameters": [
+        ],
+        "tags": [
+          "{user}/hdfs"
+        ],
+        "responses": {
+          "200": {
+            "description": "An array of users"
+          },
+          "204": {
+            "description": "NO_CONTENT"
+          },
+          "401": {
+            "description": "UNAUTHORIZED"
+          },
+          "400": {
+            "description": "BAD_REQUEST"
+          },
+          "405": {
+            "description": "METHOD_NOT_ALLOWED"
+          }
+        },
+        "security": [
+          {
+            "access-token": []
+          }
+        ]
+      },
+      "post": {
+        "summary": "Append File",
+        "description": "Append File",
+        "consumes": [
+          "application/json",
+          "application/xml"
+        ],
+        "parameters": [
+          {
+            "name": "user",
+            "in": "body",
+            "description": "user body",
+            "required": true,
+            "schema": {
+              "$ref": "#/definitions/User"
+            }
+          }
+        ],
+        "tags": [
+          "{user}/hdfs"
+        ],
+        "responses": {
+          "201": {
+            "description": "CREATED"
+          },
+          "401": {
+            "description": "UNAUTHORIZED"
+          },
+          "400": {
+            "description": "BAD_REQUEST"
+          },
+          "405": {
+            "description": "METHOD_NOT_ALLOWED"
+          },
+          "409": {
+            "description": "CONFLICT"
+          }
+        },
+        "security": [
+          {
+            "access-token": []
+          }
+        ]
+      },
+      "put": {
+        "summary": "Create File",
+        "description": "create File",
+        "consumes": [
+          "application/json",
+          "application/xml"
+        ],
+        "parameters": [
+          {
+            "name": "user",
+            "in": "body",
+            "description": "user body",
+            "required": true,
+            "schema": {
+              "$ref": "#/definitions/User"
+            }
+          }
+        ],
+        "tags": [
+          "{user}/hdfs"
+        ],
+        "responses": {
+          "201": {
+            "description": "CREATED"
+          },
+          "401": {
+            "description": "UNAUTHORIZED"
+          },
+          "400": {
+            "description": "BAD_REQUEST"
+          },
+          "405": {
+            "description": "METHOD_NOT_ALLOWED"
+          },
+          "409": {
+            "description": "CONFLICT"
+          }
+        },
+        "security": [
+          {
+            "access-token": []
+          }
+        ]
+      }
+    },
+    "/{user}/hdfs/directory": {
+      "get": {
+        "summary": "List a Directory",
+        "description": "List a Directory",
+        "parameters": [
+        ],
+        "tags": [
+          "{user}/hdfs"
+        ],
+        "responses": {
+          "200": {
+            "description": "An array of users"
+          },
+          "204": {
+            "description": "NO_CONTENT"
+          },
+          "401": {
+            "description": "UNAUTHORIZED"
+          },
+          "400": {
+            "description": "BAD_REQUEST"
+          },
+          "405": {
+            "description": "METHOD_NOT_ALLOWED"
+          }
+        },
+        "security": [
+          {
+            "access-token": []
+          }
+        ]
+      },
+      "put": {
+        "summary": "Make Directory",
+        "description": "Make Directory",
+        "consumes": [
+          "application/json",
+          "application/xml"
+        ],
+        "parameters": [
+          {
+            "name": "user",
+            "in": "body",
+            "description": "user body",
+            "required": true,
+            "schema": {
+              "$ref": "#/definitions/User"
+            }
+          }
+        ],
+        "tags": [
+          "{user}/hdfs"
+        ],
+        "responses": {
+          "201": {
+            "description": "CREATED"
+          },
+          "401": {
+            "description": "UNAUTHORIZED"
+          },
+          "400": {
+            "description": "BAD_REQUEST"
+          },
+          "405": {
+            "description": "METHOD_NOT_ALLOWED"
+          },
+          "409": {
+            "description": "CONFLICT"
+          }
+        },
+        "security": [
+          {
+            "access-token": []
+          }
+        ]
+      }
+    },
+    "/{user}/hdfs/rename": {
+      "put": {
+        "summary": "Rename a File/Directory",
+        "description": "Rename a File/Directory",
+        "parameters": [
+        ],
+        "tags": [
+          "{user}/hdfs"
+        ],
+        "responses": {
+          "200": {
+            "description": "An array of scopes"
+          },
+          "204": {
+            "description": "NO_CONTENT"
+          },
+          "401": {
+            "description": "UNAUTHORIZED"
+          },
+          "400": {
+            "description": "BAD_REQUEST"
+          },
+          "405": {
+            "description": "METHOD_NOT_ALLOWED"
+          }
+        },
+        "security": [
+          {
+            "access-token": []
+          }
+        ]
+      }
+    },
+    "/{user}/hdfs/delete": {
+      "delete": {
+        "summary": "Delete a File/Directory",
+        "description": "Delete a File/Directory",
+        "parameters": [
+        ],
+        "tags": [
+          "{user}/hdfs"
+        ],
+        "responses": {
+          "200": {
+            "description": "An array of scopes"
+          },
+          "204": {
+            "description": "NO_CONTENT"
+          },
+          "401": {
+            "description": "UNAUTHORIZED"
+          },
+          "400": {
+            "description": "BAD_REQUEST"
+          },
+          "405": {
+            "description": "METHOD_NOT_ALLOWED"
+          }
+        },
+        "security": [
+          {
+            "access-token": []
+          }
+        ]
+      }
+    },
+    "/{user}/hdfs/status": {
+      "get": {
+        "summary": "Status a File/Directory",
+        "description": "Status a File/Directory",
+        "parameters": [
+        ],
+        "tags": [
+          "{user}/hdfs"
+        ],
+        "responses": {
+          "200": {
+            "description": "An array of scopes"
+          },
+          "204": {
+            "description": "NO_CONTENT"
+          },
+          "401": {
+            "description": "UNAUTHORIZED"
+          },
+          "400": {
+            "description": "BAD_REQUEST"
+          },
+          "405": {
+            "description": "METHOD_NOT_ALLOWED"
+          }
+        },
+        "security": [
+          {
+            "access-token": []
+          }
+        ]
+      }
+    },
+    "/{user}/hive": {
+      "post": {
+        "summary": "Run Hive Query",
+        "description": "Run Hive Query",
+        "consumes": [
+          "application/json",
+          "application/xml"
+        ],
+        "parameters": [
+          {
+            "name": "user",
+            "in": "body",
+            "description": "user body",
+            "required": true,
+            "schema": {
+              "$ref": "#/definitions/User"
+            }
+          }
+        ],
+        "tags": [
+          "{user}/hive"
+        ],
+        "responses": {
+          "201": {
+            "description": "CREATED"
+          },
+          "401": {
+            "description": "UNAUTHORIZED"
+          },
+          "400": {
+            "description": "BAD_REQUEST"
+          },
+          "405": {
+            "description": "METHOD_NOT_ALLOWED"
+          },
+          "409": {
+            "description": "CONFLICT"
+          }
+        },
+        "security": [
+          {
+            "access-token": []
+          }
+        ]
+      }
+    },
+    "/{user}/spark": {
+      "post": {
+        "summary": "Run Spark Job",
+        "description": "Run Spark Job",
+        "consumes": [
+          "application/json",
+          "application/xml"
+        ],
+        "parameters": [
+          {
+            "name": "user",
+            "in": "body",
+            "description": "user body",
+            "required": true,
+            "schema": {
+              "$ref": "#/definitions/User"
+            }
+          }
+        ],
+        "tags": [
+          "{user}/spark"
+        ],
+        "responses": {
+          "201": {
+            "description": "CREATED"
+          },
+          "401": {
+            "description": "UNAUTHORIZED"
+          },
+          "400": {
+            "description": "BAD_REQUEST"
+          },
+          "405": {
+            "description": "METHOD_NOT_ALLOWED"
+          },
+          "409": {
+            "description": "CONFLICT"
+          }
+        },
+        "security": [
+          {
+            "access-token": []
+          }
+        ]
+      }
+    },
+    "/{user}/pig": {
+      "post": {
+        "summary": "Run Pig Script",
+        "description": "Run Pig Script",
+        "consumes": [
+          "application/json",
+          "application/xml"
+        ],
+        "parameters": [
+          {
+            "name": "user",
+            "in": "body",
+            "description": "user body",
+            "required": true,
+            "schema": {
+              "$ref": "#/definitions/User"
+            }
+          }
+        ],
+        "tags": [
+          "{user}/pig"
+        ],
+        "responses": {
+          "201": {
+            "description": "CREATED"
+          },
+          "401": {
+            "description": "UNAUTHORIZED"
+          },
+          "400": {
+            "description": "BAD_REQUEST"
+          },
+          "405": {
+            "description": "METHOD_NOT_ALLOWED"
+          },
+          "409": {
+            "description": "CONFLICT"
+          }
+        },
+        "security": [
+          {
+            "access-token": []
+          }
+        ]
+      }
+    },
+    "/job": {
+      "get": {
+        "summary": "Return a list of all job IDs.",
+        "description": "Return a list of all job IDs.",
+        "consumes": [
+          "application/json",
+          "application/xml"
+        ],
+        "parameters": [
+          {
+            "name": "user",
+            "in": "body",
+            "description": "user body",
+            "required": true,
+            "schema": {
+              "$ref": "#/definitions/User"
+            }
+          }
+        ],
+        "tags": [
+          "job"
+        ],
+        "responses": {
+          "201": {
+            "description": "CREATED"
+          },
+          "401": {
+            "description": "UNAUTHORIZED"
+          },
+          "400": {
+            "description": "BAD_REQUEST"
+          },
+          "405": {
+            "description": "METHOD_NOT_ALLOWED"
+          },
+          "409": {
+            "description": "CONFLICT"
+          }
+        },
+        "security": [
+          {
+            "access-token": []
+          }
+        ]
+      }
+    },
+    "/job/{jobId}": {
+      "get": {
+        "summary": "Return the status of a job given its ID.",
+        "description": "Return the status of a job given its ID..",
+        "consumes": [
+          "application/json",
+          "application/xml"
+        ],
+        "parameters": [
+          {
+            "name": "user",
+            "in": "body",
+            "description": "user body",
+            "required": true,
+            "schema": {
+              "$ref": "#/definitions/User"
+            }
+          }
+        ],
+        "tags": [
+          "job"
+        ],
+        "responses": {
+          "201": {
+            "description": "CREATED"
+          },
+          "401": {
+            "description": "UNAUTHORIZED"
+          },
+          "400": {
+            "description": "BAD_REQUEST"
+          },
+          "405": {
+            "description": "METHOD_NOT_ALLOWED"
+          },
+          "409": {
+            "description": "CONFLICT"
+          }
+        },
+        "security": [
+          {
+            "access-token": []
+          }
+        ]
+      },
+      "delete": {
+        "summary": "Kill a job given its ID.",
+        "description": "Kill a job given its ID.",
+        "consumes": [
+          "application/json",
+          "application/xml"
+        ],
+        "parameters": [
+          {
+            "name": "user",
+            "in": "body",
+            "description": "user body",
+            "required": true,
+            "schema": {
+              "$ref": "#/definitions/User"
+            }
+          }
+        ],
+        "tags": [
+          "job"
+        ],
+        "responses": {
+          "201": {
+            "description": "CREATED"
+          },
+          "401": {
+            "description": "UNAUTHORIZED"
+          },
+          "400": {
+            "description": "BAD_REQUEST"
+          },
+          "405": {
+            "description": "METHOD_NOT_ALLOWED"
+          },
+          "409": {
+            "description": "CONFLICT"
+          }
+        },
+        "security": [
+          {
+            "access-token": []
+          }
+        ]
+      }
+    },
+    "/job/{jobId}/log": {
+      "get": {
+        "summary": "Return the logs of a job given its ID.",
+        "description": "Return the logs of a job given its ID.",
+        "consumes": [
+          "application/json",
+          "application/xml"
+        ],
+        "parameters": [
+          {
+            "name": "user",
+            "in": "body",
+            "description": "user body",
+            "required": true,
+            "schema": {
+              "$ref": "#/definitions/User"
+            }
+          }
+        ],
+        "tags": [
+          "job"
+        ],
+        "responses": {
+          "201": {
+            "description": "CREATED"
+          },
+          "401": {
+            "description": "UNAUTHORIZED"
+          },
+          "400": {
+            "description": "BAD_REQUEST"
+          },
+          "405": {
+            "description": "METHOD_NOT_ALLOWED"
+          },
+          "409": {
+            "description": "CONFLICT"
+          }
+        },
+        "security": [
+          {
+            "access-token": []
+          }
+        ]
+      },
+      "delete": {
+        "summary": "Kill a job given its ID.",
+        "description": "Kill a job given its ID.",
+        "consumes": [
+          "application/json",
+          "application/xml"
+        ],
+        "parameters": [
+          {
+            "name": "user",
+            "in": "body",
+            "description": "user body",
+            "required": true,
+            "schema": {
+              "$ref": "#/definitions/User"
+            }
+          }
+        ],
+        "tags": [
+          "job"
+        ],
+        "responses": {
+          "201": {
+            "description": "CREATED"
+          },
+          "401": {
+            "description": "UNAUTHORIZED"
+          },
+          "400": {
+            "description": "BAD_REQUEST"
+          },
+          "405": {
+            "description": "METHOD_NOT_ALLOWED"
+          },
+          "409": {
+            "description": "CONFLICT"
+          }
+        },
+        "security": [
+          {
+            "access-token": []
+          }
+        ]
+      }
+    },
+    "/rm/cluster/info": {
+      "get": {
+        "summary": "The cluster information resource provides overall information about the cluster.",
+        "description": "The cluster information resource provides overall information about the cluster.",
+        "consumes": [
+          "application/json",
+          "application/xml"
+        ],
+        "parameters": [
+          {
+            "name": "user",
+            "in": "body",
+            "description": "user body",
+            "required": true,
+            "schema": {
+              "$ref": "#/definitions/User"
+            }
+          }
+        ],
+        "tags": [
+          "Resource Manager"
+        ],
+        "responses": {
+          "201": {
+            "description": "CREATED"
+          },
+          "401": {
+            "description": "UNAUTHORIZED"
+          },
+          "400": {
+            "description": "BAD_REQUEST"
+          },
+          "405": {
+            "description": "METHOD_NOT_ALLOWED"
+          },
+          "409": {
+            "description": "CONFLICT"
+          }
+        },
+        "security": [
+          {
+            "access-token": []
+          }
+        ]
+      }
+    },
+    "/rm/cluster/metrics": {
+      "get": {
+        "summary": "The cluster metrics resource provides some overall metrics about the cluster. More detailed metrics should be retrieved from the jmx interface.",
+        "description": "The cluster metrics resource provides some overall metrics about the cluster. More detailed metrics should be retrieved from the jmx interface.",
+        "consumes": [
+          "application/json",
+          "application/xml"
+        ],
+        "parameters": [
+          {
+            "name": "user",
+            "in": "body",
+            "description": "user body",
+            "required": true,
+            "schema": {
+              "$ref": "#/definitions/User"
+            }
+          }
+        ],
+        "tags": [
+          "Resource Manager"
+        ],
+        "responses": {
+          "201": {
+            "description": "CREATED"
+          },
+          "401": {
+            "description": "UNAUTHORIZED"
+          },
+          "400": {
+            "description": "BAD_REQUEST"
+          },
+          "405": {
+            "description": "METHOD_NOT_ALLOWED"
+          },
+          "409": {
+            "description": "CONFLICT"
+          }
+        },
+        "security": [
+          {
+            "access-token": []
+          }
+        ]
+      }
+    },
+    "/rm/cluster/scheduler": {
+      "get": {
+        "summary": "A scheduler resource contains information about the current scheduler configured in a cluster.",
+        "description": "A scheduler resource contains information about the current scheduler configured in a cluster.",
+        "consumes": [
+          "application/json",
+          "application/xml"
+        ],
+        "parameters": [
+          {
+            "name": "user",
+            "in": "body",
+            "description": "user body",
+            "required": true,
+            "schema": {
+              "$ref": "#/definitions/User"
+            }
+          }
+        ],
+        "tags": [
+          "Resource Manager"
+        ],
+        "responses": {
+          "201": {
+            "description": "CREATED"
+          },
+          "401": {
+            "description": "UNAUTHORIZED"
+          },
+          "400": {
+            "description": "BAD_REQUEST"
+          },
+          "405": {
+            "description": "METHOD_NOT_ALLOWED"
+          },
+          "409": {
+            "description": "CONFLICT"
+          }
+        },
+        "security": [
+          {
+            "access-token": []
+          }
+        ]
+      }
+    },
+    "/rm/cluster/apps": {
+      "get": {
+        "summary": "With the Applications API, you can obtain a collection of resources, each of which represents an application.",
+        "description": "With the Applications API, you can obtain a collection of resources, each of which represents an application.",
+        "consumes": [
+          "application/json",
+          "application/xml"
+        ],
+        "parameters": [
+          {
+            "name": "user",
+            "in": "body",
+            "description": "user body",
+            "required": true,
+            "schema": {
+              "$ref": "#/definitions/User"
+            }
+          }
+        ],
+        "tags": [
+          "Resource Manager"
+        ],
+        "responses": {
+          "201": {
+            "description": "CREATED"
+          },
+          "401": {
+            "description": "UNAUTHORIZED"
+          },
+          "400": {
+            "description": "BAD_REQUEST"
+          },
+          "405": {
+            "description": "METHOD_NOT_ALLOWED"
+          },
+          "409": {
+            "description": "CONFLICT"
+          }
+        },
+        "security": [
+          {
+            "access-token": []
+          }
+        ]
+      },
+      "post": {
+        "summary": "The Submit Applications API can be used to submit applications.",
+        "description": "The Submit Applications API can be used to submit applications.",
+        "consumes": [
+          "application/json",
+          "application/xml"
+        ],
+        "parameters": [
+          {
+            "name": "user",
+            "in": "body",
+            "description": "user body",
+            "required": true,
+            "schema": {
+              "$ref": "#/definitions/User"
+            }
+          }
+        ],
+        "tags": [
+          "Resource Manager"
+        ],
+        "responses": {
+          "201": {
+            "description": "CREATED"
+          },
+          "401": {
+            "description": "UNAUTHORIZED"
+          },
+          "400": {
+            "description": "BAD_REQUEST"
+          },
+          "405": {
+            "description": "METHOD_NOT_ALLOWED"
+          },
+          "409": {
+            "description": "CONFLICT"
+          }
+        },
+        "security": [
+          {
+            "access-token": []
+          }
+        ]
+      }
+    },
+    "/rm/cluster/appstatistics": {
+      "get": {
+        "summary": "With the Application Statistics API, you can obtain a collection of triples, each of which contains the application type, the application state and the number of applications of this type and this state in ResourceManager context.",
+        "description": "With the Application Statistics API, you can obtain a collection of triples, each of which contains the application type, the application state and the number of applications of this type and this state in ResourceManager context.",
+        "consumes": [
+          "application/json",
+          "application/xml"
+        ],
+        "parameters": [
+          {
+            "name": "user",
+            "in": "body",
+            "description": "user body",
+            "required": true,
+            "schema": {
+              "$ref": "#/definitions/User"
+            }
+          }
+        ],
+        "tags": [
+          "Resource Manager"
+        ],
+        "responses": {
+          "201": {
+            "description": "CREATED"
+          },
+          "401": {
+            "description": "UNAUTHORIZED"
+          },
+          "400": {
+            "description": "BAD_REQUEST"
+          },
+          "405": {
+            "description": "METHOD_NOT_ALLOWED"
+          },
+          "409": {
+            "description": "CONFLICT"
+          }
+        },
+        "security": [
+          {
+            "access-token": []
+          }
+        ]
+      }
+    },
+    "/rm/cluster/apps/{appid}": {
+      "get": {
+        "summary": "An application resource contains information about a particular application that was submitted to a cluster.",
+        "description": "An application resource contains information about a particular application that was submitted to a cluster.",
+        "consumes": [
+          "application/json",
+          "application/xml"
+        ],
+        "parameters": [
+          {
+            "name": "user",
+            "in": "body",
+            "description": "user body",
+            "required": true,
+            "schema": {
+              "$ref": "#/definitions/User"
+            }
+          }
+        ],
+        "tags": [
+          "Resource Manager"
+        ],
+        "responses": {
+          "201": {
+            "description": "CREATED"
+          },
+          "401": {
+            "description": "UNAUTHORIZED"
+          },
+          "400": {
+            "description": "BAD_REQUEST"
+          },
+          "405": {
+            "description": "METHOD_NOT_ALLOWED"
+          },
+          "409": {
+            "description": "CONFLICT"
+          }
+        },
+        "security": [
+          {
+            "access-token": []
+          }
+        ]
+      }
+    },
+    "/rm/cluster/apps/{appid}/state": {
+      "get": {
+        "summary": "State of app.",
+        "description": "State of app.",
+        "consumes": [
+          "application/json",
+          "application/xml"
+        ],
+        "parameters": [
+          {
+            "name": "user",
+            "in": "body",
+            "description": "user body",
+            "required": true,
+            "schema": {
+              "$ref": "#/definitions/User"
+            }
+          }
+        ],
+        "tags": [
+          "Resource Manager"
+        ],
+        "responses": {
+          "201": {
+            "description": "CREATED"
+          },
+          "401": {
+            "description": "UNAUTHORIZED"
+          },
+          "400": {
+            "description": "BAD_REQUEST"
+          },
+          "405": {
+            "description": "METHOD_NOT_ALLOWED"
+          },
+          "409": {
+            "description": "CONFLICT"
+          }
+        },
+        "security": [
+          {
+            "access-token": []
+          }
+        ]
+      },
+      "put": {
+        "summary": "Kill app.",
+        "description": "Kill app.",
+        "consumes": [
+          "application/json",
+          "application/xml"
+        ],
+        "parameters": [
+          {
+            "name": "user",
+            "in": "body",
+            "description": "user body",
+            "required": true,
+            "schema": {
+              "$ref": "#/definitions/User"
+            }
+          }
+        ],
+        "tags": [
+          "Resource Manager"
+        ],
+        "responses": {
+          "201": {
+            "description": "CREATED"
+          },
+          "401": {
+            "description": "UNAUTHORIZED"
+          },
+          "400": {
+            "description": "BAD_REQUEST"
+          },
+          "405": {
+            "description": "METHOD_NOT_ALLOWED"
+          },
+          "409": {
+            "description": "CONFLICT"
+          }
+        },
+        "security": [
+          {
+            "access-token": []
+          }
+        ]
+      }
+    },
+    "/rm/cluster/apps/{appid}/queue": {
+      "get": {
+        "summary": "queue of app.",
+        "description": "queue of app.",
+        "consumes": [
+          "application/json",
+          "application/xml"
+        ],
+        "parameters": [
+          {
+            "name": "user",
+            "in": "body",
+            "description": "user body",
+            "required": true,
+            "schema": {
+              "$ref": "#/definitions/User"
+            }
+          }
+        ],
+        "tags": [
+          "Resource Manager"
+        ],
+        "responses": {
+          "201": {
+            "description": "CREATED"
+          },
+          "401": {
+            "description": "UNAUTHORIZED"
+          },
+          "400": {
+            "description": "BAD_REQUEST"
+          },
+          "405": {
+            "description": "METHOD_NOT_ALLOWED"
+          },
+          "409": {
+            "description": "CONFLICT"
+          }
+        },
+        "security": [
+          {
+            "access-token": []
+          }
+        ]
+      },
+      "put": {
+        "summary": "Set app queue.",
+        "description": "Set app queue.",
+        "consumes": [
+          "application/json",
+          "application/xml"
+        ],
+        "parameters": [
+          {
+            "name": "user",
+            "in": "body",
+            "description": "user body",
+            "required": true,
+            "schema": {
+              "$ref": "#/definitions/User"
+            }
+          }
+        ],
+        "tags": [
+          "Resource Manager"
+        ],
+        "responses": {
+          "201": {
+            "description": "CREATED"
+          },
+          "401": {
+            "description": "UNAUTHORIZED"
+          },
+          "400": {
+            "description": "BAD_REQUEST"
+          },
+          "405": {
+            "description": "METHOD_NOT_ALLOWED"
+          },
+          "409": {
+            "description": "CONFLICT"
+          }
+        },
+        "security": [
+          {
+            "access-token": []
+          }
+        ]
+      }
+    },
+    "/rm/cluster/delegation-token": {
+      "post": {
+        "summary": "create token",
+        "description": "create token",
+        "consumes": [
+          "application/json",
+          "application/xml"
+        ],
+        "parameters": [
+          {
+            "name": "user",
+            "in": "body",
+            "description": "user body",
+            "required": true,
+            "schema": {
+              "$ref": "#/definitions/User"
+            }
+          }
+        ],
+        "tags": [
+          "Resource Manager"
+        ],
+        "responses": {
+          "201": {
+            "description": "CREATED"
+          },
+          "401": {
+            "description": "UNAUTHORIZED"
+          },
+          "400": {
+            "description": "BAD_REQUEST"
+          },
+          "405": {
+            "description": "METHOD_NOT_ALLOWED"
+          },
+          "409": {
+            "description": "CONFLICT"
+          }
+        },
+        "security": [
+          {
+            "access-token": []
+          }
+        ]
+      },
+      "delete": {
+        "summary": "delete token",
+        "description": "delete token",
+        "consumes": [
+          "application/json",
+          "application/xml"
+        ],
+        "parameters": [
+          {
+            "name": "user",
+            "in": "body",
+            "description": "user body",
+            "required": true,
+            "schema": {
+              "$ref": "#/definitions/User"
+            }
+          }
+        ],
+        "tags": [
+          "Resource Manager"
+        ],
+        "responses": {
+          "201": {
+            "description": "CREATED"
+          },
+          "401": {
+            "description": "UNAUTHORIZED"
+          },
+          "400": {
+            "description": "BAD_REQUEST"
+          },
+          "405": {
+            "description": "METHOD_NOT_ALLOWED"
+          },
+          "409": {
+            "description": "CONFLICT"
+          }
+        },
+        "security": [
+          {
+            "access-token": []
+          }
+        ]
+      }
+    },
+    "/rm/cluster/delegation-token/expiration": {
+      "post": {
+        "summary": "renew token",
+        "description": "renew token",
+        "consumes": [
+          "application/json",
+          "application/xml"
+        ],
+        "parameters": [
+          {
+            "name": "user",
+            "in": "body",
+            "description": "user body",
+            "required": true,
+            "schema": {
+              "$ref": "#/definitions/User"
+            }
+          }
+        ],
+        "tags": [
+          "Resource Manager"
+        ],
+        "responses": {
+          "201": {
+            "description": "CREATED"
+          },
+          "401": {
+            "description": "UNAUTHORIZED"
+          },
+          "400": {
+            "description": "BAD_REQUEST"
+          },
+          "405": {
+            "description": "METHOD_NOT_ALLOWED"
+          },
+          "409": {
+            "description": "CONFLICT"
+          }
+        },
+        "security": [
+          {
+            "access-token": []
+          }
+        ]
+      }
+    },
+    "/rm/cluster/apps/{appid}/appattempts": {
+      "get": {
+        "summary": "With the application attempts API, you can obtain a collection of resources that represent an application attempt.",
+        "description": "With the application attempts API, you can obtain a collection of resources that represent an application attempt.",
+        "consumes": [
+          "application/json",
+          "application/xml"
+        ],
+        "parameters": [
+          {
+            "name": "user",
+            "in": "body",
+            "description": "user body",
+            "required": true,
+            "schema": {
+              "$ref": "#/definitions/User"
+            }
+          }
+        ],
+        "tags": [
+          "Resource Manager"
+        ],
+        "responses": {
+          "201": {
+            "description": "CREATED"
+          },
+          "401": {
+            "description": "UNAUTHORIZED"
+          },
+          "400": {
+            "description": "BAD_REQUEST"
+          },
+          "405": {
+            "description": "METHOD_NOT_ALLOWED"
+          },
+          "409": {
+            "description": "CONFLICT"
+          }
+        },
+        "security": [
+          {
+            "access-token": []
+          }
+        ]
+      }
+    },
+    "/rm/cluster/nodes": {
+      "get": {
+        "summary": "With the Nodes API, you can obtain a collection of resources, each of which represents a node.",
+        "description": "With the Nodes API, you can obtain a collection of resources, each of which represents a node.",
+        "consumes": [
+          "application/json",
+          "application/xml"
+        ],
+        "parameters": [
+          {
+            "name": "user",
+            "in": "body",
+            "description": "user body",
+            "required": true,
+            "schema": {
+              "$ref": "#/definitions/User"
+            }
+          }
+        ],
+        "tags": [
+          "Resource Manager"
+        ],
+        "responses": {
+          "201": {
+            "description": "CREATED"
+          },
+          "401": {
+            "description": "UNAUTHORIZED"
+          },
+          "400": {
+            "description": "BAD_REQUEST"
+          },
+          "405": {
+            "description": "METHOD_NOT_ALLOWED"
+          },
+          "409": {
+            "description": "CONFLICT"
+          }
+        },
+        "security": [
+          {
+            "access-token": []
+          }
+        ]
+      }
+    },
+    "/rm/cluster/nodes/{nodeid}": {
+      "get": {
+        "summary": "A node resource contains information about a node in the cluster.",
+        "description": "A node resource contains information about a node in the cluster.",
+        "consumes": [
+          "application/json",
+          "application/xml"
+        ],
+        "parameters": [
+          {
+            "name": "user",
+            "in": "body",
+            "description": "user body",
+            "required": true,
+            "schema": {
+              "$ref": "#/definitions/User"
+            }
+          }
+        ],
+        "tags": [
+          "Resource Manager"
+        ],
+        "responses": {
+          "201": {
+            "description": "CREATED"
+          },
+          "401": {
+            "description": "UNAUTHORIZED"
+          },
+          "400": {
+            "description": "BAD_REQUEST"
+          },
+          "405": {
+            "description": "METHOD_NOT_ALLOWED"
+          },
+          "409": {
+            "description": "CONFLICT"
+          }
+        },
+        "security": [
+          {
+            "access-token": []
+          }
+        ]
+      }
+    },
+    "/rm/cluster/nodes/new-application": {
+      "post": {
+        "summary": "With the New Application API, you can obtain an application-id which can then be used as part of the Cluster Submit Applications API to submit applications.",
+        "description": "With the New Application API, you can obtain an application-id which can then be used as part of the Cluster Submit Applications API to submit applications.",
+        "consumes": [
+          "application/json",
+          "application/xml"
+        ],
+        "parameters": [
+          {
+            "name": "user",
+            "in": "body",
+            "description": "user body",
+            "required": true,
+            "schema": {
+              "$ref": "#/definitions/User"
+            }
+          }
+        ],
+        "tags": [
+          "Resource Manager"
+        ],
+        "responses": {
+          "201": {
+            "description": "CREATED"
+          },
+          "401": {
+            "description": "UNAUTHORIZED"
+          },
+          "400": {
+            "description": "BAD_REQUEST"
+          },
+          "405": {
+            "description": "METHOD_NOT_ALLOWED"
+          },
+          "409": {
+            "description": "CONFLICT"
+          }
+        },
+        "security": [
+          {
+            "access-token": []
+          }
+        ]
+      }
+    }
+  },
+  "securityDefinitions": {
+    "access-token": {
+      "type": "apiKey",
+      "name": "access-token",
+      "in": "header"
+    }
+  },
+  "definitions": {
+    "User": {
+      "type": "object",
+      "properties": {
+        "userName": {
+          "type": "string"
+        },
+        "userPassword": {
+          "type": "string"
+        },
+        "level": {
+          "type": "number"
+        }
+      }
+    },
+    "Scope": {
+      "type": "object",
+      "properties": {
+        "name": {
+          "type": "string"
+        },
+        "description": {
+          "type": "string"
+        }
+      }
+    },
+    "Client": {
+      "type": "object",
+      "properties": {
+        "name": {
+          "type": "string"
+        },
+        "description": {
+          "type": "string"
+        },
+        "clientTrust": {
+          "type": "string"
+        },
+        "clientType": {
+          "type": "string"
+        },
+        "activeClient": {
+          "type": "string"
+        },
+        "authorizedGrantTypes": {
+          "type": "string"
+        },
+        "webServerRedirectUri": {
+          "type": "string"
+        },
+        "refreshTokenValidity": {
+          "type": "string"
+        },
+        "codeLifetime": {
+          "type": "number"
+        },
+        "refreshTokenLifetime": {
+          "type": "number"
+        },
+        "accessTokenLifetime": {
+          "type": "number"
+        },
+        "jwtTokenLifetime": {
+          "type": "number"
+        }
+      }
+    },
+    "AccessToken": {
+      "type": "object",
+      "properties": {
+        "type": {
+          "type": "string"
+        },
+        "scopes": {
+          "type": "string"
+        },
+        "oauthUserId": {
+          "type": "string"
+        },
+        "clientId": {
+          "type": "string"
+        }
+      }
+    }
+  }
+}

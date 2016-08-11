@@ -11,7 +11,9 @@
     <url>http://www.uengine.org/</url>
 
     <modules>
+        <module>uengine-bpm</module>
         <module>hrm-common</module>
+        <module>hrm-web</module>
         <module>hrm-mr-agent</module>
     </modules>
 
