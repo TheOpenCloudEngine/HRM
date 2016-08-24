@@ -49,16 +49,9 @@ public class SysuserServiceImpl implements SysuserService {
             this.makeUnDefaultUser();
         }
 
-        //사용자 이름은 업데이트가 안된다.
-        //사용자가 있다면 삭제한다.
-        boolean existUser = systemService.existUser(name);
-        if(existUser){
-            systemService.deleteUser(name);
-        }
-        systemService.createUser("/home", name , name);
-        systemService.changeUser(name, password);
-
-        return sysuserRepository.insert(sysuser);
+        Sysuser insert = sysuserRepository.insert(sysuser);
+        this.createUser(insert);
+        return insert;
     }
 
     @Override
@@ -113,7 +106,10 @@ public class SysuserServiceImpl implements SysuserService {
         if ("Y".equals(sysuser.getDefaultUser())) {
             this.makeUnDefaultUser();
         }
-        return sysuserRepository.updateById(sysuser);
+
+        Sysuser updateById = sysuserRepository.updateById(sysuser);
+        this.updateById(updateById);
+        return updateById;
     }
 
     @Override
@@ -131,11 +127,65 @@ public class SysuserServiceImpl implements SysuserService {
             this.makeUnDefaultUser();
         }
 
-        return sysuserRepository.updateById(sysuser);
+        Sysuser updateById = sysuserRepository.updateById(sysuser);
+        this.updateById(updateById);
+        return updateById;
     }
 
     @Override
     public void deleteById(String id) {
+        Sysuser sysuser = sysuserRepository.selectById(id);
+        this.deleteUser(sysuser);
         sysuserRepository.deleteById(id);
+    }
+
+    /**
+     * 시스템에 유저를 생성하고 하둡 시스템에 유저 디렉토리를 생성한다.
+     *
+     * @param sysuser
+     */
+    private void createUser(Sysuser sysuser) {
+        String name = sysuser.getName();
+        String password = sysuser.getPassword();
+
+        //사용자가 있다면 삭제한다.
+        boolean existUser = systemService.existUser(name);
+        if (existUser) {
+            systemService.deleteUser(name);
+        }
+        systemService.createUser("/home", name, name);
+        systemService.changeUser(name, password);
+    }
+
+    /**
+     * 시스템의 유저의 비밀번호를 업데이트한다.
+     *
+     * @param sysuser
+     */
+    private void updateUser(Sysuser sysuser) {
+        String name = sysuser.getName();
+        String password = sysuser.getPassword();
+
+        //사용자가 없다면 생성한다.
+        boolean existUser = systemService.existUser(name);
+        if (!existUser) {
+            systemService.createUser("/home", name, name);
+        }
+        systemService.changeUser(name, password);
+    }
+
+    /**
+     * 시스템의 유저를 삭제하고, 하둡 시스템의 유저 디렉토리를 삭제한다.
+     *
+     * @param sysuser
+     */
+    private void deleteUser(Sysuser sysuser) {
+        String name = sysuser.getName();
+
+        //사용자가 있다면 삭제한다.
+        boolean existUser = systemService.existUser(name);
+        if (existUser) {
+            systemService.deleteUser(name);
+        }
     }
 }
