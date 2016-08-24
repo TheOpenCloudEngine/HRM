@@ -2,11 +2,10 @@ package org.opencloudengine.garuda.web.security;
 
 import org.opencloudengine.garuda.model.User;
 import org.opencloudengine.garuda.util.ApplicationContextRegistry;
+import org.opencloudengine.garuda.web.configuration.ConfigurationController;
 import org.opencloudengine.garuda.web.system.UserService;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
-import org.springframework.beans.factory.annotation.Autowired;
-import org.springframework.beans.factory.annotation.Qualifier;
 import org.springframework.context.ApplicationContext;
 import org.springframework.security.authentication.AuthenticationProvider;
 import org.springframework.security.authentication.BadCredentialsException;
@@ -18,7 +17,6 @@ import org.springframework.security.core.authority.SimpleGrantedAuthority;
 
 import java.util.ArrayList;
 import java.util.List;
-import java.util.Properties;
 
 /**
  * Created by uengine on 2016. 4. 27..

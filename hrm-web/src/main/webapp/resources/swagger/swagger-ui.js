@@ -3589,7 +3589,7 @@ SwaggerSpecConverter.prototype.convert = function (obj, clientAuthorizations, op
   // add the info
   this.apiInfo(obj, swagger);
 
-  // add authentication definitions
+  // add security definitions
   this.securityDefinitions(obj, swagger);
 
   // take basePath into account
@@ -15842,8 +15842,8 @@ var nextTick =(function () {
 // Attempt to make generics safe in the face of downstream
 // modifications.
 // There is no situation where this is necessary.
-// If you need a authentication guarantee, these primordials need to be
-// deeply frozen anyway, and if you don’t need a authentication guarantee,
+// If you need a security guarantee, these primordials need to be
+// deeply frozen anyway, and if you don’t need a security guarantee,
 // this is just plain paranoid.
 // However, this **might** have the nice side-effect of reducing the size of
 // the minified code by reducing x.call() to merely x()

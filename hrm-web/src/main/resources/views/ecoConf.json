@@ -1,0 +1,9 @@
+{
+  "_id": "_design/ecoConf",
+  "language": "javascript",
+  "views": {
+    "select": {
+      "map": "function(doc) {if(doc.docType == \"ecoConf\"){emit(null,doc); }}"
+    }
+  }
+}

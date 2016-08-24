@@ -15,11 +15,6 @@ public class YarnApplicationAgent {
         ApplicationSubmissionContext context = (ApplicationSubmissionContext) object[0];
         ApplicationId applicationId = context.getApplicationId();
 
-        System.out.println("************************************************************************************");
-        System.out.println("** YARN App instrumented By Flamingo 2 >> Path : " + System.getProperty("user.dir"));
-        System.out.println("** YARN App instrumented By Flamingo 2 >> Application ID : " + applicationId);
-        System.out.println("************************************************************************************");
-
         File file = new File(System.getProperty("user.dir"), "app." + applicationId);
         FileOutputStream fos = new FileOutputStream(file);
         fos.write(getMetadata(context));

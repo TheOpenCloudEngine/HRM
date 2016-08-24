@@ -17,7 +17,7 @@
 
     <%@include file="../template/header_js.jsp" %>
 
-    <link rel="stylesheet" href="/service-console/resources/assets/css/pages/page_404_error.css">
+    <link rel="stylesheet" href="/resources/assets/css/pages/page_404_error.css">
 </head>
 
 <!-- body classes:

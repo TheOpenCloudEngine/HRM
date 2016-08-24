@@ -62,7 +62,7 @@
                 /WEB-INF/dispatcher-servlet.xml
                 /WEB-INF/applicationContext-security.xml
                 /WEB-INF/applicationContext-reactor.xml
-                /WEB-INF/applicationContext-activiti.xml
+                /WEB-INF/applicationContext-mail.xml
             </param-value>
         </init-param>
         <load-on-startup>1</load-on-startup>
@@ -70,26 +70,7 @@
 
     <servlet-mapping>
         <servlet-name>dispatcher</servlet-name>
-        <url-pattern>/service-console/*</url-pattern>
-    </servlet-mapping>
-
-    <servlet>
-        <servlet-name>jsp</servlet-name>
-        <servlet-class>org.apache.jasper.servlet.JspServlet</servlet-class>
-    </servlet>
-    <servlet-mapping>
-        <servlet-name>jsp</servlet-name>
-        <url-pattern>/WEB-INF/pages/*</url-pattern>
-    </servlet-mapping>
-
-    <servlet>
-        <servlet-name>gateway</servlet-name>
-        <servlet-class>org.opencloudengine.garuda.gateway.GatewayServlet</servlet-class>
-        <load-on-startup>2</load-on-startup>
-    </servlet>
-    <servlet-mapping>
-        <servlet-name>gateway</servlet-name>
-        <url-pattern>/*</url-pattern>
+        <url-pattern>/</url-pattern>
     </servlet-mapping>
 
     <!-- ================ -->
@@ -125,20 +106,40 @@
         <servlet-name>dispatcher</servlet-name>
     </filter-mapping>
 
-    <filter>
-        <filter-name>springSecurityFilterChain</filter-name>
-        <filter-class>org.springframework.web.filter.DelegatingFilterProxy</filter-class>
+	<filter>
+		<filter-name>springSecurityFilterChain</filter-name>
+		<filter-class>org.springframework.web.filter.DelegatingFilterProxy</filter-class>
         <!-- Error if omitted -->
-        <init-param>
-            <param-name>contextAttribute</param-name>
-            <param-value>org.springframework.web.servlet.FrameworkServlet.CONTEXT.dispatcher</param-value>
-        </init-param>
-    </filter>
+		<init-param>
+			<param-name>contextAttribute</param-name>
+			<param-value>org.springframework.web.servlet.FrameworkServlet.CONTEXT.dispatcher</param-value>
+		</init-param>
+	</filter>
 
+	<filter-mapping>
+		<filter-name>springSecurityFilterChain</filter-name>
+		<url-pattern>/*</url-pattern>
+        <dispatcher>REQUEST</dispatcher>
+        <dispatcher>FORWARD</dispatcher>
+	</filter-mapping>
+
+    <filter>
+        <filter-name>SimpleCORSFilter</filter-name>
+        <filter-class>org.opencloudengine.garuda.web.security.CorsFilter</filter-class>
+    </filter>
     <filter-mapping>
-        <filter-name>springSecurityFilterChain</filter-name>
-        <servlet-name>dispatcher</servlet-name>
+        <filter-name>SimpleCORSFilter</filter-name>
+        <url-pattern>/*</url-pattern>
     </filter-mapping>
+
+
+	<!-- =================== -->
+    <!--  Welcome File List  -->
+    <!-- =================== -->
+
+    <welcome-file-list>
+        <welcome-file>/index.do</welcome-file>
+    </welcome-file-list>
 
     <!-- ============= -->
     <!--  Error Pages  -->
@@ -163,6 +164,7 @@
         <error-code>500</error-code>
         <location>/WEB-INF/pages/auth/error-500.jsp</location>
     </error-page>
+
 
     <!-- ================= -->
     <!--  Session Timeout  -->

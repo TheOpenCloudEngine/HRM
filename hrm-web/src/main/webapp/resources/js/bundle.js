@@ -19,7 +19,7 @@ var message;
 $.ajax({
 
     type: "get",
-    url: '/service-console/config/bundle.json?lang=' + lang,
+    url: '/config/bundle.json?lang=' + lang,
     dataType: "json",
     success: function (content) {
         if(content.success){

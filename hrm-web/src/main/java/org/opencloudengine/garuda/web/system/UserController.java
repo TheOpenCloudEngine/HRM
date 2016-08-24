@@ -16,28 +16,16 @@
  */
 package org.opencloudengine.garuda.web.system;
 
-import org.apache.commons.codec.binary.Base64;
-import org.opencloudengine.garuda.common.security.SessionUtils;
-import org.opencloudengine.garuda.model.User;
-import org.opencloudengine.garuda.util.DateUtils;
 import org.opencloudengine.garuda.web.configuration.DefaultController;
-import org.opencloudengine.garuda.web.security.AESPasswordEncoder;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import org.springframework.beans.factory.annotation.Autowired;
-import org.springframework.beans.factory.annotation.Qualifier;
-import org.springframework.security.access.annotation.Secured;
 import org.springframework.stereotype.Controller;
-import org.springframework.web.bind.annotation.RequestBody;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RequestMethod;
-import org.springframework.web.bind.annotation.RequestParam;
 import org.springframework.web.servlet.ModelAndView;
 
-import javax.servlet.http.HttpServletResponse;
 import javax.servlet.http.HttpSession;
-import java.io.IOException;
-import java.util.Date;
 
 /**
  * Security Auth Controller

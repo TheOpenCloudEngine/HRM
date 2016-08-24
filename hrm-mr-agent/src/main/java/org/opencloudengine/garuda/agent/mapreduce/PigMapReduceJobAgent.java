@@ -12,11 +12,6 @@ public class PigMapReduceJobAgent {
         if (jobId != null && jobId instanceof JobID) {
             JobID id = (JobID) jobId;
 
-            System.out.println("************************************************************************************");
-            System.out.println("** PIG MR instrumented By Flamingo 2 >> Path : " + System.getProperty("user.dir"));
-            System.out.println("** PIG MR instrumented By Flamingo 2 >> Job ID : " + id);
-            System.out.println("************************************************************************************");
-
             File file = new File(System.getProperty("user.dir"), "hadoop." + id);
             if (!file.exists()) {
                 FileOutputStream fos = new FileOutputStream(file);

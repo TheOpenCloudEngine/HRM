@@ -120,7 +120,7 @@ public class HttpUtils {
             return null;
 
         try {
-            tmp = URLDecoder.decode(name, DEFAULT_ENCODING_FOR_URL);
+            tmp = java.net.URLDecoder.decode(name, DEFAULT_ENCODING_FOR_URL);
         } catch (Exception e) {
         }
 

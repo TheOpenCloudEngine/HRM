@@ -1,5 +1,7 @@
 <%@ page contentType="text/html; charset=UTF-8" language="java" trimDirectiveWhitespaces="true" %>
 
+<%@ taglib prefix="spring" uri="http://www.springframework.org/tags"%>
+
 <!--=== Footer Version 1 ===-->
 <div class="footer-v1" id="exactline">
     <div class="footer">
@@ -7,7 +9,7 @@
             <div class="row">
                 <!-- About -->
                 <div class="col-md-3 md-margin-bottom-40">
-                    <a href="index.html"><img id="logo-footer" class="footer-logo" src="/service-console/resources/images/oce-logo.png" alt="Footer Logo"></a>
+                    <a href="index.html"><img id="logo-footer" class="footer-logo" src="/resources/images/oce-logo.png" alt="Footer Logo"></a>
                     <p><uengine:message code="introduction"/></p>
                 </div><!--/col-md-3-->
                 <!-- End About -->

@@ -11,7 +11,6 @@
     <url>http://www.uengine.org/</url>
 
     <modules>
-        <module>uengine-bpm</module>
         <module>hrm-common</module>
         <module>hrm-web</module>
         <module>hrm-mr-agent</module>
@@ -119,7 +118,7 @@
         <easymock.version>3.2</easymock.version>
 
         <!-- Dependencies -->
-        <hive.version>1.0.0</hive.version>
+        <hive.version>1.2.1</hive.version>
         <spring.hadoop.version>1.0.2.RELEASE</spring.hadoop.version>
         <thrift.version>0.9.0</thrift.version>
         <thrift.lib303.version>0.9.1</thrift.lib303.version>

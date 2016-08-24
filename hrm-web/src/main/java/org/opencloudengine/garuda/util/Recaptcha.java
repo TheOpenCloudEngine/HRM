@@ -1,5 +1,6 @@
 package org.opencloudengine.garuda.util;
 
+import org.opencloudengine.garuda.common.exception.ServiceException;
 import org.apache.http.HttpEntity;
 import org.apache.http.HttpResponse;
 import org.apache.http.NameValuePair;
@@ -8,7 +9,6 @@ import org.apache.http.client.methods.HttpPost;
 import org.apache.http.impl.client.DefaultHttpClient;
 import org.apache.http.message.BasicNameValuePair;
 import org.apache.http.util.EntityUtils;
-import org.opencloudengine.garuda.common.exception.ServiceException;
 
 import java.nio.ByteBuffer;
 import java.util.ArrayList;

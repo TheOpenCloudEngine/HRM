@@ -50,7 +50,7 @@ import static org.apache.commons.lang.StringUtils.splitPreserveAllTokens;
  * @since 0.1
  */
 @RestController
-@RequestMapping("/config/")
+@RequestMapping("/config")
 public class ConfigurationController implements InitializingBean {
 
     /**

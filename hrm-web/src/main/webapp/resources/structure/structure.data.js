@@ -6,42 +6,35 @@ structure.data = {
          */
         {
             title: message.msg('menu.home'),
-            href: '/service-console/index'
+            href: '/index'
         },
         /*
-         Uris
+         Jobs
          */
         {
-            title: 'URI Mappings',
-            href: '/service-console/uris'
+            title: 'Jobs',
+            href: '/job'
         },
         /*
-         Policy
+         Hdfs Browser
          */
         {
-            title: 'Simple Wrappers',
-            href: '/service-console/policy'
+            title: 'Hdfs Browser',
+            href: '/fileview'
         },
         /*
-         Workflow
+         Console
          */
         {
-            title: 'Composite Wrappers',
-            href: '/service-console/workflow'
+            title: 'Web Console',
+            href: '/console'
         },
         /*
-         Analysis
+         Eco System
          */
         {
-            title: 'Logs',
-            href: '/service-console/analysis'
-        },
-        /*
-         Configuration
-         */
-        {
-            title: 'Configuration',
-            href: '/service-console/iam'
+            title: 'Eco System',
+            href: '/eco/configuration'
         }
     ]
 };

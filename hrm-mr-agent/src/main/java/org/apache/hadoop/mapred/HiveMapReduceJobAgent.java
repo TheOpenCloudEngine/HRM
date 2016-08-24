@@ -11,11 +11,6 @@ public class HiveMapReduceJobAgent {
         if (args.length == 4) {
             JobClient.NetworkedJob networkedJob = (JobClient.NetworkedJob) args[1];
 
-            System.out.println("************************************************************************************");
-            System.out.println("** HIVE MR instrumented By Flamingo 2 >> Path : " + System.getProperty("user.dir"));
-            System.out.println("** HIVE MR instrumented By Flamingo 2 >> Job ID : " + networkedJob.getID());
-            System.out.println("************************************************************************************");
-
             File file = new File(System.getProperty("user.dir"), "hadoop." + networkedJob.getID());
             FileOutputStream fos = new FileOutputStream(file);
             fos.write(getMetadata(networkedJob));

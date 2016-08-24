@@ -17,26 +17,30 @@
 package org.opencloudengine.garuda.couchdb;
 
 import com.cloudant.client.api.Database;
+import com.cloudant.client.api.model.DesignDocument;
 import com.cloudant.client.api.views.AllDocsResponse;
 import org.opencloudengine.garuda.common.exception.ServiceException;
+import org.opencloudengine.garuda.model.User;
 import org.opencloudengine.garuda.util.JsonUtils;
 import org.opencloudengine.garuda.util.ResourceUtils;
-import org.opencloudengine.garuda.web.iam.Iam;
-import org.opencloudengine.garuda.web.iam.IamRepository;
+import org.opencloudengine.garuda.web.eco.configuration.EcoConf;
+import org.opencloudengine.garuda.web.eco.configuration.EcoConfRepository;
+import org.opencloudengine.garuda.web.security.AESPasswordEncoder;
+import org.opencloudengine.garuda.web.system.UserRepository;
+import org.opencloudengine.garuda.web.system.UserService;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import org.springframework.beans.factory.InitializingBean;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.beans.factory.annotation.Qualifier;
+import org.springframework.core.io.DefaultResourceLoader;
+import org.springframework.stereotype.Component;
 import org.springframework.stereotype.Service;
 
 import java.io.File;
 import java.net.URL;
 import java.nio.file.Files;
-import java.util.Date;
-import java.util.List;
-import java.util.Map;
-import java.util.Properties;
+import java.util.*;
 
 /**
  * @author Seungpil, Park
@@ -58,13 +62,13 @@ public class CouchView implements InitializingBean {
     private CouchServiceFactory serviceFactory;
 
     @Autowired
-    private IamRepository iamRepository;
+    private EcoConfRepository ecoConfRepository;
 
     @Override
     public void afterPropertiesSet() throws Exception {
 
         String property = config.getProperty("couch.db.autoview");
-        if (property.equals("false")) {
+        if(property.equals("false")){
             return;
         }
 
@@ -96,15 +100,20 @@ public class CouchView implements InitializingBean {
             }
         }
 
-        //기본 Iam 등록
-        if (iamRepository.select() == null) {
-            Iam iam = new Iam();
-            iam.setHost("localhost");
-            iam.setPort(8080);
-            iam.setManagementKey("");
-            iam.setManagementSecret("");
 
-            iamRepository.insert(iam);
+        //기본 EcoConf 등록
+        if (ecoConfRepository.select() == null) {
+            EcoConf ecoConf = new EcoConf();
+            ecoConf.setYarnHome("");
+            ecoConf.setMapreduceHome("");
+            ecoConf.setSparkHome("");
+            ecoConf.setPigHome("");
+            ecoConf.setHadoopHome("");
+            ecoConf.setHdfsHome("");
+            ecoConf.setHdfsSuperUser("");
+            ecoConf.setHiveHome("");
+
+            ecoConfRepository.insert(ecoConf);
         }
     }
 }

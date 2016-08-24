@@ -19,7 +19,7 @@
 
     <%@include file="../template/header_js.jsp" %>
 
-    <link rel="stylesheet" href="/service-console/resources/assets/css/pages/page_log_reg_v1.css">
+    <link rel="stylesheet" href="/resources/assets/css/pages/page_log_reg_v1.css">
 </head>
 
 <!-- body classes:
@@ -47,7 +47,7 @@
         <div class="row">
             <div class="col-md-4 col-md-offset-4 col-sm-6 col-sm-offset-3">
 
-                <form id="login_form" class="reg-page" action="/service-console/j_spring_security_check" method="post" role="form">
+                <form id="login_form" class="reg-page" action="/j_spring_security_check" method="post" role="form">
                     <div class="reg-header">
                         <h2><uengine:message code="login.title"></uengine:message> </h2>
                         <p><uengine:message code="login.fail"></uengine:message></p>

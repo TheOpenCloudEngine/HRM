@@ -4,6 +4,8 @@ import org.springframework.security.web.util.matcher.RegexRequestMatcher;
 import org.springframework.security.web.util.matcher.RequestMatcher;
 
 import javax.servlet.http.HttpServletRequest;
+import java.util.ArrayList;
+import java.util.List;
 import java.util.regex.Pattern;
 
 /**
@@ -12,7 +14,13 @@ import java.util.regex.Pattern;
 public class CsrfSecurityRequestMatcher implements RequestMatcher {
     private Pattern allowedMethods = Pattern.compile("^(GET|HEAD|TRACE|OPTIONS)$");
 
-    private RegexRequestMatcher securityMatcher = new RegexRequestMatcher("/service-console/j_spring_security_check", null);
+    private RegexRequestMatcher unprotectedMatcher = new RegexRequestMatcher("/oauth/authorize_redirect", null);
+
+    private RegexRequestMatcher redirectMatcher = new RegexRequestMatcher("/oauth/redirect", null);
+
+    private RegexRequestMatcher accessTokentMatcher = new RegexRequestMatcher("/oauth/access_token", null);
+
+    private RegexRequestMatcher restMatcher = new RegexRequestMatcher("/rest/v1/.*", null);
 
     @Override
     public boolean matches(HttpServletRequest request) {
@@ -21,7 +29,19 @@ public class CsrfSecurityRequestMatcher implements RequestMatcher {
             return false;
         }
 
-        if(securityMatcher.matches(request)){
+        if(unprotectedMatcher.matches(request)){
+            return false;
+        }
+
+        if(redirectMatcher.matches(request)){
+            return false;
+        }
+
+        if(accessTokentMatcher.matches(request)){
+            return false;
+        }
+
+        if(restMatcher.matches(request)){
             return false;
         }
 

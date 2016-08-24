@@ -16,17 +16,11 @@
  */
 package org.opencloudengine.garuda.web.system;
 
-import com.cloudant.client.api.model.Response;
-import com.cloudant.client.api.views.Key;
-import com.cloudant.client.api.views.ViewRequestBuilder;
-import org.opencloudengine.garuda.couchdb.CouchServiceFactory;
 import org.opencloudengine.garuda.model.User;
-import org.opencloudengine.garuda.util.JsonUtils;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.beans.factory.annotation.Qualifier;
 import org.springframework.stereotype.Repository;
 
-import java.util.Date;
 import java.util.Properties;
 
 /**

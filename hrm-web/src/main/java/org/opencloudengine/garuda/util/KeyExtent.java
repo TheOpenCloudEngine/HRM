@@ -8,7 +8,7 @@ import com.google.gson.JsonArray;
 /**
  * Created by uengine on 2016. 4. 28..
  */
-public class KeyExtent extends Key{
+public class KeyExtent extends com.cloudant.client.api.views.Key{
 
     public static KeyExtent.ComplexKey complex() {
         return (new KeyExtent.ComplexKey(null));

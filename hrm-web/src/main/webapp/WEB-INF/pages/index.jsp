@@ -1,8 +1,7 @@
 <%@ page contentType="text/html; charset=UTF-8" language="java" trimDirectiveWhitespaces="true" %>
 
+<%@ taglib prefix="spring" uri="http://www.springframework.org/tags" %>
 <%@ taglib prefix="uengine" uri="http://www.uengine.io/tags" %>
-<%@ taglib prefix="c" uri="http://java.sun.com/jsp/jstl/core" %>
-
 <!DOCTYPE html>
 <!--[if IE 9]> <html lang="en" class="ie9"> <![endif]-->
 <!--[if IE 8]> <html lang="en" class="ie8"> <![endif]-->
@@ -13,6 +12,10 @@
       lang="en">
 <!--<![endif]-->
 <head>
+    <meta charset="utf-8">
+    <meta http-equiv="Content-Type" content="text/html; charset=UTF-8">
+    <title>OCE IAM | HOME</title>
+
     <%@include file="template/header_js.jsp" %>
 
 </head>
@@ -62,36 +65,14 @@
         </div>
         <!-- End Service Blokcs -->
 
-
-        <!-- Owl Clients v1 -->
-        <div class="headline"><h2>OCE Products Customers</h2></div>
-        <div class="owl-clients-v1">
-            <div class="item">
-                <img src="/service-console/resources/images/customers/1.png" alt="Client 1">
-            </div>
-            <div class="item">
-                <img src="/service-console/resources/images/customers/2.png" alt="Client 2">
-            </div>
-            <div class="item">
-                <img src="/service-console/resources/images/customers/3.png" alt="Client 3">
-            </div>
-            <div class="item">
-                <img src="/service-console/resources/images/customers/4.png" alt="Client 4">
-            </div>
-            <div class="item">
-                <img src="/service-console/resources/images/customers/5.png" alt="Client 5">
-            </div>
-            <div class="item">
-                <img src="/service-console/resources/images/customers/6.png" alt="Client 6">
-            </div>
-        </div>
-        <!-- End Owl Clients v1 -->
     </div>
     <!--/container-->
     <!-- End Content Part -->
 
 
     <%@include file="template/footer.jsp" %>
+
+
 </div>
 <!--/wrapper-->
 
