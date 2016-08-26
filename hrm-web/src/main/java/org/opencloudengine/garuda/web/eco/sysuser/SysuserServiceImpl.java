@@ -1,5 +1,6 @@
 package org.opencloudengine.garuda.web.eco.sysuser;
 
+import org.apache.hadoop.fs.FileSystem;
 import org.opencloudengine.garuda.backend.system.SystemService;
 import org.opencloudengine.garuda.util.StringUtils;
 import org.opencloudengine.garuda.web.configuration.ConfigurationHelper;
@@ -155,6 +156,8 @@ public class SysuserServiceImpl implements SysuserService {
         }
         systemService.createUser("/home", name, name);
         systemService.changeUser(name, password);
+
+
     }
 
     /**
