@@ -40,6 +40,8 @@ import javax.servlet.http.HttpServletRequest;
 import java.io.BufferedInputStream;
 import java.io.FileInputStream;
 import java.io.InputStream;
+import java.util.ArrayList;
+import java.util.List;
 import java.util.Properties;
 import java.util.concurrent.TimeUnit;
 
@@ -60,7 +62,7 @@ public class HdfsServiceImpl implements HdfsService {
     private Properties config;
 
     @Override
-    public FileStatus[] getFile(String path) throws Exception {
+    public List<FileStatus> getFile(String path) throws Exception {
         if (StringUtils.isEmpty(path)) {
             path = "/";
         }
@@ -74,11 +76,11 @@ public class HdfsServiceImpl implements HdfsService {
         FileSystem fileSystem = FileSystem.get(conf);
         FileStatus[] fileStatuses = fileSystem.listStatus(new Path(path));
 
+        List<FileStatus> listStatus = new ArrayList<>();
         for (int i = 0; i < fileStatuses.length; i++) {
-            FileStatus fileStatuse = fileStatuses[i];
-            System.out.println(fileStatuse.toString());
+            listStatus.add(fileStatuses[i]);
         }
-        return fileStatuses;
+        return listStatus;
     }
 
     @Override

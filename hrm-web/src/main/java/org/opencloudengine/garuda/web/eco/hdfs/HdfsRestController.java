@@ -30,11 +30,11 @@ public class HdfsRestController {
     @Autowired
     HdfsService hdfsService;
 
-    @RequestMapping(value = "/liststatus/{path}", method = RequestMethod.GET, produces = "application/json")
-    public ResponseEntity<FileStatus[]> listAllClients(HttpServletRequest request, @PathVariable String path) {
+    @RequestMapping(value = "/liststatus", method = RequestMethod.GET, produces = "application/json")
+    public ResponseEntity<List<FileStatus>> listAllClients(HttpServletRequest request, @RequestParam(defaultValue = "") String path) {
 
         try {
-            FileStatus[] fileStatuses = hdfsService.getFile(path);
+            List<FileStatus> fileStatuses = hdfsService.getFile(path);
             return new ResponseEntity<>(fileStatuses, HttpStatus.OK);
         } catch (Exception ex) {
             return new ResponseEntity<>(HttpStatus.BAD_REQUEST);
@@ -42,12 +42,12 @@ public class HdfsRestController {
     }
 
     @RequestMapping(value = "/file", method = RequestMethod.POST)
-    public ResponseEntity<Void> createFile(HttpServletRequest request, @PathVariable String path, UriComponentsBuilder ucBuilder) {
+    public ResponseEntity<Void> createFile(HttpServletRequest request, @RequestParam(defaultValue = "") String path, UriComponentsBuilder ucBuilder) {
         try {
-            hdfsService.createFile(path,request.getInputStream());
+            hdfsService.createFile(path, request.getInputStream());
 
             HttpHeaders headers = new HttpHeaders();
-            headers.setLocation(ucBuilder.path("/rest/v1/file/{path}").buildAndExpand(path).toUri());
+            headers.setLocation(ucBuilder.path("/rest/v1/file?path={path}").buildAndExpand(path).toUri());
             return new ResponseEntity<>(HttpStatus.CREATED);
         } catch (Exception ex) {
             return new ResponseEntity<>(HttpStatus.BAD_REQUEST);
