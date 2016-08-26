@@ -18,8 +18,12 @@ package org.opencloudengine.garuda.backend.hdfs;
 
 import org.apache.hadoop.fs.FileStatus;
 
+import java.io.InputStream;
+
 public interface HdfsService {
 
 	FileStatus[] getFile(String path) throws Exception;
+
+	public void createFile(String path, InputStream is) throws Exception;
 
 }
