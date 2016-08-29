@@ -23,7 +23,7 @@ import java.util.List;
 
 public interface HdfsService {
 
-    List<HdfsFileInfo> listDirectory(String path) throws Exception;
+    List<HdfsFileInfo> list(String path, int start, int end, String filter) throws Exception;
 
     public void createFile(String path, InputStream is) throws Exception;
 

@@ -31,11 +31,14 @@ public class HdfsRestController {
     @Autowired
     HdfsService hdfsService;
 
-    @RequestMapping(value = "/listDirectory", method = RequestMethod.GET, produces = "application/json")
-    public ResponseEntity<List<HdfsFileInfo>> listAllClients(HttpServletRequest request, @RequestParam(defaultValue = "") String path) {
-
+    @RequestMapping(value = "/list", method = RequestMethod.GET, produces = "application/json")
+    public ResponseEntity<List<HdfsFileInfo>> listAllClients(HttpServletRequest request,
+                                                             @RequestParam(defaultValue = "") String path,
+                                                             @RequestParam(defaultValue = "1") int start,
+                                                             @RequestParam(defaultValue = "10") int end,
+                                                             @RequestParam(defaultValue = "") String filter) {
         try {
-            List<HdfsFileInfo> fileStatuses = hdfsService.listDirectory(path);
+            List<HdfsFileInfo> fileStatuses = hdfsService.list(path, start, end, filter);
             return new ResponseEntity<>(fileStatuses, HttpStatus.OK);
         } catch (Exception ex) {
             return new ResponseEntity<>(HttpStatus.BAD_REQUEST);

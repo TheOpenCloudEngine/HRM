@@ -62,13 +62,40 @@ public class HdfsServiceImpl implements HdfsService {
     @Autowired
     FileSystemFactory fileSystemFactory;
 
-    @Override
-    public List<HdfsFileInfo> listDirectory(String path) throws Exception {
+
+    private FileStatus[] listAll(String path, final String filter) throws Exception {
         FileSystem fs = fileSystemFactory.getFileSystem();
-        FileStatus[] fileStatuses = fs.listStatus(new Path(path));
+        Path fsPath = new Path(path);
+
+        if (!fs.exists(fsPath)) {
+            this.notFoundException(fsPath.toString());
+        }
+        FileStatus fileStatus = fs.getFileStatus(fsPath);
+        if (!fileStatus.isDirectory()) {
+            this.notDirectoryException(fsPath.toString());
+        }
+
+        if (StringUtils.isEmpty(filter)) {
+            return fs.listStatus(fsPath);
+        } else {
+            PathFilter pathFilter = new PathFilter() {
+                @Override
+                public boolean accept(Path path) {
+                    return path.toUri().getPath().contains(filter);
+                }
+            };
+            return fs.listStatus(fsPath, pathFilter);
+        }
+    }
+
+    @Override
+    public List<HdfsFileInfo> list(String path, int start, int end, String filter) throws Exception {
+        FileSystem fs = fileSystemFactory.getFileSystem();
+        this.indexCheck(start, end);
 
         List<HdfsFileInfo> listStatus = new ArrayList<>();
-        for (int i = 0; i < fileStatuses.length; i++) {
+        FileStatus[] fileStatuses = this.listAll(path, filter);
+        for (int i = start - 1; i < end; i++) {
             listStatus.add(new HdfsFileInfo(fileStatuses[i], fs.getContentSummary(fileStatuses[i].getPath())));
         }
         fs.close();
@@ -97,30 +124,57 @@ public class HdfsServiceImpl implements HdfsService {
     }
 
     @Override
-    public void appendFile(String path, InputStream is) throws Exception{
+    public void appendFile(String path, InputStream is) throws Exception {
         FileSystem fs = fileSystemFactory.getFileSystem();
         Path fsPath = new Path(path);
-        boolean exists = fs.exists(fsPath);
-        if(exists){
-            FileStatus fileStatus = fs.getFileStatus(fsPath);
-            if(fileStatus.isFile()){
-                FSDataOutputStream out = fs.append(fsPath);
-                byte[] b = new byte[1024];
-                int numBytes = 0;
-                while ((numBytes = is.read(b)) > 0) {
-                    out.write(b, 0, numBytes);
-                }
 
-                is.close();
-                out.close();
-                fs.close();
-            }else{
-                logger.warn("Failed append HDFS file, {} is not file.", fsPath.toString());
-                throw new ServiceException("디렉토리에 파일을 쓸 수 없습니다..");
-            }
-        }else{
-            logger.warn("Failed append HDFS file, File not exist : {}", fsPath.toString());
-            throw new ServiceException("파일이 존재하지 않습니다.");
+        if (!fs.exists(fsPath)) {
+            this.notFoundException(fsPath.toString());
         }
+
+        FileStatus fileStatus = fs.getFileStatus(fsPath);
+        if (!fileStatus.isFile()) {
+            this.notFileException(fsPath.toString());
+        }
+
+        FSDataOutputStream out = fs.append(fsPath);
+        byte[] b = new byte[1024];
+        int numBytes = 0;
+        while ((numBytes = is.read(b)) > 0) {
+            out.write(b, 0, numBytes);
+        }
+
+        is.close();
+        out.close();
+        fs.close();
+    }
+
+    private void notFileException(String path) {
+        logger.warn("File {} is not a file : {}", path);
+        throw new ServiceException("파일이 아닙니다.");
+    }
+
+    private void notDirectoryException(String path) {
+        logger.warn("File {} is not a directory : {}", path);
+        throw new ServiceException("디렉토리가 아닙니다.");
+    }
+
+    private void notFoundException(String path) {
+        logger.warn("Failed append HDFS file, File not exist : {}", path);
+        throw new ServiceException("파일이 존재하지 않습니다.");
+    }
+
+    private void indexCheck(int start, int end) {
+        if (start < 1) {
+            logger.warn("Start must more than 1. current start is : {}", start);
+            throw new ServiceException("조회 시작 수가 적습니다.");
+        } else if (end - start > 100) {
+            logger.warn("100 count per page limit. current per count is : {}", end - start);
+            throw new ServiceException("페이지 당 조회수가 100을 넘습니다.");
+        } else if (end <= start) {
+            logger.warn("End count is less than start count. start : {} , end : {}", start, end);
+            throw new ServiceException("종료 카운트가 시작 카운트보다 작거나 큽니다.");
+        }
+
     }
 }
