@@ -115,21 +115,28 @@ public class HdfsServiceImpl implements HdfsService {
             if (!StringUtils.isEmpty(filter)) {
                 if (next.getPath().getName().contains(filter)) {
                     count++;
+                    if (count >= start && count <= end) {
+                        fileStatuses = fs.getFileStatus(next.getPath());
+                        listStatus.add(new HdfsFileInfo(fileStatuses, fs.getContentSummary(fileStatuses.getPath())));
+                    }
                 }
             } else {
                 count++;
-            }
-
-            if (count >= start && count <= end) {
-                fileStatuses = fs.getFileStatus(next.getPath());
-                if (!StringUtils.isEmpty(filter)) {
-                    if (fileStatuses.getPath().getName().contains(filter)) {
-                        listStatus.add(new HdfsFileInfo(fileStatuses, fs.getContentSummary(fileStatuses.getPath())));
-                    }
-                } else {
+                if (count >= start && count <= end) {
                     listStatus.add(new HdfsFileInfo(fileStatuses, fs.getContentSummary(fileStatuses.getPath())));
                 }
             }
+
+//            if (count >= start && count <= end) {
+//                fileStatuses = fs.getFileStatus(next.getPath());
+//                if (!StringUtils.isEmpty(filter)) {
+//                    if (fileStatuses.getPath().getName().contains(filter)) {
+//                        listStatus.add(new HdfsFileInfo(fileStatuses, fs.getContentSummary(fileStatuses.getPath())));
+//                    }
+//                } else {
+//                    listStatus.add(new HdfsFileInfo(fileStatuses, fs.getContentSummary(fileStatuses.getPath())));
+//                }
+//            }
         }
         fs.close();
         return listStatus;
