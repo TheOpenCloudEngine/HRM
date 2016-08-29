@@ -81,28 +81,36 @@ public class HdfsServiceImpl implements HdfsService {
         List<HdfsFileInfo> listStatus = new ArrayList<>();
         int count = 0;
 
-        FileStatus fileStatuses = null;
-        LocatedFileStatus next = null;
-        RemoteIterator<LocatedFileStatus> remoteIterator = fs.listLocatedStatus(fsPath);
-        while (remoteIterator.hasNext()) {
-            next = remoteIterator.next();
-            if (!StringUtils.isEmpty(filter)) {
-                if (next.getPath().getName().contains(filter)) {
-                    count++;
-                    if (count >= start && count <= end) {
-                        fileStatuses = fs.getFileStatus(next.getPath());
-                        listStatus.add(new HdfsFileInfo(fileStatuses, fs.getContentSummary(fileStatuses.getPath())));
-                    }
-                }
-            } else {
-                count++;
-                if (count >= start && count <= end) {
-                    listStatus.add(new HdfsFileInfo(fileStatuses, fs.getContentSummary(fileStatuses.getPath())));
-                }
-            }
+        FileStatus[] fileStatuses = fs.listStatus(fsPath);
+        for (int i = start - 1; i < end; i++) {
+            listStatus.add(new HdfsFileInfo(fileStatuses[i], fs.getContentSummary(fileStatuses[i].getPath())));
         }
         fs.close();
         return listStatus;
+
+//        FileStatus fileStatuses = null;
+//        LocatedFileStatus next = null;
+//        RemoteIterator<LocatedFileStatus> remoteIterator = fs.listLocatedStatus(fsPath);
+//        while (remoteIterator.hasNext()) {
+//            next = remoteIterator.next();
+//            if (!StringUtils.isEmpty(filter)) {
+//                if (next.getPath().getName().contains(filter)) {
+//                    count++;
+//                    if (count >= start && count <= end) {
+//                        fileStatuses = fs.getFileStatus(next.getPath());
+//                        listStatus.add(new HdfsFileInfo(fileStatuses, fs.getContentSummary(fileStatuses.getPath())));
+//                    }
+//                }
+//            } else {
+//                count++;
+//                if (count >= start && count <= end) {
+//                    fileStatuses = fs.getFileStatus(next.getPath());
+//                    listStatus.add(new HdfsFileInfo(fileStatuses, fs.getContentSummary(fileStatuses.getPath())));
+//                }
+//            }
+//        }
+//        fs.close();
+//        return listStatus;
     }
 
     @Override
