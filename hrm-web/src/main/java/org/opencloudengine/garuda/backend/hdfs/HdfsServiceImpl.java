@@ -61,42 +61,26 @@ public class HdfsServiceImpl implements HdfsService {
     @Qualifier("config")
     private Properties config;
 
+    @Autowired
+    FileSystemFactory fileSystemFactory;
+
     @Override
-    public List<FileStatus> getFile(String path) throws Exception {
-        if (StringUtils.isEmpty(path)) {
-            path = "/";
-        }
-        String hadoopHome = config.getProperty("hadoop.hadoop.home");
+    public List<HdfsFileInfo> getFile(String path) throws Exception {
+        FileSystem fs = fileSystemFactory.getFileSystem();
+        FileStatus[] fileStatuses = fs.listStatus(new Path(path));
 
-        Configuration conf = new Configuration();
-        conf.addResource(new Path(hadoopHome + "/conf/core-site.xml"));
-        conf.addResource(new Path(hadoopHome + "/conf/hdfs-site.xml"));
-        conf.addResource(new Path(hadoopHome + "/conf/mapred-site.xml"));
-
-        FileSystem fileSystem = FileSystem.get(conf);
-        FileStatus[] fileStatuses = fileSystem.listStatus(new Path(path));
-
-        List<FileStatus> listStatus = new ArrayList<>();
+        List<HdfsFileInfo> listStatus = new ArrayList<>();
         for (int i = 0; i < fileStatuses.length; i++) {
-            listStatus.add(fileStatuses[i]);
+            listStatus.add(new HdfsFileInfo(fileStatuses[i], fs.getContentSummary(fileStatuses[i].getPath())));
         }
+        fs.close();
         return listStatus;
     }
 
     @Override
     public void createFile(String path, InputStream is) throws Exception {
-        if (StringUtils.isEmpty(path)) {
-            path = "/";
-        }
-        String hadoopHome = config.getProperty("hadoop.hadoop.home");
-
-        Configuration conf = new Configuration();
-        conf.addResource(new Path(hadoopHome + "/conf/core-site.xml"));
-        conf.addResource(new Path(hadoopHome + "/conf/hdfs-site.xml"));
-        conf.addResource(new Path(hadoopHome + "/conf/mapred-site.xml"));
-
-        FileSystem fileSystem = FileSystem.get(conf);
-        FSDataOutputStream out = fileSystem.create(new Path(path));
+        FileSystem fs = fileSystemFactory.getFileSystem();
+        FSDataOutputStream out = fs.create(new Path(path));
         byte[] b = new byte[1024];
         int numBytes = 0;
         while ((numBytes = is.read(b)) > 0) {
@@ -105,6 +89,6 @@ public class HdfsServiceImpl implements HdfsService {
 
         is.close();
         out.close();
-        fileSystem.close();
+        fs.close();
     }
 }
