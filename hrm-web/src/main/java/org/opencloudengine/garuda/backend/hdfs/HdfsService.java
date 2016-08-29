@@ -30,4 +30,6 @@ public interface HdfsService {
     public void createEmptyFile(String path) throws Exception;
 
     public void appendFile(String path, InputStream is) throws Exception;
+
+    public void teragen() throws Exception;
 }

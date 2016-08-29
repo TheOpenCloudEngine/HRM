@@ -62,32 +62,6 @@ public class HdfsServiceImpl implements HdfsService {
     @Autowired
     FileSystemFactory fileSystemFactory;
 
-
-    private FileStatus[] listAll(String path, final String filter) throws Exception {
-        FileSystem fs = fileSystemFactory.getFileSystem();
-        Path fsPath = new Path(path);
-
-        if (!fs.exists(fsPath)) {
-            this.notFoundException(fsPath.toString());
-        }
-        FileStatus fileStatus = fs.getFileStatus(fsPath);
-        if (!fileStatus.isDirectory()) {
-            this.notDirectoryException(fsPath.toString());
-        }
-
-        if (StringUtils.isEmpty(filter)) {
-            return fs.listStatus(fsPath);
-        } else {
-            PathFilter pathFilter = new PathFilter() {
-                @Override
-                public boolean accept(Path path) {
-                    return path.toUri().getPath().contains(filter);
-                }
-            };
-            return fs.listStatus(fsPath, pathFilter);
-        }
-    }
-
     @Override
     public List<HdfsFileInfo> list(String path, int start, int end, String filter) throws Exception {
 
@@ -126,33 +100,9 @@ public class HdfsServiceImpl implements HdfsService {
                     listStatus.add(new HdfsFileInfo(fileStatuses, fs.getContentSummary(fileStatuses.getPath())));
                 }
             }
-
-//            if (count >= start && count <= end) {
-//                fileStatuses = fs.getFileStatus(next.getPath());
-//                if (!StringUtils.isEmpty(filter)) {
-//                    if (fileStatuses.getPath().getName().contains(filter)) {
-//                        listStatus.add(new HdfsFileInfo(fileStatuses, fs.getContentSummary(fileStatuses.getPath())));
-//                    }
-//                } else {
-//                    listStatus.add(new HdfsFileInfo(fileStatuses, fs.getContentSummary(fileStatuses.getPath())));
-//                }
-//            }
         }
         fs.close();
         return listStatus;
-
-
-//        FileSystem fs = fileSystemFactory.getFileSystem();
-//
-//        this.indexCheck(start, end);
-//
-//        List<HdfsFileInfo> listStatus = new ArrayList<>();
-//        FileStatus[] fileStatuses = this.listAll(path, filter);
-//        for (int i = start - 1; i < end; i++) {
-//            listStatus.add(new HdfsFileInfo(fileStatuses[i], fs.getContentSummary(fileStatuses[i].getPath())));
-//        }
-//        fs.close();
-//        return listStatus;
     }
 
     @Override
@@ -174,6 +124,16 @@ public class HdfsServiceImpl implements HdfsService {
     public void createEmptyFile(String path) throws Exception {
         FileSystem fs = fileSystemFactory.getFileSystem();
         fs.create(new Path(path));
+        fs.close();
+    }
+
+    @Override
+    public void teragen() throws Exception {
+        FileSystem fs = fileSystemFactory.getFileSystem();
+        for (int i = 0; i < 1000000; i++) {
+            fs.create(new Path("/user/ubuntu/many/uuid" + i));
+        }
+        fs.close();
     }
 
     @Override

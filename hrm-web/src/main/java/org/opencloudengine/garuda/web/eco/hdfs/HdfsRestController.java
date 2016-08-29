@@ -62,9 +62,7 @@ public class HdfsRestController {
     public ResponseEntity<Void> teragen(HttpServletRequest request) {
         try {
 
-            for (int i = 10000; i < 100000; i++) {
-                hdfsService.createEmptyFile("/user/ubuntu/many/test" + i);
-            }
+            hdfsService.teragen();
             return new ResponseEntity<>(HttpStatus.CREATED);
         } catch (Exception ex) {
             return new ResponseEntity<>(HttpStatus.BAD_REQUEST);
