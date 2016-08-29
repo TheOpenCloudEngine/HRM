@@ -105,7 +105,7 @@ public class HdfsServiceImpl implements HdfsService {
         }
 
         List<HdfsFileInfo> listStatus = new ArrayList<>();
-        int count = 1;
+        int count = 0;
 
         FileStatus fileStatuses = null;
         LocatedFileStatus next = null;
@@ -113,36 +113,23 @@ public class HdfsServiceImpl implements HdfsService {
         while (remoteIterator.hasNext()) {
             next = remoteIterator.next();
             if (!StringUtils.isEmpty(filter)) {
-                if(next.getPath().toUri().getPath().contains(filter)){
+                if (next.getPath().getName().contains(filter)) {
                     count++;
                 }
-            }else{
+            } else {
                 count++;
             }
 
             if (count >= start && count <= end) {
                 fileStatuses = fs.getFileStatus(next.getPath());
                 if (!StringUtils.isEmpty(filter)) {
-                    if (fileStatuses.getPath().toUri().getPath().contains(filter)) {
+                    if (fileStatuses.getPath().getName().contains(filter)) {
                         listStatus.add(new HdfsFileInfo(fileStatuses, fs.getContentSummary(fileStatuses.getPath())));
                     }
-                }else{
+                } else {
                     listStatus.add(new HdfsFileInfo(fileStatuses, fs.getContentSummary(fileStatuses.getPath())));
                 }
             }
-//            if (count >= start && count <= end) {
-//                next = remoteIterator.next();
-//                fileStatuses = fs.getFileStatus(next.getPath());
-//                if (!StringUtils.isEmpty(filter)) {
-//                    if (fileStatuses.getPath().toUri().getPath().contains(filter)) {
-//                        listStatus.add(new HdfsFileInfo(fileStatuses, fs.getContentSummary(fileStatuses.getPath())));
-//                    }
-//                } else {
-//                    listStatus.add(new HdfsFileInfo(fileStatuses, fs.getContentSummary(fileStatuses.getPath())));
-//                }
-//            } else {
-//                remoteIterator.next();
-//            }
         }
         fs.close();
         return listStatus;
