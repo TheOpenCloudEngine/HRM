@@ -105,15 +105,22 @@ public class HdfsServiceImpl implements HdfsService {
         }
 
         List<HdfsFileInfo> listStatus = new ArrayList<>();
-        int count = 0;
-        RemoteIterator<LocatedFileStatus> remoteIterator = fs.listFiles(fsPath, false);
+        int count = 1;
+
+        RemoteIterator<LocatedFileStatus> remoteIterator = fs.listLocatedStatus(fsPath);
         while (remoteIterator.hasNext()) {
             count++;
             if (count >= start && count <= end) {
                 LocatedFileStatus next = remoteIterator.next();
                 FileStatus fileStatuses = fs.getFileStatus(next.getPath());
-                listStatus.add(new HdfsFileInfo(fileStatuses, fs.getContentSummary(fileStatuses.getPath())));
-            }else{
+                if (!StringUtils.isEmpty(filter)) {
+                    if (fileStatuses.getPath().toUri().getPath().contains(filter)) {
+                        listStatus.add(new HdfsFileInfo(fileStatuses, fs.getContentSummary(fileStatuses.getPath())));
+                    }
+                } else {
+                    listStatus.add(new HdfsFileInfo(fileStatuses, fs.getContentSummary(fileStatuses.getPath())));
+                }
+            } else {
                 remoteIterator.next();
             }
         }
