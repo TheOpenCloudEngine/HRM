@@ -90,16 +90,55 @@ public class HdfsServiceImpl implements HdfsService {
 
     @Override
     public List<HdfsFileInfo> list(String path, int start, int end, String filter) throws Exception {
+
         FileSystem fs = fileSystemFactory.getFileSystem();
+        Path fsPath = new Path(path);
+
         this.indexCheck(start, end);
 
+        if (!fs.exists(fsPath)) {
+            this.notFoundException(fsPath.toString());
+        }
+        FileStatus fileStatus = fs.getFileStatus(fsPath);
+        if (!fileStatus.isDirectory()) {
+            this.notDirectoryException(fsPath.toString());
+        }
+
         List<HdfsFileInfo> listStatus = new ArrayList<>();
-        FileStatus[] fileStatuses = this.listAll(path, filter);
-        for (int i = start - 1; i < end; i++) {
-            listStatus.add(new HdfsFileInfo(fileStatuses[i], fs.getContentSummary(fileStatuses[i].getPath())));
+        int count = 0;
+        RemoteIterator<LocatedFileStatus> remoteIterator = fs.listFiles(fsPath, false);
+        while (remoteIterator.hasNext()) {
+            count++;
+            if (count >= start || count <= end) {
+                LocatedFileStatus next = remoteIterator.next();
+                FileStatus fileStatuses = fs.getFileStatus(next.getPath());
+                listStatus.add(new HdfsFileInfo(fileStatuses, fs.getContentSummary(fileStatuses.getPath())));
+            }else{
+                remoteIterator.next();
+            }
         }
         fs.close();
         return listStatus;
+
+//        List<HdfsFileInfo> listStatus = new ArrayList<>();
+//        FileStatus[] fileStatuses = this.listAll(path, filter);
+//        for (int i = start - 1; i < end; i++) {
+//            listStatus.add(new HdfsFileInfo(fileStatuses[i], fs.getContentSummary(fileStatuses[i].getPath())));
+//        }
+//        fs.close();
+//        return listStatus;
+
+//        FileSystem fs = fileSystemFactory.getFileSystem();
+//
+//        this.indexCheck(start, end);
+//
+//        List<HdfsFileInfo> listStatus = new ArrayList<>();
+//        FileStatus[] fileStatuses = this.listAll(path, filter);
+//        for (int i = start - 1; i < end; i++) {
+//            listStatus.add(new HdfsFileInfo(fileStatuses[i], fs.getContentSummary(fileStatuses[i].getPath())));
+//        }
+//        fs.close();
+//        return listStatus;
     }
 
     @Override
