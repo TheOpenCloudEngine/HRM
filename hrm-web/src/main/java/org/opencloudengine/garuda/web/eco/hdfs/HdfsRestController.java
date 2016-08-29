@@ -31,11 +31,11 @@ public class HdfsRestController {
     @Autowired
     HdfsService hdfsService;
 
-    @RequestMapping(value = "/liststatus", method = RequestMethod.GET, produces = "application/json")
+    @RequestMapping(value = "/listDirectory", method = RequestMethod.GET, produces = "application/json")
     public ResponseEntity<List<HdfsFileInfo>> listAllClients(HttpServletRequest request, @RequestParam(defaultValue = "") String path) {
 
         try {
-            List<HdfsFileInfo> fileStatuses = hdfsService.getFile(path);
+            List<HdfsFileInfo> fileStatuses = hdfsService.listDirectory(path);
             return new ResponseEntity<>(fileStatuses, HttpStatus.OK);
         } catch (Exception ex) {
             return new ResponseEntity<>(HttpStatus.BAD_REQUEST);
@@ -49,6 +49,19 @@ public class HdfsRestController {
 
             HttpHeaders headers = new HttpHeaders();
             headers.setLocation(ucBuilder.path("/rest/v1/file?path={path}").buildAndExpand(path).toUri());
+            return new ResponseEntity<>(headers, HttpStatus.CREATED);
+        } catch (Exception ex) {
+            return new ResponseEntity<>(HttpStatus.BAD_REQUEST);
+        }
+    }
+
+    @RequestMapping(value = "/teragen", method = RequestMethod.POST)
+    public ResponseEntity<Void> teragen(HttpServletRequest request) {
+        try {
+
+            for (int i = 10000; i < 100000; i++) {
+                hdfsService.createEmptyFile("/user/ubuntu/many/test" + i);
+            }
             return new ResponseEntity<>(HttpStatus.CREATED);
         } catch (Exception ex) {
             return new ResponseEntity<>(HttpStatus.BAD_REQUEST);

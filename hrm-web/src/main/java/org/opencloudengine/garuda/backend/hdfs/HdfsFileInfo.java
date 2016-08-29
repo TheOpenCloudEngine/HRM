@@ -19,6 +19,7 @@ package org.opencloudengine.garuda.backend.hdfs;
 import org.apache.commons.lang.SystemUtils;
 import org.apache.hadoop.fs.ContentSummary;
 import org.apache.hadoop.fs.FileStatus;
+import org.apache.hadoop.fs.Path;
 import org.opencloudengine.garuda.model.FileInfo;
 
 /**

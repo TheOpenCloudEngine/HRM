@@ -19,10 +19,7 @@ package org.opencloudengine.garuda.backend.hdfs;
 import net.sf.expectit.Expect;
 import net.sf.expectit.ExpectBuilder;
 import org.apache.hadoop.conf.Configuration;
-import org.apache.hadoop.fs.FSDataOutputStream;
-import org.apache.hadoop.fs.FileStatus;
-import org.apache.hadoop.fs.FileSystem;
-import org.apache.hadoop.fs.Path;
+import org.apache.hadoop.fs.*;
 import org.opencloudengine.garuda.backend.system.SystemService;
 import org.opencloudengine.garuda.common.exception.ServiceException;
 import org.opencloudengine.garuda.util.ExceptionUtils;
@@ -39,6 +36,7 @@ import javax.servlet.ServletInputStream;
 import javax.servlet.http.HttpServletRequest;
 import java.io.BufferedInputStream;
 import java.io.FileInputStream;
+import java.io.IOException;
 import java.io.InputStream;
 import java.util.ArrayList;
 import java.util.List;
@@ -65,7 +63,7 @@ public class HdfsServiceImpl implements HdfsService {
     FileSystemFactory fileSystemFactory;
 
     @Override
-    public List<HdfsFileInfo> getFile(String path) throws Exception {
+    public List<HdfsFileInfo> listDirectory(String path) throws Exception {
         FileSystem fs = fileSystemFactory.getFileSystem();
         FileStatus[] fileStatuses = fs.listStatus(new Path(path));
 
@@ -90,5 +88,39 @@ public class HdfsServiceImpl implements HdfsService {
         is.close();
         out.close();
         fs.close();
+    }
+
+    @Override
+    public void createEmptyFile(String path) throws Exception {
+        FileSystem fs = fileSystemFactory.getFileSystem();
+        fs.create(new Path(path));
+    }
+
+    @Override
+    public void appendFile(String path, InputStream is) throws Exception{
+        FileSystem fs = fileSystemFactory.getFileSystem();
+        Path fsPath = new Path(path);
+        boolean exists = fs.exists(fsPath);
+        if(exists){
+            FileStatus fileStatus = fs.getFileStatus(fsPath);
+            if(fileStatus.isFile()){
+                FSDataOutputStream out = fs.append(fsPath);
+                byte[] b = new byte[1024];
+                int numBytes = 0;
+                while ((numBytes = is.read(b)) > 0) {
+                    out.write(b, 0, numBytes);
+                }
+
+                is.close();
+                out.close();
+                fs.close();
+            }else{
+                logger.warn("Failed append HDFS file, {} is not file.", fsPath.toString());
+                throw new ServiceException("디렉토리에 파일을 쓸 수 없습니다..");
+            }
+        }else{
+            logger.warn("Failed append HDFS file, File not exist : {}", fsPath.toString());
+            throw new ServiceException("파일이 존재하지 않습니다.");
+        }
     }
 }
