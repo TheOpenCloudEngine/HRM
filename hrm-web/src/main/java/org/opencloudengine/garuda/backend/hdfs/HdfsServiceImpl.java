@@ -20,6 +20,8 @@ import net.sf.expectit.Expect;
 import net.sf.expectit.ExpectBuilder;
 import org.apache.hadoop.conf.Configuration;
 import org.apache.hadoop.fs.*;
+import org.apache.hadoop.fs.permission.FsAction;
+import org.apache.hadoop.fs.permission.FsPermission;
 import org.opencloudengine.garuda.backend.system.SystemService;
 import org.opencloudengine.garuda.common.exception.ServiceException;
 import org.opencloudengine.garuda.util.ExceptionUtils;
@@ -62,8 +64,45 @@ public class HdfsServiceImpl implements HdfsService {
     @Autowired
     FileSystemFactory fileSystemFactory;
 
+//    @Override
+//    public List<HdfsFileInfo> list(String path, int start, int end, final String filter) throws Exception {
+//
+//        FileSystem fs = fileSystemFactory.getFileSystem();
+//        Path fsPath = new Path(path);
+//
+//        this.indexCheck(start, end);
+//
+//        if (!fs.exists(fsPath)) {
+//            this.notFoundException(fsPath.toString());
+//        }
+//        FileStatus fileStatus = fs.getFileStatus(fsPath);
+//        if (!fileStatus.isDirectory()) {
+//            this.notDirectoryException(fsPath.toString());
+//        }
+//
+//        List<HdfsFileInfo> listStatus = new ArrayList<>();
+//        int count = 0;
+//        FileStatus[] fileStatuses = null;
+//        if (StringUtils.isEmpty(filter)) {
+//            fileStatuses = fs.listStatus(fsPath);
+//        } else {
+//            PathFilter pathfilter = new PathFilter() {
+//                @Override
+//                public boolean accept(Path path) {
+//                    return path.getName().contains(filter);
+//                }
+//            };
+//            fileStatuses = fs.listStatus(fsPath, pathfilter);
+//        }
+//        for (int i = start - 1; i < end; i++) {
+//            listStatus.add(new HdfsFileInfo(fileStatuses[i], fs.getContentSummary(fileStatuses[i].getPath())));
+//        }
+//        fs.close();
+//        return listStatus;
+//    }
+
     @Override
-    public List<HdfsFileInfo> list(String path, int start, int end, final String filter) throws Exception{
+    public List<HdfsFileInfo> list(String path, int start, int end, final String filter) throws Exception {
 
         FileSystem fs = fileSystemFactory.getFileSystem();
         Path fsPath = new Path(path);
@@ -80,20 +119,26 @@ public class HdfsServiceImpl implements HdfsService {
 
         List<HdfsFileInfo> listStatus = new ArrayList<>();
         int count = 0;
-        FileStatus[] fileStatuses = null;
-        if (StringUtils.isEmpty(filter)) {
-            fileStatuses = fs.listStatus(fsPath);
-        } else {
-            PathFilter pathfilter = new PathFilter() {
-                @Override
-                public boolean accept(Path path) {
-                    return path.getName().contains(filter);
+        FileStatus fileStatuses = null;
+        LocatedFileStatus next = null;
+        RemoteIterator<LocatedFileStatus> remoteIterator = fs.listLocatedStatus(fsPath);
+        while (remoteIterator.hasNext()) {
+            next = remoteIterator.next();
+            if (!StringUtils.isEmpty(filter)) {
+                if (next.getPath().getName().contains(filter)) {
+                    count++;
+                    if (count >= start && count <= end) {
+                        fileStatuses = fs.getFileStatus(next.getPath());
+                        listStatus.add(new HdfsFileInfo(fileStatuses, fs.getContentSummary(fileStatuses.getPath())));
+                    }
                 }
-            };
-            fileStatuses = fs.listStatus(fsPath, pathfilter);
-        }
-        for (int i = start - 1; i < end; i++) {
-            listStatus.add(new HdfsFileInfo(fileStatuses[i], fs.getContentSummary(fileStatuses[i].getPath())));
+            } else {
+                count++;
+                if (count >= start && count <= end) {
+                    fileStatuses = fs.getFileStatus(next.getPath());
+                    listStatus.add(new HdfsFileInfo(fileStatuses, fs.getContentSummary(fileStatuses.getPath())));
+                }
+            }
         }
         fs.close();
         return listStatus;
@@ -126,10 +171,6 @@ public class HdfsServiceImpl implements HdfsService {
         FileSystem fs = fileSystemFactory.getFileSystem();
         for (int i = 0; i < 1000000; i++) {
             fs.create(new Path("/user/ubuntu/many/uuid_u" + i)).close();
-//            if ((i % 1000) == 0) {
-//                Runtime.getRuntime().gc();
-//                Thread.currentThread().sleep(1000);
-//            }
         }
         fs.close();
     }
@@ -138,7 +179,6 @@ public class HdfsServiceImpl implements HdfsService {
     public void appendFile(String path, InputStream is) throws Exception {
         FileSystem fs = fileSystemFactory.getFileSystem();
         Path fsPath = new Path(path);
-
         if (!fs.exists(fsPath)) {
             this.notFoundException(fsPath.toString());
         }
