@@ -63,7 +63,7 @@ public class HdfsServiceImpl implements HdfsService {
     FileSystemFactory fileSystemFactory;
 
     @Override
-    public List<HdfsFileInfo> list(String path, int start, int end, final String filter) throws Exception {
+    public List<HdfsFileInfo> list(String path, int start, int end, final String filter) throws Exception{
 
         FileSystem fs = fileSystemFactory.getFileSystem();
         Path fsPath = new Path(path);
@@ -97,30 +97,6 @@ public class HdfsServiceImpl implements HdfsService {
         }
         fs.close();
         return listStatus;
-
-//        FileStatus fileStatuses = null;
-//        LocatedFileStatus next = null;
-//        RemoteIterator<LocatedFileStatus> remoteIterator = fs.listLocatedStatus(fsPath);
-//        while (remoteIterator.hasNext()) {
-//            next = remoteIterator.next();
-//            if (!StringUtils.isEmpty(filter)) {
-//                if (next.getPath().getName().contains(filter)) {
-//                    count++;
-//                    if (count >= start && count <= end) {
-//                        fileStatuses = fs.getFileStatus(next.getPath());
-//                        listStatus.add(new HdfsFileInfo(fileStatuses, fs.getContentSummary(fileStatuses.getPath())));
-//                    }
-//                }
-//            } else {
-//                count++;
-//                if (count >= start && count <= end) {
-//                    fileStatuses = fs.getFileStatus(next.getPath());
-//                    listStatus.add(new HdfsFileInfo(fileStatuses, fs.getContentSummary(fileStatuses.getPath())));
-//                }
-//            }
-//        }
-//        fs.close();
-//        return listStatus;
     }
 
     @Override
@@ -149,11 +125,11 @@ public class HdfsServiceImpl implements HdfsService {
     public void teragen() throws Exception {
         FileSystem fs = fileSystemFactory.getFileSystem();
         for (int i = 0; i < 1000000; i++) {
-            fs.create(new Path("/user/ubuntu/many/uuid_" + i)).close();
-            if ((i % 1000) == 0) {
-                Runtime.getRuntime().gc();
-                Thread.currentThread().sleep(1000);
-            }
+            fs.create(new Path("/user/ubuntu/many/uuid_u" + i)).close();
+//            if ((i % 1000) == 0) {
+//                Runtime.getRuntime().gc();
+//                Thread.currentThread().sleep(1000);
+//            }
         }
         fs.close();
     }
@@ -212,4 +188,31 @@ public class HdfsServiceImpl implements HdfsService {
         }
 
     }
+
+//    private void list(){
+//
+//        FileStatus fileStatuses = null;
+//        LocatedFileStatus next = null;
+//        RemoteIterator<LocatedFileStatus> remoteIterator = fs.listLocatedStatus(fsPath);
+//        while (remoteIterator.hasNext()) {
+//            next = remoteIterator.next();
+//            if (!StringUtils.isEmpty(filter)) {
+//                if (next.getPath().getName().contains(filter)) {
+//                    count++;
+//                    if (count >= start && count <= end) {
+//                        fileStatuses = fs.getFileStatus(next.getPath());
+//                        listStatus.add(new HdfsFileInfo(fileStatuses, fs.getContentSummary(fileStatuses.getPath())));
+//                    }
+//                }
+//            } else {
+//                count++;
+//                if (count >= start && count <= end) {
+//                    fileStatuses = fs.getFileStatus(next.getPath());
+//                    listStatus.add(new HdfsFileInfo(fileStatuses, fs.getContentSummary(fileStatuses.getPath())));
+//                }
+//            }
+//        }
+//        fs.close();
+//        return listStatus;
+//    }
 }

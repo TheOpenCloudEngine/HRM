@@ -41,6 +41,7 @@ public class HdfsRestController {
             List<HdfsFileInfo> fileStatuses = hdfsService.list(path, start, end, filter);
             return new ResponseEntity<>(fileStatuses, HttpStatus.OK);
         } catch (Exception ex) {
+            ex.printStackTrace();
             return new ResponseEntity<>(HttpStatus.BAD_REQUEST);
         }
     }
@@ -54,6 +55,7 @@ public class HdfsRestController {
             headers.setLocation(ucBuilder.path("/rest/v1/file?path={path}").buildAndExpand(path).toUri());
             return new ResponseEntity<>(headers, HttpStatus.CREATED);
         } catch (Exception ex) {
+            ex.printStackTrace();
             return new ResponseEntity<>(HttpStatus.BAD_REQUEST);
         }
     }
@@ -65,6 +67,7 @@ public class HdfsRestController {
             hdfsService.teragen();
             return new ResponseEntity<>(HttpStatus.CREATED);
         } catch (Exception ex) {
+            ex.printStackTrace();
             return new ResponseEntity<>(HttpStatus.BAD_REQUEST);
         }
     }
