@@ -107,33 +107,46 @@ public class HdfsServiceImpl implements HdfsService {
         List<HdfsFileInfo> listStatus = new ArrayList<>();
         int count = 1;
 
+        FileStatus fileStatuses = null;
+        LocatedFileStatus next = null;
         RemoteIterator<LocatedFileStatus> remoteIterator = fs.listLocatedStatus(fsPath);
         while (remoteIterator.hasNext()) {
-            count++;
+            next = remoteIterator.next();
+            if (!StringUtils.isEmpty(filter)) {
+                if(next.getPath().toUri().getPath().contains(filter)){
+                    count++;
+                }
+            }else{
+                count++;
+            }
+
             if (count >= start && count <= end) {
-                LocatedFileStatus next = remoteIterator.next();
-                FileStatus fileStatuses = fs.getFileStatus(next.getPath());
+                fileStatuses = fs.getFileStatus(next.getPath());
                 if (!StringUtils.isEmpty(filter)) {
                     if (fileStatuses.getPath().toUri().getPath().contains(filter)) {
                         listStatus.add(new HdfsFileInfo(fileStatuses, fs.getContentSummary(fileStatuses.getPath())));
                     }
-                } else {
+                }else{
                     listStatus.add(new HdfsFileInfo(fileStatuses, fs.getContentSummary(fileStatuses.getPath())));
                 }
-            } else {
-                remoteIterator.next();
             }
+//            if (count >= start && count <= end) {
+//                next = remoteIterator.next();
+//                fileStatuses = fs.getFileStatus(next.getPath());
+//                if (!StringUtils.isEmpty(filter)) {
+//                    if (fileStatuses.getPath().toUri().getPath().contains(filter)) {
+//                        listStatus.add(new HdfsFileInfo(fileStatuses, fs.getContentSummary(fileStatuses.getPath())));
+//                    }
+//                } else {
+//                    listStatus.add(new HdfsFileInfo(fileStatuses, fs.getContentSummary(fileStatuses.getPath())));
+//                }
+//            } else {
+//                remoteIterator.next();
+//            }
         }
         fs.close();
         return listStatus;
 
-//        List<HdfsFileInfo> listStatus = new ArrayList<>();
-//        FileStatus[] fileStatuses = this.listAll(path, filter);
-//        for (int i = start - 1; i < end; i++) {
-//            listStatus.add(new HdfsFileInfo(fileStatuses[i], fs.getContentSummary(fileStatuses[i].getPath())));
-//        }
-//        fs.close();
-//        return listStatus;
 
 //        FileSystem fs = fileSystemFactory.getFileSystem();
 //
