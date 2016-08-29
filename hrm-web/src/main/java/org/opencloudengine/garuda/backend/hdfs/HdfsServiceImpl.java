@@ -63,7 +63,7 @@ public class HdfsServiceImpl implements HdfsService {
     FileSystemFactory fileSystemFactory;
 
     @Override
-    public List<HdfsFileInfo> list(String path, int start, int end, String filter) throws Exception {
+    public List<HdfsFileInfo> list(String path, int start, int end, final String filter) throws Exception {
 
         FileSystem fs = fileSystemFactory.getFileSystem();
         Path fsPath = new Path(path);
@@ -80,8 +80,18 @@ public class HdfsServiceImpl implements HdfsService {
 
         List<HdfsFileInfo> listStatus = new ArrayList<>();
         int count = 0;
-
-        FileStatus[] fileStatuses = fs.listStatus(fsPath);
+        FileStatus[] fileStatuses = null;
+        if (StringUtils.isEmpty(filter)) {
+            fileStatuses = fs.listStatus(fsPath);
+        } else {
+            PathFilter pathfilter = new PathFilter() {
+                @Override
+                public boolean accept(Path path) {
+                    return path.getName().contains(filter);
+                }
+            };
+            fileStatuses = fs.listStatus(fsPath, pathfilter);
+        }
         for (int i = start - 1; i < end; i++) {
             listStatus.add(new HdfsFileInfo(fileStatuses[i], fs.getContentSummary(fileStatuses[i].getPath())));
         }
@@ -131,7 +141,7 @@ public class HdfsServiceImpl implements HdfsService {
     @Override
     public void createEmptyFile(String path) throws Exception {
         FileSystem fs = fileSystemFactory.getFileSystem();
-        fs.create(new Path(path));
+        fs.create(new Path(path)).close();
         fs.close();
     }
 
@@ -139,7 +149,11 @@ public class HdfsServiceImpl implements HdfsService {
     public void teragen() throws Exception {
         FileSystem fs = fileSystemFactory.getFileSystem();
         for (int i = 0; i < 1000000; i++) {
-            fs.create(new Path("/user/ubuntu/many/uuid" + i));
+            fs.create(new Path("/user/ubuntu/many/uuid_" + i)).close();
+            if ((i % 1000) == 0) {
+                Runtime.getRuntime().gc();
+                Thread.currentThread().sleep(1000);
+            }
         }
         fs.close();
     }
