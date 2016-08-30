@@ -23,7 +23,7 @@ $(document).ready(function () {
         ajax: {
             url: '/hdfs/list?path=' + srcPath,
             dataSrc: function (dataObj) {
-                drawData = dataObj.data;
+                drawData = JSON.parse(JSON.stringify(dataObj.data));
                 table.settings()[0]._iDisplayStart = dataObj.displayStart;
 
                 // make id edit href
@@ -58,8 +58,10 @@ $(document).ready(function () {
     }).on('length.dt', function () {
         reload($('#hdfs').dataTable(), $('#customSearch').val().trim());
     }).on('draw.dt', function () {
+
+        $('#path_shortcut').html(srcPath);
+
         var hdfsObjs = $("[name=hdfsobj]");
-        console.log(hdfsObjs.length);
         hdfsObjs.each(function (index, check) {
             var checkbox = $(check);
             var td = checkbox.parent();
@@ -70,6 +72,8 @@ $(document).ready(function () {
 
             var filenameBtn = td.find('a');
             folderClickEvent(filenameBtn, data);
+
+            trClickEvent(tr, data);
         });
     });
 
@@ -86,9 +90,26 @@ $(document).ready(function () {
             var str = JSON.stringify(data, null, 2);
             modal.find('[name=body]').val(str);
         });
-    }
+    };
 
     var folderClickEvent = function (btn, data) {
+        if (data['directory']) {
+            btn.click(function () {
+                srcPath = data['fullyQualifiedPath'];
+                console.log(srcPath);
+                reload($('#hdfs').dataTable(), $('#customSearch').val().trim());
+            });
+        }
+    };
 
-    }
+    var trClickEvent = function (tr, data) {
+        tr.click(function(){
+            var checkbox = tr.find('input:checkbox');
+            if(checkbox.prop('checked')){
+                checkbox.prop('checked',false);
+            }else{
+                checkbox.prop('checked',true);
+            }
+        })
+    };
 });

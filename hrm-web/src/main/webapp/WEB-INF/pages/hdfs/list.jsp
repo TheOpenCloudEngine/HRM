@@ -53,6 +53,7 @@
             <div class="col-md-12">
                 <div class="margin-bottom-10">
                     <div class="table-responsive">
+                        <div id="path_shortcut"></div>
                         <div style="float: right"> Search : <input type="text" id="customSearch"
                                                                    onKeyDown="javascript: search($('#hdfs').dataTable(), this.value)"/>
                         </div>
@@ -91,7 +92,7 @@
                 <h4 class="modal-title">Status</h4>
             </div>
             <div class="modal-body">
-                <textarea name="body" style="width: 100%; height: 100%"></textarea>
+                <textarea rows="12" name="body" style="width: 100%;"></textarea>
             </div>
             <div class="modal-footer">
                 <button class="btn-u" type="button" name="close">Close</button>
