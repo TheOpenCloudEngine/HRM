@@ -18,26 +18,18 @@ package org.opencloudengine.garuda.backend.hdfs;
 
 import net.sf.expectit.Expect;
 import net.sf.expectit.ExpectBuilder;
-import org.apache.hadoop.conf.Configuration;
 import org.apache.hadoop.fs.*;
-import org.apache.hadoop.fs.permission.FsAction;
 import org.apache.hadoop.fs.permission.FsPermission;
-import org.opencloudengine.garuda.backend.system.SystemService;
 import org.opencloudengine.garuda.common.exception.ServiceException;
 import org.opencloudengine.garuda.util.ExceptionUtils;
 import org.opencloudengine.garuda.util.StringUtils;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import org.slf4j.helpers.MessageFormatter;
-import org.springframework.beans.factory.InitializingBean;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.beans.factory.annotation.Qualifier;
 import org.springframework.stereotype.Service;
 
-import javax.servlet.ServletInputStream;
-import javax.servlet.http.HttpServletRequest;
-import java.io.BufferedInputStream;
-import java.io.FileInputStream;
 import java.io.IOException;
 import java.io.InputStream;
 import java.util.ArrayList;
@@ -45,8 +37,6 @@ import java.util.List;
 import java.util.Properties;
 import java.util.concurrent.TimeUnit;
 
-import static net.sf.expectit.matcher.Matchers.eof;
-import static net.sf.expectit.matcher.Matchers.regexp;
 
 @Service
 public class HdfsServiceImpl implements HdfsService {
@@ -65,7 +55,9 @@ public class HdfsServiceImpl implements HdfsService {
     FileSystemFactory fileSystemFactory;
 
     @Override
-    public List<HdfsFileInfo> list(String path, int start, int end, final String filter) throws Exception {
+    public HdfsListInfo list(String path, int start, int end, final String filter) throws Exception {
+        HdfsListInfo hdfsListInfo = new HdfsListInfo();
+
         this.indexCheck(start, end);
         this.mustExists(path);
 
@@ -101,7 +93,22 @@ public class HdfsServiceImpl implements HdfsService {
             }
         }
         fs.close();
-        return listStatus;
+
+        hdfsListInfo.setFileInfoList(listStatus);
+        hdfsListInfo.setCount(count);
+        return hdfsListInfo;
+    }
+
+    @Override
+    public HdfsFileInfo getStatus(String path) throws Exception {
+        this.mustExists(path);
+
+        FileSystem fs = fileSystemFactory.getFileSystem();
+        Path fsPath = new Path(path);
+        FileStatus fileStatus = fs.getFileStatus(fsPath);
+        ContentSummary summary = fs.getContentSummary(fsPath);
+        fs.close();
+        return new HdfsFileInfo(fileStatus, summary);
     }
 
     @Override

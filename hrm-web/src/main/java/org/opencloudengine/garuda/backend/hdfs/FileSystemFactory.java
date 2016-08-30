@@ -42,4 +42,18 @@ public class FileSystemFactory {
             throw new ServiceException(ex);
         }
     }
+
+    public FileSystem getFileSystem(String path) {
+        try {
+            Configuration conf = new Configuration();
+            conf.addResource(new Path(hadoopHome + "/conf/core-site.xml"));
+            conf.addResource(new Path(hadoopHome + "/conf/hdfs-site.xml"));
+            conf.addResource(new Path(hadoopHome + "/conf/mapred-site.xml"));
+
+            return FileSystem.get(new Path(path).toUri(), conf);
+        } catch (Exception ex) {
+            logger.error("Unable create hadoop FileSystem {}", hadoopHome);
+            throw new ServiceException(ex);
+        }
+    }
 }

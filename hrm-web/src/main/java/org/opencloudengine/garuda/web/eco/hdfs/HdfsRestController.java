@@ -3,6 +3,7 @@ package org.opencloudengine.garuda.web.eco.hdfs;
 
 import org.apache.hadoop.fs.FileStatus;
 import org.opencloudengine.garuda.backend.hdfs.HdfsFileInfo;
+import org.opencloudengine.garuda.backend.hdfs.HdfsListInfo;
 import org.opencloudengine.garuda.backend.hdfs.HdfsService;
 import org.opencloudengine.garuda.web.console.oauthclient.OauthClient;
 import org.opencloudengine.garuda.web.console.oauthclient.OauthClientService;
@@ -38,7 +39,20 @@ public class HdfsRestController {
                                                    @RequestParam(defaultValue = "10") int end,
                                                    @RequestParam(defaultValue = "") String filter) {
         try {
-            List<HdfsFileInfo> fileStatuses = hdfsService.list(path, start, end, filter);
+            HdfsListInfo hdfsListInfo = hdfsService.list(path, start, end, filter);
+            List<HdfsFileInfo> fileStatuses = hdfsListInfo.getFileInfoList();
+            return new ResponseEntity<>(fileStatuses, HttpStatus.OK);
+        } catch (Exception ex) {
+            ex.printStackTrace();
+            return new ResponseEntity<>(HttpStatus.BAD_REQUEST);
+        }
+    }
+
+    @RequestMapping(value = "/status", method = RequestMethod.GET)
+    public ResponseEntity<HdfsFileInfo> createFile(HttpServletRequest request,
+                                           @RequestParam(defaultValue = "") String path) {
+        try {
+            HdfsFileInfo fileStatuses = hdfsService.getStatus(path);
             return new ResponseEntity<>(fileStatuses, HttpStatus.OK);
         } catch (Exception ex) {
             ex.printStackTrace();

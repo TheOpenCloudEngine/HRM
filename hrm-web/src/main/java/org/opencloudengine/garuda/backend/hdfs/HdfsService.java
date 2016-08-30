@@ -23,21 +23,23 @@ import java.util.List;
 
 public interface HdfsService {
 
-    List<HdfsFileInfo> list(String path, int start, int end, String filter) throws Exception;
+    HdfsListInfo list(String path, int start, int end, String filter) throws Exception;
 
-    public void createFile(String path, InputStream is, String owner, String group, String permission, boolean overwrite) throws Exception;
+    HdfsFileInfo getStatus(String path) throws Exception;
 
-    public void createEmptyFile(String path, String owner, String group, String permission, boolean overwrite) throws Exception;
+    void createFile(String path, InputStream is, String owner, String group, String permission, boolean overwrite) throws Exception;
 
-    public void appendFile(String path, InputStream is) throws Exception;
+    void createEmptyFile(String path, String owner, String group, String permission, boolean overwrite) throws Exception;
 
-    public boolean createDirectory(String path, String owner, String group, String permission) throws Exception;
+    void appendFile(String path, InputStream is) throws Exception;
 
-    public boolean delete(String path) throws Exception;
+    boolean createDirectory(String path, String owner, String group, String permission) throws Exception;
 
-    public boolean setOwner(String path, String owner, String group, boolean recursive);
+    boolean delete(String path) throws Exception;
 
-    public boolean setPermission(String path, String permission, boolean recursive);
+    boolean setOwner(String path, String owner, String group, boolean recursive);
 
-    public void teragen() throws Exception;
+    boolean setPermission(String path, String permission, boolean recursive);
+
+    void teragen() throws Exception;
 }
