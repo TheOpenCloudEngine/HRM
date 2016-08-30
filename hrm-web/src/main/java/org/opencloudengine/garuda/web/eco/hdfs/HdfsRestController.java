@@ -32,11 +32,11 @@ public class HdfsRestController {
     HdfsService hdfsService;
 
     @RequestMapping(value = "/list", method = RequestMethod.GET, produces = "application/json")
-    public ResponseEntity<List<HdfsFileInfo>> listAllClients(HttpServletRequest request,
-                                                             @RequestParam(defaultValue = "") String path,
-                                                             @RequestParam(defaultValue = "1") int start,
-                                                             @RequestParam(defaultValue = "10") int end,
-                                                             @RequestParam(defaultValue = "") String filter) {
+    public ResponseEntity<List<HdfsFileInfo>> list(HttpServletRequest request,
+                                                   @RequestParam(defaultValue = "") String path,
+                                                   @RequestParam(defaultValue = "1") int start,
+                                                   @RequestParam(defaultValue = "10") int end,
+                                                   @RequestParam(defaultValue = "") String filter) {
         try {
             List<HdfsFileInfo> fileStatuses = hdfsService.list(path, start, end, filter);
             return new ResponseEntity<>(fileStatuses, HttpStatus.OK);
@@ -47,13 +47,74 @@ public class HdfsRestController {
     }
 
     @RequestMapping(value = "/file", method = RequestMethod.POST)
-    public ResponseEntity<Void> createFile(HttpServletRequest request, @RequestParam(defaultValue = "") String path, UriComponentsBuilder ucBuilder) {
+    public ResponseEntity<Void> createFile(HttpServletRequest request,
+                                           @RequestParam(defaultValue = "") String path,
+                                           @RequestParam(defaultValue = "") String owner,
+                                           @RequestParam(defaultValue = "") String group,
+                                           @RequestParam(defaultValue = "") String permission,
+                                           UriComponentsBuilder ucBuilder) {
         try {
-            hdfsService.createFile(path, request.getInputStream());
+            hdfsService.createFile(path, request.getInputStream(), owner, group, permission);
 
             HttpHeaders headers = new HttpHeaders();
             headers.setLocation(ucBuilder.path("/rest/v1/file?path={path}").buildAndExpand(path).toUri());
             return new ResponseEntity<>(headers, HttpStatus.CREATED);
+        } catch (Exception ex) {
+            ex.printStackTrace();
+            return new ResponseEntity<>(HttpStatus.BAD_REQUEST);
+        }
+    }
+
+    @RequestMapping(value = "/emptyfile", method = RequestMethod.POST)
+    public ResponseEntity<Void> createEmptyFile(HttpServletRequest request,
+                                                @RequestParam(defaultValue = "") String path,
+                                                @RequestParam(defaultValue = "") String owner,
+                                                @RequestParam(defaultValue = "") String group,
+                                                @RequestParam(defaultValue = "") String permission,
+                                                UriComponentsBuilder ucBuilder) {
+        try {
+            hdfsService.createEmptyFile(path, owner, group, permission);
+
+            HttpHeaders headers = new HttpHeaders();
+            headers.setLocation(ucBuilder.path("/rest/v1/file?path={path}").buildAndExpand(path).toUri());
+            return new ResponseEntity<>(headers, HttpStatus.CREATED);
+        } catch (Exception ex) {
+            ex.printStackTrace();
+            return new ResponseEntity<>(HttpStatus.BAD_REQUEST);
+        }
+    }
+
+    @RequestMapping(value = "/owner", method = RequestMethod.PUT)
+    public ResponseEntity<Void> owner(HttpServletRequest request,
+                                      @RequestParam(defaultValue = "") String path,
+                                      @RequestParam(defaultValue = "") String owner,
+                                      @RequestParam(defaultValue = "") String group,
+                                      @RequestParam(defaultValue = "false") boolean recursive,
+                                      UriComponentsBuilder ucBuilder) {
+        try {
+            hdfsService.setOwner(path, owner, group, recursive);
+
+            HttpHeaders headers = new HttpHeaders();
+            headers.setLocation(ucBuilder.path("/rest/v1/file?path={path}").buildAndExpand(path).toUri());
+            return new ResponseEntity<>(headers, HttpStatus.OK);
+        } catch (Exception ex) {
+            ex.printStackTrace();
+            return new ResponseEntity<>(HttpStatus.BAD_REQUEST);
+        }
+    }
+
+    @RequestMapping(value = "/permission", method = RequestMethod.PUT)
+    public ResponseEntity<Void> permission(HttpServletRequest request,
+                                           @RequestParam(defaultValue = "") String path,
+                                           @RequestParam(defaultValue = "") String permission,
+                                           @RequestParam(defaultValue = "false") boolean recursive,
+                                           UriComponentsBuilder ucBuilder) {
+        try {
+            hdfsService.setPermission(path, permission, recursive);
+
+            HttpHeaders headers = new HttpHeaders();
+            headers.setLocation(ucBuilder.path("/rest/v1/file?path={path}").buildAndExpand(path).toUri());
+            return new ResponseEntity<>(headers, HttpStatus.OK);
         } catch (Exception ex) {
             ex.printStackTrace();
             return new ResponseEntity<>(HttpStatus.BAD_REQUEST);
