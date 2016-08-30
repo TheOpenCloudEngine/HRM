@@ -92,7 +92,6 @@ public class HdfsServiceImpl implements HdfsService {
                 }
             }
         }
-        fs.close();
 
         hdfsListInfo.setFileInfoList(listStatus);
         hdfsListInfo.setCount(count);
@@ -107,7 +106,6 @@ public class HdfsServiceImpl implements HdfsService {
         Path fsPath = new Path(path);
         FileStatus fileStatus = fs.getFileStatus(fsPath);
         ContentSummary summary = fs.getContentSummary(fsPath);
-        fs.close();
         return new HdfsFileInfo(fileStatus, summary);
     }
 
@@ -168,6 +166,7 @@ public class HdfsServiceImpl implements HdfsService {
             if (fs.mkdirs(fsPath)) {
                 this._setOwner(path, owner, group);
                 this._setPermission(path, permission);
+                fs.close();
             }
             return true;
         } catch (IOException ex) {
@@ -212,7 +211,6 @@ public class HdfsServiceImpl implements HdfsService {
             } else {
                 this._setOwner(path, owner, group);
             }
-            fs.close();
             return true;
 
         } catch (Exception ex) {
@@ -236,7 +234,6 @@ public class HdfsServiceImpl implements HdfsService {
             } else {
                 this._setPermission(path, permission);
             }
-            fs.close();
             return true;
 
         } catch (Exception ex) {
@@ -386,9 +383,7 @@ public class HdfsServiceImpl implements HdfsService {
     private boolean exists(String path) throws Exception {
         FileSystem fs = fileSystemFactory.getFileSystem();
         Path fsPath = new Path(path);
-        boolean exists = fs.exists(fsPath);
-        fs.close();
-        return exists;
+        return fs.exists(fsPath);
     }
 
     private void mustNotExists(String path) throws Exception {
@@ -397,7 +392,6 @@ public class HdfsServiceImpl implements HdfsService {
         if (fs.exists(fsPath)) {
             this.alreadyExistException(fsPath.toString());
         }
-        fs.close();
     }
 
     private void mustExists(String path) throws Exception {
@@ -406,7 +400,6 @@ public class HdfsServiceImpl implements HdfsService {
         if (!fs.exists(fsPath)) {
             this.notFoundException(fsPath.toString());
         }
-        fs.close();
     }
 
     private void rootCheck(String path) {
