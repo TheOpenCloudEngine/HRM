@@ -35,10 +35,10 @@
         }
         ;
 
-        function reload(table, searchValue, srcPath) {
+        function reload(table, searchValue) {
             // limit and skip setting
             var tableAPI = table.api();
-            var limit = tableAPI.settings()[0]._iDisplayLength
+            var limit = tableAPI.settings()[0]._iDisplayLength;
             var skip = tableAPI.settings()[0]._iDisplayStart;
 
             tableAPI.ajax.url('/hdfs/list?limit=' + limit + '&skip=' + skip + '&filter=' + searchValue + '&path=' + srcPath);
