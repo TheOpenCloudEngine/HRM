@@ -1,4 +1,5 @@
 var srcPath = '/';
+var drawData;
 function search(table, searchValue) {
     if (event.keyCode == 13) {
         reload(table, searchValue, srcPath);
@@ -22,7 +23,7 @@ $(document).ready(function () {
         ajax: {
             url: '/hdfs/list?path=' + srcPath,
             dataSrc: function (dataObj) {
-                // change init page setting (_iDisplayStart )
+                drawData = dataObj.data;
                 table.settings()[0]._iDisplayStart = dataObj.displayStart;
 
                 // make id edit href
@@ -31,9 +32,11 @@ $(document).ready(function () {
                     if (dataObj.data[i]['directory']) {
                         icon = '<span class="glyphicon glyphicon-folder-open"></span>';
                     }
-                    dataObj.data[i].filename = '<input type="checkbox" id="hdfs' + i + '" data-data="' +
-                        JSON.stringify(dataObj.data[i]) + '"/>' + icon +
-                        '<a href="#">' + dataObj.data[i].filename + '</a>';
+                    dataObj.data[i].filename = '<input type="checkbox" name="hdfsobj" data-data="' +
+                        JSON.stringify(dataObj.data[i]) + '"/>&nbsp;' + icon +
+                        '&nbsp;<a href="#">' + dataObj.data[i].filename + '</a>';
+
+                    dataObj.data[i].status = '<button class="btn btn-xs rounded btn-primary" name="statusBtn">Detail</button>'
                 }
                 return dataObj.data;
             }
@@ -44,7 +47,7 @@ $(document).ready(function () {
             {data: 'owner'},
             {data: 'group'},
             {data: 'permission'},
-            {data: 'path'}
+            {data: 'status'}
         ]
     });
 
@@ -55,6 +58,10 @@ $(document).ready(function () {
     }).on('length.dt', function () {
         reload($('#hdfs').dataTable(), $('#customSearch').val().trim());
     }).on('draw.dt', function () {
-        console.log('Redraw occurred at: ' + new Date().getTime());
+        $("[name=hdfsobj]").each(function (index, check) {
+            var checkbox = $(check);
+            var data = drawData[index];
+
+        });
     });
 });
