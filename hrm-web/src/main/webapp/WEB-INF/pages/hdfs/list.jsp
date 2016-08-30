@@ -61,9 +61,6 @@
                             dataObj.data[i].checkbox = '<input type="checkbox" id="hdfs' + i + '" data-data="' + JSON.stringify(dataObj.data[i]) + '" />'
                         }
                         return dataObj.data;
-                    },
-                    success: function () {
-                        console.log($('#hdfs0').length);
                     }
                 },
                 columns: [
