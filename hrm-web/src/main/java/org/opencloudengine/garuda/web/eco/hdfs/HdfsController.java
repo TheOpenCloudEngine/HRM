@@ -2,6 +2,7 @@ package org.opencloudengine.garuda.web.eco.hdfs;
 
 
 import net.minidev.json.JSONObject;
+import org.opencloudengine.garuda.backend.hdfs.HdfsFileInfo;
 import org.opencloudengine.garuda.backend.hdfs.HdfsListInfo;
 import org.opencloudengine.garuda.backend.hdfs.HdfsService;
 import org.opencloudengine.garuda.common.exception.ServiceException;
@@ -53,10 +54,25 @@ public class HdfsController {
         JSONObject jsonObject = new JSONObject();
         try {
             HdfsListInfo list = hdfsService.list(path, skip + 1, skip + limit, filter);
+
+            //디렉토리, 파일 소트
+            List<HdfsFileInfo> sortList = new ArrayList<>();
+            List<HdfsFileInfo> fileInfoList = list.getFileInfoList();
+            for (HdfsFileInfo hdfsFileInfo : fileInfoList) {
+                if(hdfsFileInfo.isDirectory()){
+                    sortList.add(hdfsFileInfo);
+                }
+            }
+            for (HdfsFileInfo hdfsFileInfo : fileInfoList) {
+                if(hdfsFileInfo.isFile()){
+                    sortList.add(hdfsFileInfo);
+                }
+            }
+
             jsonObject.put("recordsTotal", limit);
             jsonObject.put("recordsFiltered", list.getCount());
             jsonObject.put("displayStart", skip);
-            jsonObject.put("data", list.getFileInfoList());
+            jsonObject.put("data", sortList);
             return jsonObject.toString();
         } catch (Exception ex) {
             ex.printStackTrace();

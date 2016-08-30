@@ -57,14 +57,17 @@
                         table.settings()[0]._iDisplayStart = dataObj.displayStart;
 
                         // make id edit href
-//                        for (var i = 0; i < dataObj.data.length; i++) {
-//                            dataObj.data[i].managementName = '<a href=/management/session?_id=' + managements.data[i]._id + '>' + managements.data[i].managementName + '</a>';
-//                            dataObj.data[i]._id = '<a href=/management/edit?_id=' + managements.data[i]._id + '>Edit</a>';
-//                        }
+                        for (var i = 0; i < dataObj.data.length; i++) {
+                            dataObj.data[i].checkbox = '<input type="checkbox" id="hdfs' + i + '" data-data="' + JSON.stringify(dataObj.data[i]) + '" />'
+                        }
                         return dataObj.data;
+                    },
+                    success: function () {
+                        console.log($('#hdfs1'));
                     }
                 },
                 columns: [
+                    {data: 'checkbox'},
                     {data: 'filename'},
                     {data: 'length'},
                     {data: 'owner'},
@@ -117,6 +120,7 @@
                         <table id="hdfs" class="display table table-bordered table-striped">
                             <thead>
                             <tr>
+                                <th>Select</th>
                                 <th>Name</th>
                                 <th>Size</th>
                                 <th>Owner</th>

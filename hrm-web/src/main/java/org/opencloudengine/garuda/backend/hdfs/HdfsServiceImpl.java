@@ -117,7 +117,7 @@ public class HdfsServiceImpl implements HdfsService {
         this._createEmptyFile(path);
         this._setOwner(path, owner, group);
         this._setPermission(path, permission);
-        this.appendFile(path, is);
+        this._appendFile(path, is);
     }
 
     @Override
@@ -141,17 +141,7 @@ public class HdfsServiceImpl implements HdfsService {
         if (!fileStatus.isFile()) {
             this.notFileException(fsPath.toString());
         }
-
-        FSDataOutputStream out = fs.append(fsPath);
-        byte[] b = new byte[1024];
-        int numBytes = 0;
-        while ((numBytes = is.read(b)) > 0) {
-            out.write(b, 0, numBytes);
-        }
-
-        is.close();
-        out.close();
-        fs.close();
+        this._appendFile(path, is);
     }
 
     @Override
@@ -240,6 +230,21 @@ public class HdfsServiceImpl implements HdfsService {
             ex.printStackTrace();
             throw new ServiceException("권한을 변경할 수 없습니다.", ex);
         }
+    }
+
+    private void _appendFile(String path, InputStream is) throws Exception {
+        FileSystem fs = fileSystemFactory.getFileSystem();
+        Path fsPath = new Path(path);
+        FSDataOutputStream out = fs.append(fsPath);
+        byte[] b = new byte[1024];
+        int numBytes = 0;
+        while ((numBytes = is.read(b)) > 0) {
+            out.write(b, 0, numBytes);
+        }
+
+        is.close();
+        out.close();
+        fs.close();
     }
 
     /**
