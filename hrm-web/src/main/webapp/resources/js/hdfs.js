@@ -58,16 +58,22 @@ $(document).ready(function () {
     }).on('length.dt', function () {
         reload($('#hdfs').dataTable(), $('#customSearch').val().trim());
     }).on('draw.dt', function () {
-        $("[name=hdfsobj]").each(function (index, check) {
+        var hdfsObjs = $("[name=hdfsobj]");
+        console.log(hdfsObjs.length);
+        hdfsObjs.each(function (index, check) {
             var checkbox = $(check);
             var td = checkbox.parent();
+            var tr = td.parent();
             var data = drawData[index];
-            var statusBtn = td.find('[name=statusBtn]');
+            var statusBtn = tr.find('[name=statusBtn]');
             bindStatusEvent(statusBtn, data);
+
+            var filenameBtn = td.find('a');
+            folderClickEvent(filenameBtn, data);
         });
     });
 
-    var bindStatusEvent = function(btn, data){
+    var bindStatusEvent = function (btn, data) {
         btn.click(function () {
             var modal = $('#statusModal');
             modal.modal({
@@ -80,5 +86,9 @@ $(document).ready(function () {
             var str = JSON.stringify(data, null, 2);
             modal.find('[name=body]').val(str);
         });
+    }
+
+    var folderClickEvent = function (btn, data) {
+
     }
 });
