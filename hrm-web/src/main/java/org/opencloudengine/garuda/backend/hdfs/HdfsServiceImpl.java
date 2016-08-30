@@ -67,7 +67,7 @@ public class HdfsServiceImpl implements HdfsService {
     @Override
     public List<HdfsFileInfo> list(String path, int start, int end, final String filter) throws Exception {
         this.indexCheck(start, end);
-        this.existCheck(path);
+        this.mustExists(path);
 
         FileSystem fs = fileSystemFactory.getFileSystem();
         Path fsPath = new Path(path);
@@ -105,7 +105,10 @@ public class HdfsServiceImpl implements HdfsService {
     }
 
     @Override
-    public void createFile(String path, InputStream is, String owner, String group, String permission) throws Exception {
+    public void createFile(String path, InputStream is, String owner, String group, String permission, boolean overwrite) throws Exception {
+        if (!overwrite) {
+            this.mustNotExists(path);
+        }
         this._createEmptyFile(path);
         this._setOwner(path, owner, group);
         this._setPermission(path, permission);
@@ -113,7 +116,10 @@ public class HdfsServiceImpl implements HdfsService {
     }
 
     @Override
-    public void createEmptyFile(String path, String owner, String group, String permission) throws Exception {
+    public void createEmptyFile(String path, String owner, String group, String permission, boolean overwrite) throws Exception {
+        if (!overwrite) {
+            this.mustNotExists(path);
+        }
         this._createEmptyFile(path);
         this._setOwner(path, owner, group);
         this._setPermission(path, permission);
@@ -121,7 +127,7 @@ public class HdfsServiceImpl implements HdfsService {
 
     @Override
     public void appendFile(String path, InputStream is) throws Exception {
-        this.existCheck(path);
+        this.mustExists(path);
 
         FileSystem fs = fileSystemFactory.getFileSystem();
         Path fsPath = new Path(path);
@@ -144,10 +150,51 @@ public class HdfsServiceImpl implements HdfsService {
     }
 
     @Override
+    public boolean createDirectory(String path, String owner, String group, String permission) throws Exception {
+        this.rootCheck(path);
+        this.mustNotExists(path);
+
+        try {
+            FileSystem fs = fileSystemFactory.getFileSystem();
+            Path fsPath = new Path(path);
+
+            if (fs.mkdirs(fsPath)) {
+                this._setOwner(path, owner, group);
+                this._setPermission(path, permission);
+            }
+            return true;
+        } catch (IOException ex) {
+            throw new ServiceException("디렉토리를 생성할 수 없습니다.", ex);
+        }
+    }
+
+    /**
+     * HDFS의 파일 또는 디렉토리를 삭제한다.
+     *
+     * @param path HDFS의 파일 또는 디렉토리
+     * @return 정상적으로 삭제된 경우 <tt>true</tt>, 그렇지 않은 경우는 <tt>false</tt>
+     * @throws ServiceException 파일 시스템에 접근할 수 없는 경우
+     */
+    @Override
+    public boolean delete(String path) throws Exception {
+        this.rootCheck(path);
+        this.mustExists(path);
+        try {
+            FileSystem fs = fileSystemFactory.getFileSystem();
+            Path fsPath = new Path(path);
+            boolean delete = fs.delete(fsPath, true);
+            fs.close();
+            return delete;
+        } catch (Exception ex) {
+            throw new ServiceException("디렉토리를 삭제할 수 없습니다.", ex);
+        }
+    }
+
+    @Override
     public boolean setOwner(String path, String owner, String group, boolean recursive) {
         try {
             this.rootCheck(path);
-            this.existCheck(path);
+            this.mustExists(path);
 
             FileSystem fs = fileSystemFactory.getFileSystem();
             Path fsPath = new Path(path);
@@ -171,7 +218,7 @@ public class HdfsServiceImpl implements HdfsService {
     public boolean setPermission(String path, String permission, boolean recursive) {
         try {
             this.rootCheck(path);
-            this.existCheck(path);
+            this.mustExists(path);
 
             FileSystem fs = fileSystemFactory.getFileSystem();
             Path fsPath = new Path(path);
@@ -202,10 +249,10 @@ public class HdfsServiceImpl implements HdfsService {
      */
     private boolean runChown(boolean recursive, String owner, String group, String srcPath) {
         try {
-            if(StringUtils.isEmpty(owner)){
+            if (StringUtils.isEmpty(owner)) {
                 owner = config.getProperty("system.hdfs.super.user");
             }
-            if(StringUtils.isEmpty(group)){
+            if (StringUtils.isEmpty(group)) {
                 group = owner;
             }
             String chownRCli = config.getProperty("hadoop2.namenode.ownership.recursively.cli");
@@ -254,7 +301,7 @@ public class HdfsServiceImpl implements HdfsService {
      */
     private boolean runChmod(boolean recursive, String permission, String srcPath) {
         try {
-            if(StringUtils.isEmpty(permission)){
+            if (StringUtils.isEmpty(permission)) {
                 return false;
             }
             String chmodRCli = config.getProperty("hadoop2.namenode.permission.recursively.cli");
@@ -300,10 +347,10 @@ public class HdfsServiceImpl implements HdfsService {
     }
 
     private void _setOwner(String path, String owner, String group) throws Exception {
-        if(StringUtils.isEmpty(owner)){
+        if (StringUtils.isEmpty(owner)) {
             owner = config.getProperty("system.hdfs.super.user");
         }
-        if(StringUtils.isEmpty(group)){
+        if (StringUtils.isEmpty(group)) {
             group = owner;
         }
         FileSystem fs = fileSystemFactory.getFileSystem();
@@ -329,14 +376,30 @@ public class HdfsServiceImpl implements HdfsService {
         fs.close();
     }
 
-    private boolean existCheck(String path) throws Exception {
+    private boolean exists(String path) throws Exception {
+        FileSystem fs = fileSystemFactory.getFileSystem();
+        Path fsPath = new Path(path);
+        boolean exists = fs.exists(fsPath);
+        fs.close();
+        return exists;
+    }
+
+    private void mustNotExists(String path) throws Exception {
+        FileSystem fs = fileSystemFactory.getFileSystem();
+        Path fsPath = new Path(path);
+        if (fs.exists(fsPath)) {
+            this.alreadyExistException(fsPath.toString());
+        }
+        fs.close();
+    }
+
+    private void mustExists(String path) throws Exception {
         FileSystem fs = fileSystemFactory.getFileSystem();
         Path fsPath = new Path(path);
         if (!fs.exists(fsPath)) {
             this.notFoundException(fsPath.toString());
         }
         fs.close();
-        return true;
     }
 
     private void rootCheck(String path) {
@@ -356,8 +419,13 @@ public class HdfsServiceImpl implements HdfsService {
         throw new ServiceException("디렉토리가 아닙니다.");
     }
 
+    private void alreadyExistException(String path) {
+        logger.warn("File is already exist : {}", path);
+        throw new ServiceException("파일이 이미 존재합니다.");
+    }
+
     private void notFoundException(String path) {
-        logger.warn("Failed append HDFS file, File not exist : {}", path);
+        logger.warn("Failed find HDFS file, File not exist : {}", path);
         throw new ServiceException("파일이 존재하지 않습니다.");
     }
 

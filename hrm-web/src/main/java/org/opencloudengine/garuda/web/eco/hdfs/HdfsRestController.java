@@ -52,13 +52,30 @@ public class HdfsRestController {
                                            @RequestParam(defaultValue = "") String owner,
                                            @RequestParam(defaultValue = "") String group,
                                            @RequestParam(defaultValue = "") String permission,
+                                           @RequestParam(defaultValue = "false") boolean overwrite,
                                            UriComponentsBuilder ucBuilder) {
         try {
-            hdfsService.createFile(path, request.getInputStream(), owner, group, permission);
+            hdfsService.createFile(path, request.getInputStream(), owner, group, permission, overwrite);
 
             HttpHeaders headers = new HttpHeaders();
             headers.setLocation(ucBuilder.path("/rest/v1/file?path={path}").buildAndExpand(path).toUri());
             return new ResponseEntity<>(headers, HttpStatus.CREATED);
+        } catch (Exception ex) {
+            ex.printStackTrace();
+            return new ResponseEntity<>(HttpStatus.BAD_REQUEST);
+        }
+    }
+
+    @RequestMapping(value = "/file", method = RequestMethod.PUT)
+    public ResponseEntity<Void> appendFile(HttpServletRequest request,
+                                           @RequestParam(defaultValue = "") String path,
+                                           UriComponentsBuilder ucBuilder) {
+        try {
+            hdfsService.appendFile(path, request.getInputStream());
+
+            HttpHeaders headers = new HttpHeaders();
+            headers.setLocation(ucBuilder.path("/rest/v1/file?path={path}").buildAndExpand(path).toUri());
+            return new ResponseEntity<>(headers, HttpStatus.OK);
         } catch (Exception ex) {
             ex.printStackTrace();
             return new ResponseEntity<>(HttpStatus.BAD_REQUEST);
@@ -71,13 +88,45 @@ public class HdfsRestController {
                                                 @RequestParam(defaultValue = "") String owner,
                                                 @RequestParam(defaultValue = "") String group,
                                                 @RequestParam(defaultValue = "") String permission,
+                                                @RequestParam(defaultValue = "false") boolean overwrite,
                                                 UriComponentsBuilder ucBuilder) {
         try {
-            hdfsService.createEmptyFile(path, owner, group, permission);
+            hdfsService.createEmptyFile(path, owner, group, permission, overwrite);
 
             HttpHeaders headers = new HttpHeaders();
             headers.setLocation(ucBuilder.path("/rest/v1/file?path={path}").buildAndExpand(path).toUri());
             return new ResponseEntity<>(headers, HttpStatus.CREATED);
+        } catch (Exception ex) {
+            ex.printStackTrace();
+            return new ResponseEntity<>(HttpStatus.BAD_REQUEST);
+        }
+    }
+
+    @RequestMapping(value = "/directory", method = RequestMethod.POST)
+    public ResponseEntity<Void> createDirectory(HttpServletRequest request,
+                                                @RequestParam(defaultValue = "") String path,
+                                                @RequestParam(defaultValue = "") String owner,
+                                                @RequestParam(defaultValue = "") String group,
+                                                @RequestParam(defaultValue = "") String permission,
+                                                UriComponentsBuilder ucBuilder) {
+        try {
+            hdfsService.createDirectory(path, owner, group, permission);
+
+            HttpHeaders headers = new HttpHeaders();
+            headers.setLocation(ucBuilder.path("/rest/v1/file?path={path}").buildAndExpand(path).toUri());
+            return new ResponseEntity<>(headers, HttpStatus.CREATED);
+        } catch (Exception ex) {
+            ex.printStackTrace();
+            return new ResponseEntity<>(HttpStatus.BAD_REQUEST);
+        }
+    }
+
+    @RequestMapping(value = "/delete", method = RequestMethod.DELETE)
+    public ResponseEntity<Void> createDirectory(HttpServletRequest request,
+                                                @RequestParam(defaultValue = "") String path) {
+        try {
+            hdfsService.delete(path);
+            return new ResponseEntity<>(HttpStatus.NO_CONTENT);
         } catch (Exception ex) {
             ex.printStackTrace();
             return new ResponseEntity<>(HttpStatus.BAD_REQUEST);

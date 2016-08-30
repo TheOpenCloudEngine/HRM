@@ -25,11 +25,15 @@ public interface HdfsService {
 
     List<HdfsFileInfo> list(String path, int start, int end, String filter) throws Exception;
 
-    public void createFile(String path, InputStream is, String owner, String group, String permission) throws Exception;
+    public void createFile(String path, InputStream is, String owner, String group, String permission, boolean overwrite) throws Exception;
 
-    public void createEmptyFile(String path, String owner, String group, String permission) throws Exception;
+    public void createEmptyFile(String path, String owner, String group, String permission, boolean overwrite) throws Exception;
 
     public void appendFile(String path, InputStream is) throws Exception;
+
+    public boolean createDirectory(String path, String owner, String group, String permission) throws Exception;
+
+    public boolean delete(String path) throws Exception;
 
     public boolean setOwner(String path, String owner, String group, boolean recursive);
 
