@@ -52,7 +52,7 @@ public class HdfsController {
         Long count;
         JSONObject jsonObject = new JSONObject();
         try {
-            HdfsListInfo list = hdfsService.list(path, skip + 1, limit, filter);
+            HdfsListInfo list = hdfsService.list(path, skip + 1, skip + limit, filter);
             jsonObject.put("recordsTotal", limit);
             jsonObject.put("recordsFiltered", list.getCount());
             jsonObject.put("displayStart", skip);

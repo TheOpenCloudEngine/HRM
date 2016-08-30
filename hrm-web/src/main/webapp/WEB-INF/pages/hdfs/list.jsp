@@ -28,7 +28,7 @@
 
     <script type="text/javascript">
         var srcPath = '/';
-        function search(table, searchValue, srcPath) {
+        function search(table, searchValue) {
             if (event.keyCode == 13) {
                 reload(table, searchValue, srcPath);
             }
