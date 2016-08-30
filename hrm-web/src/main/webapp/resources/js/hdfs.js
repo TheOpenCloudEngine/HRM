@@ -59,7 +59,7 @@ $(document).ready(function () {
         reload($('#hdfs').dataTable(), $('#customSearch').val().trim());
     }).on('draw.dt', function () {
 
-        $('#path_shortcut').html(srcPath);
+        bindShortcutMove(srcPath);
 
         var hdfsObjs = $("[name=hdfsobj]");
         hdfsObjs.each(function (index, check) {
@@ -76,6 +76,42 @@ $(document).ready(function () {
             trClickEvent(tr, data);
         });
     });
+
+    var bindShortcutMove = function (fullPath) {
+        var navigator = $('#path_shortcut');
+        var shortcutPaths = fullPath.split("/");
+        var trimPaths = [];
+        for (var i = 0; i < shortcutPaths.length; i++) {
+            if (shortcutPaths[i].length > 0) {
+                trimPaths.push(shortcutPaths[i]);
+            }
+        }
+        navigator.data('trimPaths', trimPaths);
+
+        //패스정보가 없다면 기본으로 / 를 디스플레이한다.
+        if (trimPaths.length == 0) {
+            navigator.append('/');
+        }
+        for (var c = 0; c < trimPaths.length; c++) {
+
+            var shortPath = trimPaths[c];
+            var element = $('<a href="#" name="shortPath">' + trimPaths[c] + '</a>');
+            element.data('index', c);
+            element.css('float', 'left');
+            element.click(function () {
+                var data = navigator.data('trimPaths');
+                var index = $(this).data('index');
+                var newPath = '/';
+                for (var g = 0; g <= index; g++) {
+                    newPath = newPath + '/' + data[g];
+                }
+                srcPath = newPath;
+                reload($('#hdfs').dataTable(), $('#customSearch').val().trim());
+            });
+            navigator.append('/');
+            navigator.append(element);
+        }
+    };
 
     var bindStatusEvent = function (btn, data) {
         btn.click(function () {
@@ -96,19 +132,18 @@ $(document).ready(function () {
         if (data['directory']) {
             btn.click(function () {
                 srcPath = data['fullyQualifiedPath'];
-                console.log(srcPath);
                 reload($('#hdfs').dataTable(), $('#customSearch').val().trim());
             });
         }
     };
 
     var trClickEvent = function (tr, data) {
-        tr.click(function(){
+        tr.click(function () {
             var checkbox = tr.find('input:checkbox');
-            if(checkbox.prop('checked')){
-                checkbox.prop('checked',false);
-            }else{
-                checkbox.prop('checked',true);
+            if (checkbox.prop('checked')) {
+                checkbox.prop('checked', false);
+            } else {
+                checkbox.prop('checked', true);
             }
         })
     };
