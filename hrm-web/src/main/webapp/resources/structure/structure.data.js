@@ -20,7 +20,7 @@ structure.data = {
          */
         {
             title: 'Hdfs Browser',
-            href: '/fileview'
+            href: '/hdfs'
         },
         /*
          Console
