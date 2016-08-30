@@ -64,7 +64,7 @@
                                 <th>Owner</th>
                                 <th>Group</th>
                                 <th>Permission</th>
-                                <th></th>
+                                <th>Status</th>
                             </tr>
                             </thead>
                             <tbody></tbody>
