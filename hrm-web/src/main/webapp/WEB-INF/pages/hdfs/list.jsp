@@ -26,65 +26,7 @@
     <script src="https://cdn.datatables.net/1.10.11/js/jquery.dataTables.min.js"></script>
     <link href="https://cdn.datatables.net/1.10.11/css/jquery.dataTables.min.css" rel="stylesheet" type="text/css"/>
 
-    <script type="text/javascript">
-        var srcPath = '/';
-        function search(table, searchValue) {
-            if (event.keyCode == 13) {
-                reload(table, searchValue, srcPath);
-            }
-        }
-        ;
-
-        function reload(table, searchValue) {
-            // limit and skip setting
-            var tableAPI = table.api();
-            var limit = tableAPI.settings()[0]._iDisplayLength;
-            var skip = tableAPI.settings()[0]._iDisplayStart;
-
-            tableAPI.ajax.url('/hdfs/list?limit=' + limit + '&skip=' + skip + '&filter=' + searchValue + '&path=' + srcPath);
-            tableAPI.ajax.reload();
-        }
-        ;
-
-        $(document).ready(function () {
-            var table = $('#hdfs').DataTable({
-                serverSide: true,
-                searching: false,
-                ajax: {
-                    url: '/hdfs/list?path=' + srcPath,
-                    dataSrc: function (dataObj) {
-                        // change init page setting (_iDisplayStart )
-                        table.settings()[0]._iDisplayStart = dataObj.displayStart;
-
-                        // make id edit href
-                        for (var i = 0; i < dataObj.data.length; i++) {
-                            dataObj.data[i].checkbox = '<input type="checkbox" id="hdfs' + i + '" data-data="' + JSON.stringify(dataObj.data[i]) + '" />'
-                        }
-                        return dataObj.data;
-                    }
-                },
-                columns: [
-                    {data: 'checkbox'},
-                    {data: 'filename'},
-                    {data: 'length'},
-                    {data: 'owner'},
-                    {data: 'group'},
-                    {data: 'permission'},
-                    {data: 'path'}
-                ]
-            });
-
-            // page event
-            $('#hdfs').on('page.dt', function () {
-                reload($('#hdfs').dataTable(), $('#customSearch').val().trim());
-
-                // page length event
-            }).on('length.dt', function () {
-                reload($('#hdfs').dataTable(), $('#customSearch').val().trim());
-
-            });
-        });
-    </script>
+    <script src="/resources/js/hdfs.js"></script>
 </head>
 
 
@@ -117,7 +59,6 @@
                         <table id="hdfs" class="display table table-bordered table-striped">
                             <thead>
                             <tr>
-                                <th>Select</th>
                                 <th>Name</th>
                                 <th>Size</th>
                                 <th>Owner</th>
