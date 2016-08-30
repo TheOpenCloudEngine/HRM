@@ -23,7 +23,7 @@ import java.util.List;
 import java.util.Properties;
 
 @Controller
-@RequestMapping("/rest/v1")
+@RequestMapping("/rest/v1/hdfs")
 public class HdfsRestController {
     @Autowired
     @Qualifier("config")

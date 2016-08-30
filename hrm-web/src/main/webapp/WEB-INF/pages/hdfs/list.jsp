@@ -82,4 +82,22 @@
 <!--/wrapper-->
 <%@include file="../template/footer_js.jsp" %>
 
+<div class="modal fade" id="statusModal" tabindex="-1" role="dialog" aria-labelledby="myModalLabel"
+     aria-hidden="true">
+    <div class="modal-dialog">
+        <div class="modal-content">
+            <div class="modal-header">
+                <button aria-hidden="true" data-dismiss="modal" class="close" type="button">×</button>
+                <h4 class="modal-title">Status</h4>
+            </div>
+            <div class="modal-body">
+                <textarea name="body" style="width: 100%; height: 100%"></textarea>
+            </div>
+            <div class="modal-footer">
+                <button class="btn-u" type="button" name="close">Close</button>
+            </div>
+        </div>
+    </div>
+</div>
+
 </html>

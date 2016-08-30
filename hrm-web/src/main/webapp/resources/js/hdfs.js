@@ -60,8 +60,25 @@ $(document).ready(function () {
     }).on('draw.dt', function () {
         $("[name=hdfsobj]").each(function (index, check) {
             var checkbox = $(check);
+            var td = checkbox.parent();
             var data = drawData[index];
-
+            var statusBtn = td.find('[name=statusBtn]');
+            bindStatusEvent(statusBtn, data);
         });
     });
+
+    var bindStatusEvent = function(btn, data){
+        btn.click(function () {
+            var modal = $('#statusModal');
+            modal.modal({
+                show: true
+            });
+            modal.find('[name=close]').click(function () {
+                $('#statusModal').find('.close').click();
+            });
+
+            var str = JSON.stringify(data, null, 2);
+            modal.find('[name=body]').val(str);
+        });
+    }
 });
