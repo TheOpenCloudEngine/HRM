@@ -51,7 +51,7 @@
                 serverSide: true,
                 searching: false,
                 ajax: {
-                    url: '/hdfs/list',
+                    url: '/hdfs/list?path=' + srcPath,
                     dataSrc: function (dataObj) {
                         // change init page setting (_iDisplayStart )
                         table.settings()[0]._iDisplayStart = dataObj.displayStart;
