@@ -206,7 +206,7 @@ public class HdfsServiceImpl implements HdfsService {
                 owner = config.getProperty("system.hdfs.super.user");
             }
             if(StringUtils.isEmpty(group)){
-                owner = config.getProperty("system.hdfs.super.user");
+                group = owner;
             }
             String chownRCli = config.getProperty("hadoop2.namenode.ownership.recursively.cli");
             String chownCli = config.getProperty("hadoop2.namenode.ownership.cli");
@@ -304,7 +304,7 @@ public class HdfsServiceImpl implements HdfsService {
             owner = config.getProperty("system.hdfs.super.user");
         }
         if(StringUtils.isEmpty(group)){
-            owner = config.getProperty("system.hdfs.super.user");
+            group = owner;
         }
         FileSystem fs = fileSystemFactory.getFileSystem();
         Path fsPath = new Path(path);
