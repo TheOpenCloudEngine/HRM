@@ -63,7 +63,7 @@
                         return dataObj.data;
                     },
                     success: function () {
-                        console.log($('#hdfs1'));
+                        console.log($('#hdfs0').length);
                     }
                 },
                 columns: [
