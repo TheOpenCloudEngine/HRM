@@ -32,7 +32,7 @@ $(document).ready(function () {
             url: '/hdfs/list?path=' + srcPath,
             dataSrc: function (dataObj) {
                 drawData = JSON.parse(JSON.stringify(dataObj.data));
-                table.settings()[0]._iDisplayStart = dataObj.displayStart;
+                hdfsTable.settings()[0]._iDisplayStart = dataObj.displayStart;
 
                 // make id edit href
                 for (var i = 0; i < dataObj.data.length; i++) {
@@ -212,7 +212,14 @@ $(document).ready(function () {
     $('#hdfs_newdir').click(function () {newDirModal.modal({show: true});});
     $('#hdfs_upload').click(function () {uploadModal.modal({show: true});});
     $('#hdfs_download').click(function () {downloadModal.modal({show: true});});
-    $('#hdfs_rename').click(function () {renameModal.modal({show: true});});
+    $('#hdfs_rename').click(function () {
+        var length = getSelectedFiles().length;
+        if(length == 1){
+            renameModal.modal({show: true});
+        }else if(length){
+            renameModal.modal({show: true});
+        }
+    });
     $('#hdfs_owner').click(function () {ownerModal.modal({show: true});});
     $('#hdfs_permission').click(function () {permissionModal.modal({show: true});});
     $('#hdfs_delete').click(function () {deleteModal.modal({show: true});});
@@ -226,6 +233,29 @@ $(document).ready(function () {
         $.ajax({
             type: "POST",
             url: "/rest/v1/hdfs/directory?path=" + srcPath + '/' + name,
+            data: '',
+            dataType: "text",
+            contentType: "application/json; charset=utf-8",
+            success: function (response) {
+                reload();
+                blockStop();
+            },
+            error: function (request, status, errorThrown) {
+                console.log(errorThrown);
+                blockStop();
+            }
+        });
+    });
+
+    renameModal.find('[name=action]').click(function () {
+        var name = renameModal.find('[name=name]').val().trim();
+        if (name.length < 1) {
+            return;
+        }
+        blockStart();
+        $.ajax({
+            type: "PUT",
+            url: "/rest/v1/hdfs/rename?path=" + srcPath + '/' + name,
             data: '',
             dataType: "text",
             contentType: "application/json; charset=utf-8",
