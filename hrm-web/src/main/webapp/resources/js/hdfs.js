@@ -199,11 +199,12 @@ $(document).ready(function () {
     };
 
     var newDirModal = $('#newDirModal');
+    var uploadModal = $('#uploadModal');
     var renameModal = $('#renameModal');
     var ownerModal = $('#ownerModal');
     var permissionModal = $('#permissionModal');
     var deleteModal = $('#deleteModal');
-    var modals = [newDirModal, uploadModal, downloadModal, renameModal, ownerModal, permissionModal, deleteModal];
+    var modals = [newDirModal, uploadModal, renameModal, ownerModal, permissionModal, deleteModal];
     for (var i = 0; i < modals.length; i++) {
         bindModalCloseEvent(modals[i]);
     }
@@ -211,7 +212,7 @@ $(document).ready(function () {
         newDirModal.modal({show: true});
     });
     $('#hdfs_upload').click(function () {
-        uploadAction();
+        uploadModal.modal({show: true});
     });
     $('#hdfs_download').click(function () {
         var length = getSelectedFiles().length;
@@ -422,9 +423,42 @@ $(document).ready(function () {
         });
     });
 
-    var uploadAction = function () {
+    uploadModal.find('[name=action]').click(function () {
+        var _file = document.getElementById('uploadfile');
+        if (_file.files.length === 0) {
+            return;
+        }
 
-    };
+        uploadModal.find('.close').click();
+        var progressPanel = $('#progressPanel');
+        progressPanel.show();
+        var progressBar = progressPanel.find('.progress-bar');
+
+
+        var data = new FormData();
+        data.append('file', _file.files[0]);
+        data.append('dir', srcPath);
+
+        var request = new XMLHttpRequest();
+        request.onreadystatechange = function () {
+            if (request.readyState == 4) {
+                if (request.status == 201) {
+                    progressPanel.hide();
+                } else {
+                    progressPanel.hide();
+                    msgBox('Failed upload file');
+                }
+            }
+        };
+
+        request.upload.addEventListener('progress', function (e) {
+            var status = Math.ceil(e.loaded / e.total) * 100;
+            progressBar.css('width', status + '%');
+        }, false);
+
+        request.open('POST', '/hdfs/upload');
+        request.send(data);
+    });
 
     var downloadAction = function () {
 

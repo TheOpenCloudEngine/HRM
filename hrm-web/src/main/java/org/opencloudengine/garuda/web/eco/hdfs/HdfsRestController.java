@@ -22,6 +22,7 @@ import org.springframework.web.util.UriComponentsBuilder;
 
 import javax.servlet.http.HttpServletRequest;
 import javax.servlet.http.HttpServletResponse;
+import java.io.IOException;
 import java.util.List;
 import java.util.Properties;
 
@@ -35,7 +36,7 @@ public class HdfsRestController {
     @Autowired
     HdfsService hdfsService;
 
-    @RequestMapping(value = "/list", method = RequestMethod.GET, produces = "application/json")
+    @RequestMapping(value = "/status/list", method = RequestMethod.GET, produces = "application/json")
     public ResponseEntity<List<HdfsFileInfo>> list(HttpServletRequest request,
                                                    @RequestParam(defaultValue = "") String path,
                                                    @RequestParam(defaultValue = "1") int start,
@@ -117,13 +118,13 @@ public class HdfsRestController {
     @RequestMapping(value = "/file", method = RequestMethod.GET)
     public void download(HttpServletRequest request,
                          HttpServletResponse response,
-                         @RequestParam(defaultValue = "") String path) {
+                         @RequestParam(defaultValue = "") String path) throws IOException {
         try {
             hdfsService.downloadFile(path, response);
 
         } catch (Exception ex) {
             ex.printStackTrace();
-            throw new ServiceException("File download failed.");
+            response.sendError(500);
         }
     }
 
