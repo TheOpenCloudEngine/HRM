@@ -433,6 +433,7 @@ $(document).ready(function () {
         var progressPanel = $('#progressPanel');
         progressPanel.show();
         var progressBar = progressPanel.find('.progress-bar');
+        var progressTitle = progressPanel.find('.progress-title');
 
         var data = new FormData();
         data.append('file', _file.files[0]);
@@ -443,6 +444,8 @@ $(document).ready(function () {
             if (request.readyState == 4) {
                 if (request.status == 201) {
                     progressPanel.hide();
+                    msgBox('Succeed upload file');
+                    reload();
                 } else {
                     progressPanel.hide();
                     msgBox('Failed upload file');
@@ -452,7 +455,9 @@ $(document).ready(function () {
 
         request.upload.addEventListener('progress', function (e) {
             var status = Math.ceil(e.loaded / e.total) * 100;
+            console.log('status : ' + status);
             progressBar.css('width', status + '%');
+            progressTitle.html('Uploading - ' + status + '%');
         }, false);
 
         request.open('POST', '/hdfs/upload');

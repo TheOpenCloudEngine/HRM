@@ -68,12 +68,11 @@
                         </div>
 
                         <div id="progressPanel" class="col-md-6 md-margin-bottom-10" style="display: none">
-                            <h3 class="heading-xs">Web Design - 88%</h3>
+                            <h3 class="heading-xs progress-title">Uploading - 0%</h3>
 
                             <div class="progress progress-u progress-xxs">
                                 <div class="progress-bar progress-bar-dark"
-                                     role="progressbar" aria-valuenow="88" aria-valuemin="0" aria-valuemax="100"
-                                     style="width: 0%">
+                                     role="progressbar" aria-valuenow="88" aria-valuemin="0" aria-valuemax="100">
                                 </div>
                             </div>
                         </div>
