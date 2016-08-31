@@ -12,7 +12,7 @@ function reload(refresh) {
     var searchValue = $('#customSearch').val().trim();
     blockStart();
     // limit and skip setting
-    var tableAPI = hdfsTable.api();
+    var tableAPI = $('#hdfs').dataTable().api();
     var limit = tableAPI.settings()[0]._iDisplayLength;
     var skip = tableAPI.settings()[0]._iDisplayStart;
     if (refresh) {
@@ -209,63 +209,221 @@ $(document).ready(function () {
     for (var i = 0; i < modals.length; i++) {
         bindModalCloseEvent(modals[i]);
     }
-    $('#hdfs_newdir').click(function () {newDirModal.modal({show: true});});
-    $('#hdfs_upload').click(function () {uploadModal.modal({show: true});});
-    $('#hdfs_download').click(function () {downloadModal.modal({show: true});});
-    $('#hdfs_rename').click(function () {
+    $('#hdfs_newdir').click(function () {
+        newDirModal.modal({show: true});
+    });
+    $('#hdfs_upload').click(function () {
+        uploadModal.modal({show: true});
+    });
+    $('#hdfs_download').click(function () {
         var length = getSelectedFiles().length;
-        if(length == 1){
-            renameModal.modal({show: true});
-        }else if(length){
-            renameModal.modal({show: true});
+        if (length == 1) {
+            //TODO download action
+        } else if (length == 0) {
+            msgBox('Select one file or one directory');
+        } else if (length > 1) {
+            msgBox('Select one file or one directory');
         }
     });
-    $('#hdfs_owner').click(function () {ownerModal.modal({show: true});});
-    $('#hdfs_permission').click(function () {permissionModal.modal({show: true});});
-    $('#hdfs_delete').click(function () {deleteModal.modal({show: true});});
+    $('#hdfs_rename').click(function () {
+        var length = getSelectedFiles().length;
+        if (length == 1) {
+            renameModal.find('[name=name]').val(getSelectedFiles()[0]['fullyQualifiedPath']);
+            renameModal.modal({show: true});
+        } else if (length == 0) {
+            msgBox('Select one file or one directory');
+        } else if (length > 1) {
+            msgBox('Select one file or one directory');
+        }
+    });
+    $('#hdfs_owner').click(function () {
+        var length = getSelectedFiles().length;
+        if (length == 0) {
+            ownerModal.find('[name=owner]').val(getSelectedFiles()[0]['owner']);
+            ownerModal.find('[name=group]').val(getSelectedFiles()[0]['group']);
+            ownerModal.modal({show: true});
+        }
+        else if (length > 0) {
+            ownerModal.find('[name=owner]').val('');
+            ownerModal.find('[name=group]').val('');
+            ownerModal.modal({show: true});
+        } else {
+            msgBox('Select at least one more file or directory');
+        }
+    });
+    $('#hdfs_permission').click(function () {
+        var length = getSelectedFiles().length;
+        if (length == 0) {
+            permissionModal.find('[name=permission]').val(getSelectedFiles()[0]['permission']);
+            permissionModal.modal({show: true});
+        }
+        else if (length > 0) {
+            permissionModal.find('[name=permission]').val('');
+            permissionModal.modal({show: true});
+        } else {
+            msgBox('Select at least one more file or directory');
+        }
+    });
+    $('#hdfs_delete').click(function () {
+        var length = getSelectedFiles().length;
+        if (length > 0) {
+            deleteModal.modal({show: true});
+        } else {
+            msgBox('Select at least one more file or directory');
+        }
+    });
 
     newDirModal.find('[name=action]').click(function () {
+        newDirModal.find('.close').click();
         var name = newDirModal.find('[name=name]').val().trim();
         if (name.length < 1) {
             return;
         }
+        var path = srcPath + '/' + name;
+        path.replace('//', '/');
         blockStart();
         $.ajax({
             type: "POST",
-            url: "/rest/v1/hdfs/directory?path=" + srcPath + '/' + name,
+            url: "/rest/v1/hdfs/directory?path=" + path,
             data: '',
             dataType: "text",
             contentType: "application/json; charset=utf-8",
             success: function (response) {
                 reload();
                 blockStop();
+                msgBox(path + ' Folder created');
             },
             error: function (request, status, errorThrown) {
                 console.log(errorThrown);
                 blockStop();
+                msgBox('Failed to create folder ' + path);
             }
         });
     });
 
     renameModal.find('[name=action]').click(function () {
+        renameModal.find('.close').click();
         var name = renameModal.find('[name=name]').val().trim();
         if (name.length < 1) {
             return;
         }
+        var files = getSelectedFiles();
+        var path = files[0]['fullyQualifiedPath'];
+
         blockStart();
         $.ajax({
             type: "PUT",
-            url: "/rest/v1/hdfs/rename?path=" + srcPath + '/' + name,
+            url: "/rest/v1/hdfs/rename?path=" + path + '&rename=' + name,
             data: '',
             dataType: "text",
             contentType: "application/json; charset=utf-8",
             success: function (response) {
                 reload();
                 blockStop();
+                msgBox(path + ' rename succeed');
             },
             error: function (request, status, errorThrown) {
                 console.log(errorThrown);
                 blockStop();
+                msgBox(path + ' rename failed');
+            }
+        });
+    });
+
+    ownerModal.find('[name=action]').click(function () {
+        ownerModal.find('.close').click();
+        var owner = ownerModal.find('[name=owner]').val().trim();
+        var group = ownerModal.find('[name=group]').val().trim();
+        var recursive = ownerModal.find('[name=recursive]').prop('checked') ? 'true' : 'false';
+        if (owner.length < 1 || group.length < 1) {
+            return;
+        }
+        var files = getSelectedFiles();
+        var paths = [];
+        for (var i = 0; i < files.length; i++) {
+            paths.push(files[i]['fullyQualifiedPath']);
+        }
+        var path = paths.join();
+
+        blockStart();
+        $.ajax({
+            type: "PUT",
+            url: "/rest/v1/hdfs/owner?path=" + path + '&owner=' + owner + '&group=' + group + '&recursive=' + recursive,
+            data: '',
+            dataType: "text",
+            contentType: "application/json; charset=utf-8",
+            success: function (response) {
+                reload();
+                blockStop();
+                msgBox('Change owner succeed');
+            },
+            error: function (request, status, errorThrown) {
+                console.log(errorThrown);
+                blockStop();
+                msgBox('Change owner failed');
+            }
+        });
+    });
+
+    permissionModal.find('[name=action]').click(function () {
+        permissionModal.find('.close').click();
+        var permission = permissionModal.find('[name=permission]').val();
+        var recursive = permissionModal.find('[name=recursive]').prop('checked') ? 'true' : 'false';
+        if (permission < 1) {
+            return;
+        }
+        var files = getSelectedFiles();
+        var paths = [];
+        for (var i = 0; i < files.length; i++) {
+            paths.push(files[i]['fullyQualifiedPath']);
+        }
+        var path = paths.join();
+
+        blockStart();
+        $.ajax({
+            type: "PUT",
+            url: "/rest/v1/hdfs/permission?path=" + path + '&permission=' + permission + '&recursive=' + recursive,
+            data: '',
+            dataType: "text",
+            contentType: "application/json; charset=utf-8",
+            success: function (response) {
+                reload();
+                blockStop();
+                msgBox('Change permission succeed');
+            },
+            error: function (request, status, errorThrown) {
+                console.log(errorThrown);
+                blockStop();
+                msgBox('Change permission failed');
+            }
+        });
+    });
+
+    deleteModal.find('[name=action]').click(function () {
+        deleteModal.find('.close').click();
+        var files = getSelectedFiles();
+        var paths = [];
+        for (var i = 0; i < files.length; i++) {
+            paths.push(files[i]['fullyQualifiedPath']);
+        }
+        var path = paths.join();
+
+        blockStart();
+        $.ajax({
+            type: "PUT",
+            url: "/rest/v1/hdfs/permission?path=" + path,
+            data: '',
+            dataType: "text",
+            contentType: "application/json; charset=utf-8",
+            success: function (response) {
+                reload();
+                blockStop();
+                msgBox('Delete files succeed');
+            },
+            error: function (request, status, errorThrown) {
+                console.log(errorThrown);
+                blockStop();
+                msgBox('Delete files failed');
             }
         });
     });
