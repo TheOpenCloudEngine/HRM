@@ -1,15 +1,18 @@
 var srcPath = '/';
 var drawData;
-function search(table, searchValue) {
+var hdfsTable;
+var hdfsTableDiv = $('#hdfs');
+function search() {
     if (event.keyCode == 13) {
-        reload(table, searchValue, true);
+        reload(true);
     }
 }
 
-function reload(table, searchValue, refresh) {
+function reload(refresh) {
+    var searchValue = $('#customSearch').val().trim();
     blockStart();
     // limit and skip setting
-    var tableAPI = table.api();
+    var tableAPI = hdfsTable.api();
     var limit = tableAPI.settings()[0]._iDisplayLength;
     var skip = tableAPI.settings()[0]._iDisplayStart;
     if (refresh) {
@@ -21,7 +24,7 @@ function reload(table, searchValue, refresh) {
 }
 
 $(document).ready(function () {
-    var table = $('#hdfs').DataTable({
+    hdfsTable = hdfsTableDiv.DataTable({
         serverSide: true,
         searching: false,
         ajax: {
@@ -56,10 +59,10 @@ $(document).ready(function () {
     });
 
     // page event
-    $('#hdfs').on('page.dt', function () {
-        reload($('#hdfs').dataTable(), $('#customSearch').val().trim());
+    hdfsTableDiv.on('page.dt', function () {
+        reload();
     }).on('length.dt', function () {
-        reload($('#hdfs').dataTable(), $('#customSearch').val().trim());
+        reload();
     }).on('error.dt', function (e, settings, techNote, message) {
         console.log('An error has been reported by DataTables: ', message);
         blockStop();
@@ -100,7 +103,7 @@ $(document).ready(function () {
         var rootElement = $('<a href="#" name="shortPath">/..</a>');
         rootElement.click(function () {
             srcPath = '/';
-            reload($('#hdfs').dataTable(), $('#customSearch').val().trim(), true);
+            reload(true);
         });
         navigator.append(rootElement);
 
@@ -122,7 +125,7 @@ $(document).ready(function () {
                     newPath = newPath + '/' + data[g];
                 }
                 srcPath = newPath;
-                reload($('#hdfs').dataTable(), $('#customSearch').val().trim(), true);
+                reload(true);
             });
             navigator.append('/');
             navigator.append(element);
@@ -160,7 +163,7 @@ $(document).ready(function () {
             btn.click(function (event) {
                 event.stopPropagation()
                 srcPath = data['fullyQualifiedPath'];
-                reload($('#hdfs').dataTable(), $('#customSearch').val().trim(), true);
+                reload(true);
             });
         }
     };
@@ -188,31 +191,45 @@ $(document).ready(function () {
         return selectedFiles;
     };
 
+    var bindModalCloseEvent = function (modal) {
+        modal.find('[name=close]').click(function () {
+            modal.find('.close').click();
+        });
+    };
+
+    var newDirModal = $('#newDirModal');
+    var uploadModal = $('#uploadModal');
+    var downloadModal = $('#downloadModal');
+    var renameModal = $('#renameModal');
+    var ownerModal = $('#ownerModal');
+    var permissionModal = $('#permissionModal');
+    var deleteModal = $('#deleteModal');
+    var modals = [newDirModal, uploadModal, downloadModal, renameModal, ownerModal, permissionModal, deleteModal];
+    for (var i = 0; i < modals.length; i++) {
+        bindModalCloseEvent(modals[i]);
+    }
+
     $('#hdfs_newdir').click(function () {
-
-        $.ajax({
-            type: "POST",
-            url: "/rest/v1/hdfs/directory",
-            data: JSON.stringify(data),
-            contentType: "application/json; charset=utf-8",
-            dataType: "text",
-            async: false,
-            success: function (response) {
-                var res = JSON.parse(response);
-
-                //로그인 세션 확인시 어세스 토큰을 서버로 보냄
-                if (res.success && res.map.validated) {
-                    userName = res.map.userName;
-                    checkScopeToken();
-                }
-                //로그인 세션 만료시 로그인 URL 노출
-                else {
-                    viewLogin();
-                }
-            },
-            error: function (request, status, errorThrown) {
-
+        newDirModal.modal({show: true});
+        newDirModal.find('[name=action]').click(function () {
+            var name = newDirModal.find('[name=name]').val().trim();
+            if (name.length < 1) {
+                return;
             }
+            blockStart();
+            $.ajax({
+                type: "POST",
+                url: "/rest/v1/hdfs/directory?path=" + srcPath + '/' + name,
+                data: '',
+                dataType: "text",
+                contentType: "application/json; charset=utf-8",
+                success: function (response) {
+                    reload();
+                },
+                error: function (request, status, errorThrown) {
+                    console.log(errorThrown);
+                }
+            });
         });
     });
 

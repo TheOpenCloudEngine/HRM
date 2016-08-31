@@ -61,13 +61,14 @@
                                 <button id="hdfs_download" class="btn-u btn-u-default" type="button">Download</button>
                                 <button id="hdfs_rename" class="btn-u btn-u-dark-blue" type="button">Rename</button>
                                 <button id="hdfs_owner" class="btn-u btn-u-dark-blue" type="button">Owner</button>
-                                <button id="hdfs_permission" class="btn-u btn-u-dark-blue" type="button">Permission</button>
+                                <button id="hdfs_permission" class="btn-u btn-u-dark-blue" type="button">Permission
+                                </button>
                                 <button id="hdfs_delete" class="btn-u btn-u-red" type="button">Delete</button>
                             </p>
                         </div>
 
                         <div style="float: right"> Search : <input type="text" id="customSearch"
-                                                                   onKeyDown="javascript: search($('#hdfs').dataTable(), this.value)"/>
+                                                                   onKeyDown="javascript: search()"/>
                         </div>
                         <table id="hdfs" class="display table table-bordered table-striped">
                             <thead>
@@ -160,14 +161,92 @@
                 </form>
             </div>
             <div class="modal-footer">
-                <button class="btn-u" type="button" name="action">Create</button>
+                <button class="btn-u" type="button" name="action">Rename</button>
                 <button class="btn-u" type="button" name="close">Cancle</button>
             </div>
         </div>
     </div>
 </div>
 
-<div class="modal fade" id="deleteConfirm" tabindex="-1" role="dialog" aria-labelledby="myModalLabel"
+
+<div class="modal fade" id="ownerModal" tabindex="-1" role="dialog" aria-labelledby="myModalLabel"
+     aria-hidden="true">
+    <div class="modal-dialog">
+        <div class="modal-content">
+            <div class="modal-header">
+                <button aria-hidden="true" data-dismiss="modal" class="close" type="button">×</button>
+                <h4 class="modal-title">Change Owner</h4>
+            </div>
+            <div class="modal-body">
+                <form action="#" class="form-horizontal" role="form">
+                    <div class="form-group">
+                        <label class="col-md-2 control-label">Owner <span class="color-red">*</span></label>
+
+                        <div class="col-md-6">
+                            <input name="owner" type="text" class="form-control" value="">
+                        </div>
+                    </div>
+                    <div class="form-group">
+                        <label class="col-md-2 control-label">Group <span class="color-red">*</span></label>
+
+                        <div class="col-md-6">
+                            <input name="group" type="text" class="form-control" value="">
+                        </div>
+                    </div>
+                    <div class="form-group">
+                        <label class="col-md-2 control-label">Recursive </label>
+
+                        <div class="col-md-6">
+                            <label class="checkbox"><input type="checkbox" name="recursive" value="Y"
+                                                           checked>recursive</label>
+                        </div>
+                    </div>
+                </form>
+            </div>
+            <div class="modal-footer">
+                <button class="btn-u" type="button" name="action">Change</button>
+                <button class="btn-u" type="button" name="close">Cancle</button>
+            </div>
+        </div>
+    </div>
+</div>
+
+<div class="modal fade" id="permissionModal" tabindex="-1" role="dialog" aria-labelledby="myModalLabel"
+     aria-hidden="true">
+    <div class="modal-dialog">
+        <div class="modal-content">
+            <div class="modal-header">
+                <button aria-hidden="true" data-dismiss="modal" class="close" type="button">×</button>
+                <h4 class="modal-title">Change Permission</h4>
+            </div>
+            <div class="modal-body">
+                <form action="#" class="form-horizontal" role="form">
+                    <div class="form-group">
+                        <label class="col-md-2 control-label">Permission <span class="color-red">*</span></label>
+
+                        <div class="col-md-6">
+                            <input name="permission" type="number" class="form-control" value="">
+                        </div>
+                    </div>
+                    <div class="form-group">
+                        <label class="col-md-2 control-label">Recursive </label>
+
+                        <div class="col-md-6">
+                            <label class="checkbox"><input type="checkbox" name="recursive" value="Y"
+                                                           checked>recursive</label>
+                        </div>
+                    </div>
+                </form>
+            </div>
+            <div class="modal-footer">
+                <button class="btn-u" type="button" name="action">Change</button>
+                <button class="btn-u" type="button" name="close">Cancle</button>
+            </div>
+        </div>
+    </div>
+</div>
+
+<div class="modal fade" id="deleteModal" tabindex="-1" role="dialog" aria-labelledby="myModalLabel"
      aria-hidden="true">
     <div class="modal-dialog">
         <div class="modal-content">
@@ -176,10 +255,10 @@
                 <h4 class="modal-title">Caution</h4>
             </div>
             <div class="modal-body">
-                <p style="text-align: center" name="content">Are you sure delete oauth client?</p>
+                <p style="text-align: center" name="content">Are you sure delete selected files?</p>
             </div>
             <div class="modal-footer">
-                <button class="btn-u" type="button" name="delete">Delete</button>
+                <button class="btn-u" type="button" name="action">Delete</button>
                 <button class="btn-u" type="button" name="close">Cancle</button>
             </div>
         </div>
