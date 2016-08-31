@@ -228,7 +228,7 @@ $(document).ready(function () {
     $('#hdfs_rename').click(function () {
         var length = getSelectedFiles().length;
         if (length == 1) {
-            renameModal.find('[name=name]').val(getSelectedFiles()[0]['fullyQualifiedPath']);
+            renameModal.find('[name=name]').val(getSelectedFiles()[0]['filename']);
             renameModal.modal({show: true});
         } else if (length == 0) {
             msgBox('Select one file or one directory');
@@ -410,8 +410,8 @@ $(document).ready(function () {
 
         blockStart();
         $.ajax({
-            type: "PUT",
-            url: "/rest/v1/hdfs/permission?path=" + path,
+            type: "DELETE",
+            url: "/rest/v1/hdfs/file?path=" + path,
             data: '',
             dataType: "text",
             contentType: "application/json; charset=utf-8",
