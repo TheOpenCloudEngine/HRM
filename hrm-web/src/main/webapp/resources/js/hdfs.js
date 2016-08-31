@@ -1,7 +1,7 @@
 var srcPath = '/';
 var drawData;
 var hdfsTable;
-var hdfsTableDiv = $('#hdfs');
+var hdfsTableDiv;
 function search() {
     if (event.keyCode == 13) {
         reload(true);
@@ -24,6 +24,7 @@ function reload(refresh) {
 }
 
 $(document).ready(function () {
+    hdfsTableDiv = $('#hdfs');
     hdfsTable = hdfsTableDiv.DataTable({
         serverSide: true,
         searching: false,
@@ -230,16 +231,13 @@ $(document).ready(function () {
             contentType: "application/json; charset=utf-8",
             success: function (response) {
                 reload();
+                blockStop();
             },
             error: function (request, status, errorThrown) {
                 console.log(errorThrown);
+                blockStop();
             }
         });
     });
 
-    //hdfs_newdir" class="btn-u btn-u-blue" type="button">New Folder</button>
-    //<button id="hdfs_upload" class="btn-u btn-u-dark-blue" type="button">Upload</button>
-    //    <button id="hdfs_download" class="btn-u btn-u-default" type="button">Download</button>
-    //    <button id="hdfs_rename" class="btn-u btn-u-aqua" type="button">Rename</button>
-    //    <button id="hdfs_delete
 });
