@@ -54,6 +54,16 @@
                 <div class="margin-bottom-10">
                     <div class="table-responsive">
                         <div id="path_shortcut"></div>
+                        <div class="margin-bottom-10">
+                            <p>
+                                <button id="hdfs_newdir" class="btn-u btn-u-blue" type="button">New Folder</button>
+                                <button id="hdfs_upload" class="btn-u btn-u-dark-blue" type="button">Upload</button>
+                                <button id="hdfs_download" class="btn-u btn-u-default" type="button">Download</button>
+                                <button id="hdfs_rename" class="btn-u btn-u-aqua" type="button">Rename</button>
+                                <button id="hdfs_delete" class="btn-u btn-u-red" type="button">Delete</button>
+                            </p>
+                        </div>
+
                         <div style="float: right"> Search : <input type="text" id="customSearch"
                                                                    onKeyDown="javascript: search($('#hdfs').dataTable(), this.value)"/>
                         </div>
@@ -96,6 +106,79 @@
             </div>
             <div class="modal-footer">
                 <button class="btn-u" type="button" name="close">Close</button>
+            </div>
+        </div>
+    </div>
+</div>
+
+<div class="modal fade" id="newDirModal" tabindex="-1" role="dialog" aria-labelledby="myModalLabel"
+     aria-hidden="true">
+    <div class="modal-dialog">
+        <div class="modal-content">
+            <div class="modal-header">
+                <button aria-hidden="true" data-dismiss="modal" class="close" type="button">×</button>
+                <h4 class="modal-title">New Folder</h4>
+            </div>
+            <div class="modal-body">
+                <form action="#" class="form-horizontal" role="form">
+                    <div class="form-group">
+                        <label class="col-md-2 control-label">Name <span class="color-red">*</span></label>
+
+                        <div class="col-md-6">
+                            <input name="name" type="text" class="form-control" value="">
+                        </div>
+                    </div>
+                </form>
+            </div>
+            <div class="modal-footer">
+                <button class="btn-u" type="button" name="action">Create</button>
+                <button class="btn-u" type="button" name="close">Cancle</button>
+            </div>
+        </div>
+    </div>
+</div>
+
+<div class="modal fade" id="renameModal" tabindex="-1" role="dialog" aria-labelledby="myModalLabel"
+     aria-hidden="true">
+    <div class="modal-dialog">
+        <div class="modal-content">
+            <div class="modal-header">
+                <button aria-hidden="true" data-dismiss="modal" class="close" type="button">×</button>
+                <h4 class="modal-title">New Folder</h4>
+            </div>
+            <div class="modal-body">
+                <form action="#" class="form-horizontal" role="form">
+                    <div class="form-group">
+                        <label class="col-md-2 control-label">Name <span class="color-red">*</span></label>
+
+                        <div class="col-md-6">
+                            <input name="name" type="text" class="form-control" value="">
+                        </div>
+                    </div>
+                </form>
+            </div>
+            <div class="modal-footer">
+                <button class="btn-u" type="button" name="action">Create</button>
+                <button class="btn-u" type="button" name="close">Cancle</button>
+            </div>
+        </div>
+    </div>
+</div>
+
+<div class="modal fade" id="deleteConfirm" tabindex="-1" role="dialog" aria-labelledby="myModalLabel"
+     aria-hidden="true">
+    <div class="modal-dialog">
+        <div class="modal-content">
+            <div class="modal-header">
+                <button aria-hidden="true" data-dismiss="modal" class="close" type="button">×</button>
+                <h4 class="modal-title">Caution</h4>
+            </div>
+            <div class="modal-body">
+                <p style="text-align: center" name="content">Are you sure delete oauth client?</p>
+            </div>
+            <div class="modal-footer">
+                <button class="btn-u" type="button" name="delete">Delete</button>
+                <button class="btn-u" type="button" name="close">Cancle</button>
             </div>
         </div>
     </div>

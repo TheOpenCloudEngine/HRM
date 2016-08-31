@@ -145,6 +145,12 @@ public class HdfsServiceImpl implements HdfsService {
     }
 
     @Override
+    public Path rename(String path, String rename) throws Exception {
+        this.mustExists(path);
+        return this._rename(path, rename);
+    }
+
+    @Override
     public boolean createDirectory(String path, String owner, String group, String permission) throws Exception {
         this.rootCheck(path);
         this.mustNotExists(path);
@@ -245,6 +251,25 @@ public class HdfsServiceImpl implements HdfsService {
         is.close();
         out.close();
         fs.close();
+    }
+
+    private Path _rename(String path, String rename) throws Exception {
+        FileSystem fs = fileSystemFactory.getFileSystem();
+        Path fsPath = new Path(path);
+        FileStatus fileStatus = fs.getFileStatus(fsPath);
+        HdfsFileInfo hdfsFileInfo = new HdfsFileInfo(fileStatus, fs.getContentSummary(fsPath));
+        String parentPath = hdfsFileInfo.getPath();
+
+        String newPath = parentPath + "/" + rename;
+        Path path1 = new Path(newPath);
+        if (StringUtils.isEmpty(rename)) {
+            logger.warn("Failed rename HDFS file, Rename is empty : {}", newPath);
+            throw new ServiceException("변경 대상 이름이 정해지지 않았습니다.");
+        }
+
+        fs.rename(fsPath, path1);
+        fs.close();
+        return path1;
     }
 
     /**

@@ -2,6 +2,7 @@ package org.opencloudengine.garuda.web.eco.hdfs;
 
 
 import org.apache.hadoop.fs.FileStatus;
+import org.apache.hadoop.fs.Path;
 import org.opencloudengine.garuda.backend.hdfs.HdfsFileInfo;
 import org.opencloudengine.garuda.backend.hdfs.HdfsListInfo;
 import org.opencloudengine.garuda.backend.hdfs.HdfsService;
@@ -50,7 +51,7 @@ public class HdfsRestController {
 
     @RequestMapping(value = "/status", method = RequestMethod.GET)
     public ResponseEntity<HdfsFileInfo> createFile(HttpServletRequest request,
-                                           @RequestParam(defaultValue = "") String path) {
+                                                   @RequestParam(defaultValue = "") String path) {
         try {
             HdfsFileInfo fileStatuses = hdfsService.getStatus(path);
             return new ResponseEntity<>(fileStatuses, HttpStatus.OK);
@@ -128,6 +129,24 @@ public class HdfsRestController {
 
             HttpHeaders headers = new HttpHeaders();
             headers.setLocation(ucBuilder.path("/rest/v1/file?path={path}").buildAndExpand(path).toUri());
+            return new ResponseEntity<>(headers, HttpStatus.CREATED);
+        } catch (Exception ex) {
+            ex.printStackTrace();
+            return new ResponseEntity<>(HttpStatus.BAD_REQUEST);
+        }
+    }
+
+    @RequestMapping(value = "/rename", method = RequestMethod.PUT)
+    public ResponseEntity<Void> createDirectory(HttpServletRequest request,
+                                                @RequestParam(defaultValue = "") String path,
+                                                @RequestParam(defaultValue = "") String rename,
+                                                UriComponentsBuilder ucBuilder) {
+        try {
+            Path path1 = hdfsService.rename(path, rename);
+            String newPath = path1.toUri().getPath().toString();
+
+            HttpHeaders headers = new HttpHeaders();
+            headers.setLocation(ucBuilder.path("/rest/v1/file?path={path}").buildAndExpand(newPath).toUri());
             return new ResponseEntity<>(headers, HttpStatus.CREATED);
         } catch (Exception ex) {
             ex.printStackTrace();
