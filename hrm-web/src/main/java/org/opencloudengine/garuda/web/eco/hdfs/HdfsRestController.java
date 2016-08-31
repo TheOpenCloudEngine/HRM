@@ -6,6 +6,7 @@ import org.apache.hadoop.fs.Path;
 import org.opencloudengine.garuda.backend.hdfs.HdfsFileInfo;
 import org.opencloudengine.garuda.backend.hdfs.HdfsListInfo;
 import org.opencloudengine.garuda.backend.hdfs.HdfsService;
+import org.opencloudengine.garuda.common.exception.ServiceException;
 import org.opencloudengine.garuda.web.console.oauthclient.OauthClient;
 import org.opencloudengine.garuda.web.console.oauthclient.OauthClientService;
 import org.opencloudengine.garuda.web.management.Management;
@@ -20,6 +21,7 @@ import org.springframework.web.bind.annotation.*;
 import org.springframework.web.util.UriComponentsBuilder;
 
 import javax.servlet.http.HttpServletRequest;
+import javax.servlet.http.HttpServletResponse;
 import java.util.List;
 import java.util.Properties;
 
@@ -109,6 +111,19 @@ public class HdfsRestController {
         } catch (Exception ex) {
             ex.printStackTrace();
             return new ResponseEntity<>(HttpStatus.BAD_REQUEST);
+        }
+    }
+
+    @RequestMapping(value = "/file", method = RequestMethod.GET)
+    public void download(HttpServletRequest request,
+                         HttpServletResponse response,
+                         @RequestParam(defaultValue = "") String path) {
+        try {
+            hdfsService.downloadFile(path, response);
+
+        } catch (Exception ex) {
+            ex.printStackTrace();
+            throw new ServiceException("File download failed.");
         }
     }
 

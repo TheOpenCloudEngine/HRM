@@ -30,8 +30,12 @@ import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.beans.factory.annotation.Qualifier;
 import org.springframework.stereotype.Service;
 
+import javax.servlet.ServletOutputStream;
+import javax.servlet.http.HttpServletResponse;
 import java.io.IOException;
 import java.io.InputStream;
+import java.io.OutputStream;
+import java.net.URLEncoder;
 import java.util.ArrayList;
 import java.util.List;
 import java.util.Properties;
@@ -53,6 +57,41 @@ public class HdfsServiceImpl implements HdfsService {
 
     @Autowired
     FileSystemFactory fileSystemFactory;
+
+    @Override
+    public void downloadFile(String path, HttpServletResponse response) throws Exception {
+        this.mustExists(path);
+        FileSystem fs = fileSystemFactory.getFileSystem();
+        Path fsPath = new Path(path);
+
+        FileStatus fileStatus = fs.getFileStatus(fsPath);
+        if (!fileStatus.isFile()) {
+            this.notFileException(fsPath.toString());
+        }
+        HdfsFileInfo fileInfo = new HdfsFileInfo(fileStatus, fs.getContentSummary(fsPath));
+
+
+        FSDataInputStream in = fs.open(fsPath);
+        String filename = fileInfo.getFilename();
+        response.setHeader("Content-Length", "" + fileInfo.getLength());
+        response.setHeader("Content-Transfer-Encoding", "binary");
+        response.setHeader("Content-Type", "application/force-download");
+        response.setHeader("Content-Disposition", MessageFormatter.format("attachment; fullyQualifiedPath={}; filename={};",
+                URLEncoder.encode(fileInfo.getFullyQualifiedPath(), "UTF-8"), filename).getMessage());
+        response.setStatus(200);
+
+        ServletOutputStream out = response.getOutputStream();
+
+        byte[] b = new byte[1024];
+        int numBytes = 0;
+        while ((numBytes = in.read(b)) > 0) {
+            out.write(b, 0, numBytes);
+        }
+
+        in.close();
+        out.close();
+        fs.close();
+    }
 
     @Override
     public HdfsListInfo list(String path, int start, int end, final String filter) throws Exception {

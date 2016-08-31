@@ -199,8 +199,6 @@ $(document).ready(function () {
     };
 
     var newDirModal = $('#newDirModal');
-    var uploadModal = $('#uploadModal');
-    var downloadModal = $('#downloadModal');
     var renameModal = $('#renameModal');
     var ownerModal = $('#ownerModal');
     var permissionModal = $('#permissionModal');
@@ -213,12 +211,12 @@ $(document).ready(function () {
         newDirModal.modal({show: true});
     });
     $('#hdfs_upload').click(function () {
-        uploadModal.modal({show: true});
+        uploadAction();
     });
     $('#hdfs_download').click(function () {
         var length = getSelectedFiles().length;
         if (length == 1) {
-            //TODO download action
+            downloadAction();
         } else if (length == 0) {
             msgBox('Select one file or one directory');
         } else if (length > 1) {
@@ -238,7 +236,7 @@ $(document).ready(function () {
     });
     $('#hdfs_owner').click(function () {
         var length = getSelectedFiles().length;
-        if (length == 0) {
+        if (length == 1) {
             ownerModal.find('[name=owner]').val(getSelectedFiles()[0]['owner']);
             ownerModal.find('[name=group]').val(getSelectedFiles()[0]['group']);
             ownerModal.modal({show: true});
@@ -253,11 +251,7 @@ $(document).ready(function () {
     });
     $('#hdfs_permission').click(function () {
         var length = getSelectedFiles().length;
-        if (length == 0) {
-            permissionModal.find('[name=permission]').val(getSelectedFiles()[0]['permission']);
-            permissionModal.modal({show: true});
-        }
-        else if (length > 0) {
+        if (length > 0) {
             permissionModal.find('[name=permission]').val('');
             permissionModal.modal({show: true});
         } else {
@@ -427,5 +421,13 @@ $(document).ready(function () {
             }
         });
     });
+
+    var uploadAction = function () {
+
+    };
+
+    var downloadAction = function () {
+
+    };
 
 });

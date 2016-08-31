@@ -19,6 +19,7 @@ package org.opencloudengine.garuda.backend.hdfs;
 import org.apache.hadoop.fs.FileStatus;
 import org.apache.hadoop.fs.Path;
 
+import javax.servlet.http.HttpServletResponse;
 import java.io.InputStream;
 import java.util.List;
 
@@ -33,6 +34,8 @@ public interface HdfsService {
     void createEmptyFile(String path, String owner, String group, String permission, boolean overwrite) throws Exception;
 
     void appendFile(String path, InputStream is) throws Exception;
+
+    void downloadFile(String path, HttpServletResponse response) throws Exception;
 
     Path rename(String path, String rename) throws Exception;
 

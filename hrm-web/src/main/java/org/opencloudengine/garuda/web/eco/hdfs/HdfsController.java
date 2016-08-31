@@ -13,10 +13,12 @@ import org.springframework.beans.factory.annotation.Qualifier;
 import org.springframework.http.HttpStatus;
 import org.springframework.stereotype.Controller;
 import org.springframework.web.bind.annotation.*;
+import org.springframework.web.multipart.MultipartFile;
 import org.springframework.web.servlet.ModelAndView;
 
 import javax.servlet.http.HttpServletResponse;
 import javax.servlet.http.HttpSession;
+import java.io.File;
 import java.io.IOException;
 import java.util.ArrayList;
 import java.util.List;
@@ -38,8 +40,6 @@ public class HdfsController {
         return "/hdfs/list";
     }
 
-    // limit default value is javascript datatables _iDisplayLength
-    // plz check user/list.jsp
     @RequestMapping(value = "/list", method = RequestMethod.GET)
     @ResponseStatus(HttpStatus.OK)
     public
@@ -79,4 +79,29 @@ public class HdfsController {
             return jsonObject.toString();
         }
     }
+
+//    @RequestMapping(value = "/upload", method = RequestMethod.POST)
+//    public void uploadAppFile(@RequestParam("file") MultipartFile file, HttpServletResponse response, HttpSession session) throws IOException {
+//        User user = (User) session.getAttribute(User.USER_KEY);
+//        String orgId = user.getOrgId();
+//        File appFile = appManageService.saveMultipartFile(file, orgId);
+//
+//        if (appFile != null) {
+//            // garuda에 올린다.
+//            String filePath = belugaService.uploadAppFile(orgId, appFile);
+//            if (filePath != null) {
+//                long length = appFile.length();
+//                String fileName = appFile.getName();
+//                String checksum = MessageDigestUtils.getMD5Checksum(appFile);
+//                UploadFile uploadFile = new UploadFile(fileName, filePath, length, checksum, DateUtil.getNow());
+//                response.setCharacterEncoding("utf-8");
+//                response.getWriter().print(JsonUtil.object2String(uploadFile));
+//                return;
+//            } else {
+//                response.sendError(500, "Cannot upload file to remote garuda server.");
+//            }
+//        } else {
+//            response.sendError(500, "File is empty");
+//        }
+//    }
 }
