@@ -22,6 +22,8 @@ public class CsrfSecurityRequestMatcher implements RequestMatcher {
 
     private RegexRequestMatcher restMatcher = new RegexRequestMatcher("/rest/v1/.*", null);
 
+    private RegexRequestMatcher uploadMatcher = new RegexRequestMatcher("/hdfs/upload", null);
+
     @Override
     public boolean matches(HttpServletRequest request) {
 
@@ -42,6 +44,10 @@ public class CsrfSecurityRequestMatcher implements RequestMatcher {
         }
 
         if(restMatcher.matches(request)){
+            return false;
+        }
+
+        if(uploadMatcher.matches(request)){
             return false;
         }
 
