@@ -59,7 +59,9 @@
                                 <button id="hdfs_newdir" class="btn-u btn-u-blue" type="button">New Folder</button>
                                 <button id="hdfs_upload" class="btn-u btn-u-dark-blue" type="button">Upload</button>
                                 <button id="hdfs_download" class="btn-u btn-u-default" type="button">Download</button>
-                                <button id="hdfs_rename" class="btn-u btn-u-aqua" type="button">Rename</button>
+                                <button id="hdfs_rename" class="btn-u btn-u-dark-blue" type="button">Rename</button>
+                                <button id="hdfs_owner" class="btn-u btn-u-dark-blue" type="button">Owner</button>
+                                <button id="hdfs_permission" class="btn-u btn-u-dark-blue" type="button">Permission</button>
                                 <button id="hdfs_delete" class="btn-u btn-u-red" type="button">Delete</button>
                             </p>
                         </div>
@@ -144,7 +146,7 @@
         <div class="modal-content">
             <div class="modal-header">
                 <button aria-hidden="true" data-dismiss="modal" class="close" type="button">×</button>
-                <h4 class="modal-title">New Folder</h4>
+                <h4 class="modal-title">Rename</h4>
             </div>
             <div class="modal-body">
                 <form action="#" class="form-horizontal" role="form">

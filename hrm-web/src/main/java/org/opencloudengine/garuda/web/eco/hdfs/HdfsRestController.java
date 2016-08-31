@@ -97,6 +97,21 @@ public class HdfsRestController {
         }
     }
 
+    @RequestMapping(value = "/file", method = RequestMethod.DELETE)
+    public ResponseEntity<Void> createDirectory(HttpServletRequest request,
+                                                @RequestParam(defaultValue = "") String path) {
+        try {
+            String[] split = path.split(",");
+            for (String s : split) {
+                hdfsService.delete(s);
+            }
+            return new ResponseEntity<>(HttpStatus.NO_CONTENT);
+        } catch (Exception ex) {
+            ex.printStackTrace();
+            return new ResponseEntity<>(HttpStatus.BAD_REQUEST);
+        }
+    }
+
     @RequestMapping(value = "/emptyfile", method = RequestMethod.POST)
     public ResponseEntity<Void> createEmptyFile(HttpServletRequest request,
                                                 @RequestParam(defaultValue = "") String path,
@@ -147,19 +162,7 @@ public class HdfsRestController {
 
             HttpHeaders headers = new HttpHeaders();
             headers.setLocation(ucBuilder.path("/rest/v1/file?path={path}").buildAndExpand(newPath).toUri());
-            return new ResponseEntity<>(headers, HttpStatus.CREATED);
-        } catch (Exception ex) {
-            ex.printStackTrace();
-            return new ResponseEntity<>(HttpStatus.BAD_REQUEST);
-        }
-    }
-
-    @RequestMapping(value = "/delete", method = RequestMethod.DELETE)
-    public ResponseEntity<Void> createDirectory(HttpServletRequest request,
-                                                @RequestParam(defaultValue = "") String path) {
-        try {
-            hdfsService.delete(path);
-            return new ResponseEntity<>(HttpStatus.NO_CONTENT);
+            return new ResponseEntity<>(headers, HttpStatus.OK);
         } catch (Exception ex) {
             ex.printStackTrace();
             return new ResponseEntity<>(HttpStatus.BAD_REQUEST);
@@ -174,11 +177,11 @@ public class HdfsRestController {
                                       @RequestParam(defaultValue = "false") boolean recursive,
                                       UriComponentsBuilder ucBuilder) {
         try {
-            hdfsService.setOwner(path, owner, group, recursive);
-
-            HttpHeaders headers = new HttpHeaders();
-            headers.setLocation(ucBuilder.path("/rest/v1/file?path={path}").buildAndExpand(path).toUri());
-            return new ResponseEntity<>(headers, HttpStatus.OK);
+            String[] split = path.split(",");
+            for (String s : split) {
+                hdfsService.setOwner(s, owner, group, recursive);
+            }
+            return new ResponseEntity<>(HttpStatus.OK);
         } catch (Exception ex) {
             ex.printStackTrace();
             return new ResponseEntity<>(HttpStatus.BAD_REQUEST);
@@ -192,11 +195,11 @@ public class HdfsRestController {
                                            @RequestParam(defaultValue = "false") boolean recursive,
                                            UriComponentsBuilder ucBuilder) {
         try {
-            hdfsService.setPermission(path, permission, recursive);
-
-            HttpHeaders headers = new HttpHeaders();
-            headers.setLocation(ucBuilder.path("/rest/v1/file?path={path}").buildAndExpand(path).toUri());
-            return new ResponseEntity<>(headers, HttpStatus.OK);
+            String[] split = path.split(",");
+            for (String s : split) {
+                hdfsService.setPermission(s, permission, recursive);
+            }
+            return new ResponseEntity<>(HttpStatus.OK);
         } catch (Exception ex) {
             ex.printStackTrace();
             return new ResponseEntity<>(HttpStatus.BAD_REQUEST);
