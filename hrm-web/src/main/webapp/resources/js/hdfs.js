@@ -434,7 +434,6 @@ $(document).ready(function () {
         progressPanel.show();
         var progressBar = progressPanel.find('.progress-bar');
 
-
         var data = new FormData();
         data.append('file', _file.files[0]);
         data.append('dir', srcPath);
@@ -457,6 +456,10 @@ $(document).ready(function () {
         }, false);
 
         request.open('POST', '/hdfs/upload');
+        request.onerror = function () {
+            progressPanel.hide();
+            msgBox('Failed upload file');
+        };
         request.send(data);
     });
 

@@ -67,6 +67,17 @@
                             </p>
                         </div>
 
+                        <div id="progressPanel" class="col-md-6 md-margin-bottom-10" style="display: none">
+                            <h3 class="heading-xs">Web Design - 88%</h3>
+
+                            <div class="progress progress-u progress-xxs">
+                                <div class="progress-bar progress-bar-dark"
+                                     role="progressbar" aria-valuenow="88" aria-valuemin="0" aria-valuemax="100"
+                                     style="width: 0%">
+                                </div>
+                            </div>
+                        </div>
+
                         <div style="float: right"> Search : <input type="text" id="customSearch"
                                                                    onKeyDown="javascript: search()"/>
                         </div>
@@ -150,16 +161,6 @@
                 <h4 class="modal-title">Upload File</h4>
             </div>
             <div class="modal-body">
-                <div id="progressPanel" class="col-md-6 md-margin-bottom-40" style="display: none">
-                    <h3 class="heading-xs">Web Design - 88%</h3>
-
-                    <div class="progress progress-u progress-xxs">
-                        <div class="progress-bar progress-bar-dark"
-                             role="progressbar" aria-valuenow="88" aria-valuemin="0" aria-valuemax="100"
-                             style="width: 0%">
-                        </div>
-                    </div>
-                </div>
                 <form action="#" class="form-horizontal" role="form">
                     <div class="form-group">
                         <label class="col-md-2 control-label">File <span class="color-red">*</span></label>
