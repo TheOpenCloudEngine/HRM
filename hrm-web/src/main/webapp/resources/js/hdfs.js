@@ -208,28 +208,32 @@ $(document).ready(function () {
     for (var i = 0; i < modals.length; i++) {
         bindModalCloseEvent(modals[i]);
     }
+    $('#hdfs_newdir').click(function () {newDirModal.modal({show: true});});
+    $('#hdfs_upload').click(function () {uploadModal.modal({show: true});});
+    $('#hdfs_download').click(function () {downloadModal.modal({show: true});});
+    $('#hdfs_rename').click(function () {renameModal.modal({show: true});});
+    $('#hdfs_owner').click(function () {ownerModal.modal({show: true});});
+    $('#hdfs_permission').click(function () {permissionModal.modal({show: true});});
+    $('#hdfs_delete').click(function () {deleteModal.modal({show: true});});
 
-    $('#hdfs_newdir').click(function () {
-        newDirModal.modal({show: true});
-        newDirModal.find('[name=action]').click(function () {
-            var name = newDirModal.find('[name=name]').val().trim();
-            if (name.length < 1) {
-                return;
+    newDirModal.find('[name=action]').click(function () {
+        var name = newDirModal.find('[name=name]').val().trim();
+        if (name.length < 1) {
+            return;
+        }
+        blockStart();
+        $.ajax({
+            type: "POST",
+            url: "/rest/v1/hdfs/directory?path=" + srcPath + '/' + name,
+            data: '',
+            dataType: "text",
+            contentType: "application/json; charset=utf-8",
+            success: function (response) {
+                reload();
+            },
+            error: function (request, status, errorThrown) {
+                console.log(errorThrown);
             }
-            blockStart();
-            $.ajax({
-                type: "POST",
-                url: "/rest/v1/hdfs/directory?path=" + srcPath + '/' + name,
-                data: '',
-                dataType: "text",
-                contentType: "application/json; charset=utf-8",
-                success: function (response) {
-                    reload();
-                },
-                error: function (request, status, errorThrown) {
-                    console.log(errorThrown);
-                }
-            });
         });
     });
 
