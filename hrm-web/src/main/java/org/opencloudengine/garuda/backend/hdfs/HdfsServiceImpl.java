@@ -33,6 +33,7 @@ import org.springframework.stereotype.Service;
 import javax.servlet.ServletOutputStream;
 import javax.servlet.http.HttpServletResponse;
 import javax.servlet.http.HttpSession;
+import javax.swing.*;
 import java.io.IOException;
 import java.io.InputStream;
 import java.io.OutputStream;
@@ -189,7 +190,7 @@ public class HdfsServiceImpl implements HdfsService {
         this._setOwner(path, owner, group);
         this._setPermission(path, permission);
 
-        int status = 0;
+        double status = 0;
         FileSystem fs = fileSystemFactory.getFileSystem();
         Path fsPath = new Path(path);
         FSDataOutputStream out = fs.append(fsPath);
@@ -199,10 +200,10 @@ public class HdfsServiceImpl implements HdfsService {
         while ((numBytes = is.read(b)) > 0) {
             out.write(b, 0, numBytes);
             count++;
-            status = (int) (((1024 * count) / size) * 100);
+            status = ((1024 * count) / size) * 100;
             if (count % 1000 == 0) {
                 System.out.println(count + " : " + numBytes + " : " + status);
-                this.setProgress(uuid, status);
+                this.setProgress(uuid, (int) status);
             }
         }
         this.setProgress(uuid, 100);
