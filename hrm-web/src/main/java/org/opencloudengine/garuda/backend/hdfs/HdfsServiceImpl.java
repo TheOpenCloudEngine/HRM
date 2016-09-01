@@ -60,7 +60,7 @@ public class HdfsServiceImpl implements HdfsService {
 
     private Map<String, Integer> progressMap;
 
-    private void setProgress(String uuid, int status) {
+    final private void setProgress(String uuid, int status) {
         if (progressMap == null) {
             progressMap = new HashMap<>();
         }
@@ -182,7 +182,7 @@ public class HdfsServiceImpl implements HdfsService {
     }
 
     @Override
-    public void createFileProgress(String uuid, long size, String path, InputStream is, String owner, String group, String permission, boolean overwrite) throws Exception {
+    public void createFileProgress(final String uuid, final long size, String path, InputStream is, String owner, String group, String permission, boolean overwrite) throws Exception {
         if (!overwrite) {
             this.mustNotExists(path);
         }
@@ -195,23 +195,31 @@ public class HdfsServiceImpl implements HdfsService {
         Path fsPath = new Path(path);
         FSDataOutputStream out = fs.append(fsPath);
         byte[] b = new byte[1024];
-        long status = 0;
-        //int numBytes = 0;
-        int totalread = 0;
+        final long status = 0;
+        final int totalread = 0;
         int count = 0;
 
         for (int numBytes = is.read(b); numBytes >= 0; numBytes = is.read(b)) {
             out.write(b, 0, numBytes);
             count++;
-            totalread += numBytes;
-            status = ((totalread * 100) / size);
-            if (count % 1000 == 0) {
-                System.out.println(size);
-                System.out.println(totalread);
-                System.out.println(totalread / size);
-                System.out.println(((totalread * 100) / size));
-                System.out.println(status);
-                this.setProgress(uuid, (int) status);
+//            totalread += numBytes;
+//            status = ((totalread * 100) / size);
+            if(count % 1000 == 0){
+                new Thread(){
+                    @Override
+                    public void run() {
+                        try {
+                            System.out.println(size);
+                            System.out.println(totalread);
+                            System.out.println(totalread / size);
+                            System.out.println(((totalread * 100) / size));
+                            System.out.println(status);
+                            //setProgress(uuid, (int) status);
+                        } catch (Exception e) {
+                            e.printStackTrace();
+                        }
+                    }
+                }.start();
             }
         }
 //        while ((numBytes = is.read(b)) > 0) {
