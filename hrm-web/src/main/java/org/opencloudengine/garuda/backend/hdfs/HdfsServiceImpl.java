@@ -196,22 +196,37 @@ public class HdfsServiceImpl implements HdfsService {
         FSDataOutputStream out = fs.append(fsPath);
         byte[] b = new byte[1024];
         long status = 0;
-        int numBytes = 0;
+        //int numBytes = 0;
         int totalread = 0;
         int count = 0;
-        while ((numBytes = is.read(b)) > 0) {
+
+        for (int numBytes = is.read(b); numBytes >= 0; numBytes = is.read(b)) {
+            out.write(b, 0, numBytes);
             count++;
             totalread += numBytes;
             status = ((totalread * 100) / size);
             if (count % 1000 == 0) {
+                System.out.println(size);
                 System.out.println(totalread);
                 System.out.println(totalread / size);
                 System.out.println(((totalread * 100) / size));
                 System.out.println(status);
                 this.setProgress(uuid, (int) status);
             }
-            out.write(b, 0, numBytes);
         }
+//        while ((numBytes = is.read(b)) > 0) {
+//            count++;
+//            totalread += numBytes;
+//            status = ((totalread * 100) / size);
+//            if (count % 1000 == 0) {
+//                System.out.println(totalread);
+//                System.out.println(totalread / size);
+//                System.out.println(((totalread * 100) / size));
+//                System.out.println(status);
+//                this.setProgress(uuid, (int) status);
+//            }
+//            out.write(b, 0, numBytes);
+//        }
         this.setProgress(uuid, 100);
 
         is.close();
