@@ -32,10 +32,6 @@ public interface HdfsService {
 
     void createFile(String path, InputStream is, String owner, String group, String permission, boolean overwrite) throws Exception;
 
-    void createFileProgress(String uuid, long size, String path, InputStream is, String owner, String group, String permission, boolean overwrite) throws Exception;
-
-    int getUploadStatus(String uuid);
-
     void createEmptyFile(String path, String owner, String group, String permission, boolean overwrite) throws Exception;
 
     void appendFile(String path, InputStream is) throws Exception;

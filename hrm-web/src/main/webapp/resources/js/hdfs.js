@@ -424,22 +424,12 @@ $(document).ready(function () {
     });
 
     uploadModal.find('[name=action]').click(function () {
-        function guid() {
-            function s4() {
-                return Math.floor((1 + Math.random()) * 0x10000)
-                    .toString(16)
-                    .substring(1);
-            }
-
-            return s4() + s4() + '-' + s4() + '-' + s4() + '-' +
-                s4() + '-' + s4() + s4() + s4();
-        }
-
-        var uuid = guid();
         var _file = document.getElementById('uploadfile');
         if (_file.files.length === 0) {
             return;
         }
+        var form = uploadModal.find('form');
+        form.find('[name=dir]').val(srcPath);
 
         uploadModal.find('.close').click();
         var progressPanel = $('#progressPanel');
@@ -448,51 +438,73 @@ $(document).ready(function () {
         progressBar.css('width', '0%');
         progressTitle.html('Uploading - 0%');
 
-        var formData = new FormData();
-        formData.append('file', _file.files[0]);
-        formData.append('dir', srcPath);
-        formData.append('uuid', uuid);
+        //var formData = new FormData();
+        //formData.append('file', _file.files[0]);
+        //formData.append('dir', srcPath);
+        //formData.append('uuid', uuid);
 
-        $.ajax({
-            url: '/hdfs/upload',
-            processData: false,
-            contentType: false,
-            type: 'POST',
-            data: formData,
-            dataType: 'json',
-            beforeSend: function () {
+        var bar = $('.bar');
+        var percent = $('.percent');
+        var status = $('#status');
+
+        $('form').ajaxForm({
+            beforeSend: function() {
                 progressPanel.show();
             },
-            success: function (result) {
+            uploadProgress: function(event, position, total, percentComplete) {
+                var percentVal = percentComplete + '%';
+                progressBar.css('width', percentVal);
+                progressTitle.html('Uploading - ' + percentVal);
+            },
+            success: function() {
                 msgBox('File upload succeed');
             },
-            error: function (e) {
-                msgBox('File upload failed');
-            },
-            complete: function () {
-                clearInterval(interval);
+            complete: function() {
                 progressPanel.hide();
                 reload();
             }
         });
 
-        var interval = setInterval(function () {
-            $.ajax({
-                type: "GET",
-                url: "/hdfs/upload/progress?uuid=" + uuid,
-                data: '',
-                dataType: "text",
-                contentType: "application/json; charset=utf-8",
-                success: function (response) {
-                    console.log(response);
-                    var map = JSON.parse(response);
-                    if (map.status) {
-                        progressBar.css('width', map.status + '%');
-                        progressTitle.html('Uploading - ' + map.status + '%');
-                    }
-                }
-            });
-        }, 1000);
+        //$.ajax({
+        //    url: '/hdfs/upload',
+        //    processData: false,
+        //    contentType: false,
+        //    type: 'POST',
+        //    data: formData,
+        //    dataType: 'json',
+        //    beforeSend: function () {
+        //        progressPanel.show();
+        //    },
+        //    success: function (result) {
+        //        msgBox('File upload succeed');
+        //    },
+        //    error: function (e) {
+        //        msgBox('File upload failed');
+        //    },
+        //    complete: function () {
+        //        //clearInterval(interval);
+        //        progressPanel.hide();
+        //        reload();
+        //    }
+        //});
+
+        //var interval = setInterval(function () {
+        //    $.ajax({
+        //        type: "GET",
+        //        url: "/hdfs/upload/progress?uuid=" + uuid,
+        //        data: '',
+        //        dataType: "text",
+        //        contentType: "application/json; charset=utf-8",
+        //        success: function (response) {
+        //            console.log(response);
+        //            var map = JSON.parse(response);
+        //            if (map.status) {
+        //                progressBar.css('width', map.status + '%');
+        //                progressTitle.html('Uploading - ' + map.status + '%');
+        //            }
+        //        }
+        //    });
+        //}, 1000);
     });
 
     var downloadAction = function () {

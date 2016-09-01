@@ -83,9 +83,8 @@ public class HdfsController {
     @RequestMapping(value = "/upload", method = RequestMethod.POST)
     public ResponseEntity<Void> uploadFile(
             @RequestParam(value = "dir", defaultValue = "") String dir,
-            @RequestParam(value = "uuid", defaultValue = "") String uuid,
             @RequestParam("file") MultipartFile file,
-            HttpServletResponse response, HttpSession session) throws IOException {
+            HttpSession session) throws IOException {
         try {
             if (file == null || file.isEmpty()) {
                 return new ResponseEntity<>(HttpStatus.BAD_REQUEST);
@@ -93,32 +92,13 @@ public class HdfsController {
             if ("/".equals(dir)) {
                 dir = "";
             }
-            long size = file.getSize();
             String filename = file.getOriginalFilename();
             String path = dir + "/" + filename;
 
             InputStream is = file.getInputStream();
-            hdfsService.createFileProgress(uuid, size, path, is, null, null, null, false);
+            hdfsService.createFile(path, is, null, null, null, false);
 
             return new ResponseEntity<>(HttpStatus.CREATED);
-        } catch (Exception ex) {
-            ex.printStackTrace();
-            return new ResponseEntity<>(HttpStatus.BAD_REQUEST);
-        }
-    }
-
-    @RequestMapping(value = "/upload/progress", method = RequestMethod.GET)
-    public ResponseEntity<Map> uploadFile(
-            @RequestParam(value = "uuid", defaultValue = "") String uuid,
-            HttpServletResponse response, HttpSession session) throws IOException {
-        try {
-            Map map = new HashMap();
-            if (!StringUtils.isEmpty(uuid)) {
-                int status = hdfsService.getUploadStatus(uuid);
-                map.put("status", status);
-                return new ResponseEntity<>(map, HttpStatus.OK);
-            }
-            return new ResponseEntity<>(map, HttpStatus.OK);
         } catch (Exception ex) {
             ex.printStackTrace();
             return new ResponseEntity<>(HttpStatus.BAD_REQUEST);

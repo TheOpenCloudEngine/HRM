@@ -58,28 +58,6 @@ public class HdfsServiceImpl implements HdfsService {
     @Autowired
     FileSystemFactory fileSystemFactory;
 
-    private Map<String, Integer> progressMap;
-
-    final private void setProgress(String uuid, int status) {
-        if (progressMap == null) {
-            progressMap = new HashMap<>();
-        }
-        progressMap.put(uuid, status);
-        System.out.println("setProgress: " + progressMap.toString());
-    }
-
-    @Override
-    public int getUploadStatus(String uuid) {
-        if (progressMap == null) {
-            return 0;
-        }
-        System.out.println("getUploadStatus: " + progressMap.toString());
-        if (!progressMap.containsKey(uuid)) {
-            return 0;
-        }
-        return (int) progressMap.get(uuid);
-    }
-
     @Override
     public void downloadFile(String path, HttpServletResponse response) throws Exception {
         this.mustExists(path);
@@ -179,67 +157,6 @@ public class HdfsServiceImpl implements HdfsService {
         this._setOwner(path, owner, group);
         this._setPermission(path, permission);
         this._appendFile(path, is);
-    }
-
-    @Override
-    public void createFileProgress(final String uuid, final long size, String path, InputStream is, String owner, String group, String permission, boolean overwrite) throws Exception {
-        if (!overwrite) {
-            this.mustNotExists(path);
-        }
-        this._createEmptyFile(path);
-        this._setOwner(path, owner, group);
-        this._setPermission(path, permission);
-
-
-        FileSystem fs = fileSystemFactory.getFileSystem();
-        Path fsPath = new Path(path);
-        FSDataOutputStream out = fs.append(fsPath);
-        byte[] b = new byte[1024];
-        final long status = 0;
-        final int totalread = 0;
-        int count = 0;
-
-        for (int numBytes = is.read(b); numBytes >= 0; numBytes = is.read(b)) {
-            out.write(b, 0, numBytes);
-            count++;
-//            totalread += numBytes;
-//            status = ((totalread * 100) / size);
-            if(count % 1000 == 0){
-                new Thread(){
-                    @Override
-                    public void run() {
-                        try {
-                            System.out.println(size);
-                            System.out.println(totalread);
-                            System.out.println(totalread / size);
-                            System.out.println(((totalread * 100) / size));
-                            System.out.println(status);
-                            //setProgress(uuid, (int) status);
-                        } catch (Exception e) {
-                            e.printStackTrace();
-                        }
-                    }
-                }.start();
-            }
-        }
-//        while ((numBytes = is.read(b)) > 0) {
-//            count++;
-//            totalread += numBytes;
-//            status = ((totalread * 100) / size);
-//            if (count % 1000 == 0) {
-//                System.out.println(totalread);
-//                System.out.println(totalread / size);
-//                System.out.println(((totalread * 100) / size));
-//                System.out.println(status);
-//                this.setProgress(uuid, (int) status);
-//            }
-//            out.write(b, 0, numBytes);
-//        }
-        this.setProgress(uuid, 100);
-
-        is.close();
-        out.close();
-        fs.close();
     }
 
     @Override

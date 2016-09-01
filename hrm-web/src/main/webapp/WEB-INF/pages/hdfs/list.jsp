@@ -27,6 +27,7 @@
     <link href="https://cdn.datatables.net/1.10.11/css/jquery.dataTables.min.css" rel="stylesheet" type="text/css"/>
 
     <script type="text/javascript" src="/resources/plugins/download/jquery.filedownload.js"></script>
+    <script type="text/javascript" src="/resources/plugins/download/jquery.form.js"></script>
     <script src="/resources/js/hdfs.js"></script>
 </head>
 
@@ -161,7 +162,7 @@
                 <h4 class="modal-title">Upload File</h4>
             </div>
             <div class="modal-body">
-                <form action="#" class="form-horizontal" role="form">
+                <form action="/hdfs/upload" method="post" enctype="multipart/form-data" class="form-horizontal" role="form">
                     <div class="form-group">
                         <label class="col-md-2 control-label">File <span class="color-red">*</span></label>
 
@@ -169,6 +170,7 @@
                             <input id="uploadfile" name="file" type="file" class="form-control" value="">
                         </div>
                     </div>
+                    <input type="hidden" name="dir" value="">
                 </form>
             </div>
             <div class="modal-footer">
