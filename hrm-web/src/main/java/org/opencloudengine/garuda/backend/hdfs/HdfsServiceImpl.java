@@ -69,7 +69,7 @@ public class HdfsServiceImpl implements HdfsService {
 
     @Override
     public int getUploadStatus(String uuid) {
-        if(progressMap == null){
+        if (progressMap == null) {
             return 0;
         }
         System.out.println("getUploadStatus: " + progressMap.toString());
@@ -200,7 +200,10 @@ public class HdfsServiceImpl implements HdfsService {
             out.write(b, 0, numBytes);
             count++;
             status = (int) (((1024 * count) / size) * 100);
-            this.setProgress(uuid, status);
+            if (count % 1000 == 0) {
+                System.out.println(count + " : " + numBytes + " : " + status);
+                this.setProgress(uuid, status);
+            }
         }
         this.setProgress(uuid, 100);
 
