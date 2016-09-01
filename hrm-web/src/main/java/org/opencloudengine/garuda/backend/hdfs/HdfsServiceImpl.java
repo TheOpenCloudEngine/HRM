@@ -64,6 +64,7 @@ public class HdfsServiceImpl implements HdfsService {
             progressMap = new HashMap<>();
         }
         progressMap.put(uuid, status);
+        System.out.println("setProgress: " + progressMap.toString());
     }
 
     @Override
@@ -71,7 +72,7 @@ public class HdfsServiceImpl implements HdfsService {
         if(progressMap == null){
             return 0;
         }
-        System.out.println(progressMap.toString());
+        System.out.println("getUploadStatus: " + progressMap.toString());
         if (!progressMap.containsKey(uuid)) {
             return 0;
         }
