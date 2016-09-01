@@ -424,6 +424,18 @@ $(document).ready(function () {
     });
 
     uploadModal.find('[name=action]').click(function () {
+        function guid() {
+            function s4() {
+                return Math.floor((1 + Math.random()) * 0x10000)
+                    .toString(16)
+                    .substring(1);
+            }
+
+            return s4() + s4() + '-' + s4() + '-' + s4() + '-' +
+                s4() + '-' + s4() + s4() + s4();
+        }
+
+        var uuid = guid();
         var _file = document.getElementById('uploadfile');
         if (_file.files.length === 0) {
             return;
@@ -431,41 +443,57 @@ $(document).ready(function () {
 
         uploadModal.find('.close').click();
         var progressPanel = $('#progressPanel');
-        progressPanel.show();
         var progressBar = progressPanel.find('.progress-bar');
         var progressTitle = progressPanel.find('.progress-title');
+        progressBar.css('width', '0%');
+        progressTitle.html('Uploading - 0%');
 
-        var data = new FormData();
-        data.append('file', _file.files[0]);
-        data.append('dir', srcPath);
+        var formData = new FormData();
+        formData.append('file', _file.files[0]);
+        formData.append('dir', srcPath);
+        formData.append('uuid', uuid);
 
-        var request = new XMLHttpRequest();
-        request.onreadystatechange = function () {
-            if (request.readyState == 4) {
-                if (request.status == 201) {
-                    progressPanel.hide();
-                    msgBox('Succeed upload file');
-                    reload();
-                } else {
-                    progressPanel.hide();
-                    msgBox('Failed upload file');
-                }
+        $.ajax({
+            url: '/hdfs/upload',
+            processData: false,
+            contentType: false,
+            type: 'POST',
+            data: formData,
+            dataType: 'json',
+            beforeSend: function () {
+                progressPanel.show();
+            },
+            success: function (result) {
+                msgBox('File upload succeed');
+            },
+            error: function (e) {
+                msgBox('File upload failed');
+            },
+            complete: function () {
+                clearInterval(interval);
+                progressPanel.hide();
+                reload();
             }
-        };
+        });
 
-        request.upload.addEventListener('progress', function (e) {
-            var status = Math.ceil(e.loaded / e.total) * 100;
-            console.log('status : ' + status);
-            progressBar.css('width', status + '%');
-            progressTitle.html('Uploading - ' + status + '%');
-        }, false);
-
-        request.open('POST', '/hdfs/upload');
-        request.onerror = function () {
-            progressPanel.hide();
-            msgBox('Failed upload file');
-        };
-        request.send(data);
+        var interval = setInterval(function () {
+            console.log('upload staging...');
+            $.ajax({
+                type: "GET",
+                url: "/hdfs/upload/progress?uuid=" + uuid,
+                data: '',
+                dataType: "text",
+                contentType: "application/json; charset=utf-8",
+                success: function (response) {
+                    var map = JSON.parse(response.responseText);
+                    if(map.status){
+                        var status = Math.ceil(e.loaded / e.total) * 100;
+                        progressBar.css('width', status + '%');
+                        progressTitle.html('Uploading - ' + status + '%');
+                    }
+                }
+            });
+        }, 1000);
     });
 
     var downloadAction = function () {

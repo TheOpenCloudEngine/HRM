@@ -20,6 +20,7 @@ import org.apache.hadoop.fs.FileStatus;
 import org.apache.hadoop.fs.Path;
 
 import javax.servlet.http.HttpServletResponse;
+import javax.servlet.http.HttpSession;
 import java.io.InputStream;
 import java.util.List;
 
@@ -30,6 +31,8 @@ public interface HdfsService {
     HdfsFileInfo getStatus(String path) throws Exception;
 
     void createFile(String path, InputStream is, String owner, String group, String permission, boolean overwrite) throws Exception;
+
+    void createFileProgress(HttpSession session, String uuid, long size, String path, InputStream is, String owner, String group, String permission, boolean overwrite) throws Exception;
 
     void createEmptyFile(String path, String owner, String group, String permission, boolean overwrite) throws Exception;
 

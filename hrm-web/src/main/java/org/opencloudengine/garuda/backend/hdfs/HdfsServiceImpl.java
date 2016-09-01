@@ -32,6 +32,7 @@ import org.springframework.stereotype.Service;
 
 import javax.servlet.ServletOutputStream;
 import javax.servlet.http.HttpServletResponse;
+import javax.servlet.http.HttpSession;
 import java.io.IOException;
 import java.io.InputStream;
 import java.io.OutputStream;
@@ -157,6 +158,33 @@ public class HdfsServiceImpl implements HdfsService {
         this._setOwner(path, owner, group);
         this._setPermission(path, permission);
         this._appendFile(path, is);
+    }
+
+    @Override
+    public void createFileProgress(HttpSession session, String uuid, long size, String path, InputStream is, String owner, String group, String permission, boolean overwrite) throws Exception {
+        if (!overwrite) {
+            this.mustNotExists(path);
+        }
+        this._createEmptyFile(path);
+        this._setOwner(path, owner, group);
+        this._setPermission(path, permission);
+
+        int status = 0;
+        FileSystem fs = fileSystemFactory.getFileSystem();
+        Path fsPath = new Path(path);
+        FSDataOutputStream out = fs.append(fsPath);
+        byte[] b = new byte[1024];
+        int numBytes = 0;
+        while ((numBytes = is.read(b)) > 0) {
+            status = (int) (size / numBytes) * 100;
+            session.setAttribute(uuid, status);
+            out.write(b, 0, numBytes);
+        }
+        session.setAttribute(uuid, 100);
+
+        is.close();
+        out.close();
+        fs.close();
     }
 
     @Override

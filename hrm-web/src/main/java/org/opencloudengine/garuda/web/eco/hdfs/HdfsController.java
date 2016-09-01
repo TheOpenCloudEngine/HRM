@@ -6,6 +6,7 @@ import org.opencloudengine.garuda.backend.hdfs.HdfsFileInfo;
 import org.opencloudengine.garuda.backend.hdfs.HdfsListInfo;
 import org.opencloudengine.garuda.backend.hdfs.HdfsService;
 import org.opencloudengine.garuda.common.exception.ServiceException;
+import org.opencloudengine.garuda.util.StringUtils;
 import org.opencloudengine.garuda.web.eco.sysuser.Sysuser;
 import org.opencloudengine.garuda.web.eco.sysuser.SysuserService;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -21,9 +22,7 @@ import javax.servlet.http.HttpServletResponse;
 import javax.servlet.http.HttpSession;
 import java.io.*;
 import java.net.URLDecoder;
-import java.util.ArrayList;
-import java.util.List;
-import java.util.Properties;
+import java.util.*;
 
 @Controller
 @RequestMapping("/hdfs")
@@ -90,9 +89,10 @@ public class HdfsController {
             if (file == null || file.isEmpty()) {
                 return new ResponseEntity<>(HttpStatus.BAD_REQUEST);
             }
-            if("/".equals(dir)){
+            if ("/".equals(dir)) {
                 dir = "";
             }
+            long size = file.getSize();
             String filename = file.getOriginalFilename();
             String path = dir + "/" + filename;
 
@@ -100,6 +100,26 @@ public class HdfsController {
             hdfsService.createFile(path, is, null, null, null, false);
 
             return new ResponseEntity<>(HttpStatus.CREATED);
+        } catch (Exception ex) {
+            ex.printStackTrace();
+            return new ResponseEntity<>(HttpStatus.BAD_REQUEST);
+        }
+    }
+
+    @RequestMapping(value = "/upload/progress", method = RequestMethod.GET)
+    public ResponseEntity<Map> uploadFile(
+            @RequestParam(value = "uuid", defaultValue = "") String uuid,
+            HttpServletResponse response, HttpSession session) throws IOException {
+        try {
+            Map map = new HashMap();
+            if (!StringUtils.isEmpty(uuid)) {
+                Object attribute = session.getAttribute(uuid);
+                if (attribute != null) {
+                    map.put("status", attribute.toString());
+                    return new ResponseEntity<>(map, HttpStatus.OK);
+                }
+            }
+            return new ResponseEntity<>(map, HttpStatus.OK);
         } catch (Exception ex) {
             ex.printStackTrace();
             return new ResponseEntity<>(HttpStatus.BAD_REQUEST);
