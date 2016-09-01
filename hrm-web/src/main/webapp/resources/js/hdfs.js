@@ -486,7 +486,7 @@ $(document).ready(function () {
                 contentType: "application/json; charset=utf-8",
                 success: function (response) {
                     var map = JSON.parse(response);
-                    if(map.status){
+                    if (map.status) {
                         progressBar.css('width', map.status + '%');
                         progressTitle.html('Uploading - ' + map.status + '%');
                     }
@@ -496,7 +496,12 @@ $(document).ready(function () {
     });
 
     var downloadAction = function () {
-
+        var file = getSelectedFiles()[0];
+        var path = file['fullyQualifiedPath'];
+        $.fileDownload('/rest/v1/hdfs/file?path=' + path, {
+            preparingMessageHtml: "We are preparing your file, please wait...",
+            failMessageHtml: "There was a problem generating your file, please try again."
+        });
     };
 
 });

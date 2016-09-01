@@ -26,6 +26,7 @@
     <script src="https://cdn.datatables.net/1.10.11/js/jquery.dataTables.min.js"></script>
     <link href="https://cdn.datatables.net/1.10.11/css/jquery.dataTables.min.css" rel="stylesheet" type="text/css"/>
 
+    <script type="text/javascript" src="/resources/plugins/download/jquery.filedownload.js"></script>
     <script src="/resources/js/hdfs.js"></script>
 </head>
 
