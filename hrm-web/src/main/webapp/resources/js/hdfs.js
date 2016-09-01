@@ -477,7 +477,6 @@ $(document).ready(function () {
         });
 
         var interval = setInterval(function () {
-            console.log('upload staging...');
             $.ajax({
                 type: "GET",
                 url: "/hdfs/upload/progress?uuid=" + uuid,
@@ -485,6 +484,7 @@ $(document).ready(function () {
                 dataType: "text",
                 contentType: "application/json; charset=utf-8",
                 success: function (response) {
+                    console.log(response);
                     var map = JSON.parse(response);
                     if (map.status) {
                         progressBar.css('width', map.status + '%');
@@ -492,7 +492,7 @@ $(document).ready(function () {
                     }
                 }
             });
-        }, 300);
+        }, 1000);
     });
 
     var downloadAction = function () {

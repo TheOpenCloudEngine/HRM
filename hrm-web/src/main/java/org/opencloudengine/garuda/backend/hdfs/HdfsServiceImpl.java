@@ -68,11 +68,14 @@ public class HdfsServiceImpl implements HdfsService {
 
     @Override
     public int getUploadStatus(String uuid) {
-        if (progressMap.containsKey(uuid)) {
-            return (int) progressMap.get(uuid);
-        } else {
+        if(progressMap == null){
             return 0;
         }
+        System.out.println(progressMap.toString());
+        if (!progressMap.containsKey(uuid)) {
+            return 0;
+        }
+        return (int) progressMap.get(uuid);
     }
 
     @Override
