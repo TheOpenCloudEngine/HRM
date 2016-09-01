@@ -98,7 +98,7 @@ public class HdfsController {
             String path = dir + "/" + filename;
 
             InputStream is = file.getInputStream();
-            hdfsService.createFileProgress(session, uuid, size, path, is, null, null, null, false);
+            hdfsService.createFileProgress(uuid, size, path, is, null, null, null, false);
 
             return new ResponseEntity<>(HttpStatus.CREATED);
         } catch (Exception ex) {
@@ -114,11 +114,9 @@ public class HdfsController {
         try {
             Map map = new HashMap();
             if (!StringUtils.isEmpty(uuid)) {
-                Object attribute = session.getAttribute(uuid);
-                if (attribute != null) {
-                    map.put("status", attribute.toString());
-                    return new ResponseEntity<>(map, HttpStatus.OK);
-                }
+                int status = hdfsService.getUploadStatus(uuid);
+                map.put("status", status);
+                return new ResponseEntity<>(map, HttpStatus.OK);
             }
             return new ResponseEntity<>(map, HttpStatus.OK);
         } catch (Exception ex) {

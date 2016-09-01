@@ -37,9 +37,7 @@ import java.io.IOException;
 import java.io.InputStream;
 import java.io.OutputStream;
 import java.net.URLEncoder;
-import java.util.ArrayList;
-import java.util.List;
-import java.util.Properties;
+import java.util.*;
 import java.util.concurrent.TimeUnit;
 
 
@@ -58,6 +56,24 @@ public class HdfsServiceImpl implements HdfsService {
 
     @Autowired
     FileSystemFactory fileSystemFactory;
+
+    private Map<String, Integer> progressMap;
+
+    private void setProgress(String uuid, int status) {
+        if (progressMap == null) {
+            progressMap = new HashMap<>();
+        }
+        progressMap.put(uuid, status);
+    }
+
+    @Override
+    public int getUploadStatus(String uuid) {
+        if (progressMap.containsKey(uuid)) {
+            return (int) progressMap.get(uuid);
+        } else {
+            return 0;
+        }
+    }
 
     @Override
     public void downloadFile(String path, HttpServletResponse response) throws Exception {
@@ -161,7 +177,7 @@ public class HdfsServiceImpl implements HdfsService {
     }
 
     @Override
-    public void createFileProgress(HttpSession session, String uuid, long size, String path, InputStream is, String owner, String group, String permission, boolean overwrite) throws Exception {
+    public void createFileProgress(String uuid, long size, String path, InputStream is, String owner, String group, String permission, boolean overwrite) throws Exception {
         if (!overwrite) {
             this.mustNotExists(path);
         }
@@ -180,9 +196,9 @@ public class HdfsServiceImpl implements HdfsService {
             out.write(b, 0, numBytes);
             count++;
             status = (int) (((1024 * count) / size) * 100);
-            session.setAttribute(uuid, status);
+            this.setProgress(uuid, status);
         }
-        session.setAttribute(uuid, 100);
+        this.setProgress(uuid, 100);
 
         is.close();
         out.close();

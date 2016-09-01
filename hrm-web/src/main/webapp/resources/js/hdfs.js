@@ -492,7 +492,7 @@ $(document).ready(function () {
                     }
                 }
             });
-        }, 1000);
+        }, 300);
     });
 
     var downloadAction = function () {
