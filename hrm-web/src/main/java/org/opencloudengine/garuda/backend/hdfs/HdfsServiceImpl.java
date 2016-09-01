@@ -190,11 +190,12 @@ public class HdfsServiceImpl implements HdfsService {
         this._setOwner(path, owner, group);
         this._setPermission(path, permission);
 
-        double status = 0;
+
         FileSystem fs = fileSystemFactory.getFileSystem();
         Path fsPath = new Path(path);
         FSDataOutputStream out = fs.append(fsPath);
         byte[] b = new byte[1024];
+        double status = 0;
         int numBytes = 0;
         int totalread = 0;
         int count = 0;
@@ -203,7 +204,10 @@ public class HdfsServiceImpl implements HdfsService {
             totalread += numBytes;
             status = (totalread / size) * 100;
             if (count % 1000 == 0) {
-                System.out.println(totalread + " : " + status);
+                System.out.println(totalread);
+                System.out.println(totalread / size);
+                System.out.println((totalread / size) * 100);
+                System.out.println(status);
                 this.setProgress(uuid, (int) status);
             }
             out.write(b, 0, numBytes);
