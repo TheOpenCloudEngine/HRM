@@ -447,7 +447,7 @@ $(document).ready(function () {
         var percent = $('.percent');
         var status = $('#status');
 
-        form.ajaxForm({
+        form.ajaxSubmit({
             beforeSend: function() {
                 progressPanel.show();
             },

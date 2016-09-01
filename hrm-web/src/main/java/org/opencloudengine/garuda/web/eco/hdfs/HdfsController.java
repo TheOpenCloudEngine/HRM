@@ -18,7 +18,6 @@ import org.springframework.web.bind.annotation.*;
 import org.springframework.web.multipart.MultipartFile;
 import org.springframework.web.servlet.ModelAndView;
 
-import javax.servlet.http.HttpServletRequest;
 import javax.servlet.http.HttpServletResponse;
 import javax.servlet.http.HttpSession;
 import java.io.*;
@@ -83,22 +82,21 @@ public class HdfsController {
 
     @RequestMapping(value = "/upload", method = RequestMethod.POST)
     public ResponseEntity<Void> uploadFile(
-//            @RequestParam(value = "dir", defaultValue = "") String dir,
-//            @RequestParam("file") MultipartFile file,
-            HttpServletRequest request,
+            @RequestParam(value = "dir", defaultValue = "") String dir,
+            @RequestParam("file") MultipartFile file,
             HttpSession session) throws IOException {
         try {
-//            if (file == null || file.isEmpty()) {
-//                return new ResponseEntity<>(HttpStatus.BAD_REQUEST);
-//            }
-//            if ("/".equals(dir)) {
-//                dir = "";
-//            }
-//            String filename = file.getOriginalFilename();
-//            String path = dir + "/" + filename;
-//
-//            InputStream is = file.getInputStream();
-//            hdfsService.createFile(path, is, null, null, null, false);
+            if (file == null || file.isEmpty()) {
+                return new ResponseEntity<>(HttpStatus.BAD_REQUEST);
+            }
+            if ("/".equals(dir)) {
+                dir = "";
+            }
+            String filename = file.getOriginalFilename();
+            String path = dir + "/" + filename;
+
+            InputStream is = file.getInputStream();
+            hdfsService.createFile(path, is, null, null, null, false);
 
             return new ResponseEntity<>(HttpStatus.CREATED);
         } catch (Exception ex) {
