@@ -485,6 +485,7 @@ $(document).ready(function () {
                 dataType: "text",
                 contentType: "application/json; charset=utf-8",
                 success: function (response) {
+                    console.log(response);
                     var map = JSON.parse(response.responseText);
                     if(map.status){
                         var status = Math.ceil(e.loaded / e.total) * 100;

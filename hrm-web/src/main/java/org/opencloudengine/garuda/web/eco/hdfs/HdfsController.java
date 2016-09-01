@@ -83,6 +83,7 @@ public class HdfsController {
     @RequestMapping(value = "/upload", method = RequestMethod.POST)
     public ResponseEntity<Void> uploadFile(
             @RequestParam(value = "dir", defaultValue = "") String dir,
+            @RequestParam(value = "uuid", defaultValue = "") String uuid,
             @RequestParam("file") MultipartFile file,
             HttpServletResponse response, HttpSession session) throws IOException {
         try {
@@ -97,6 +98,7 @@ public class HdfsController {
             String path = dir + "/" + filename;
 
             InputStream is = file.getInputStream();
+            hdfsService.createFileProgress(session, uuid, size, path, is, null, null, null, false);
             hdfsService.createFile(path, is, null, null, null, false);
 
             return new ResponseEntity<>(HttpStatus.CREATED);
