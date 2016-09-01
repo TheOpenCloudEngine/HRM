@@ -99,7 +99,6 @@ public class HdfsController {
 
             InputStream is = file.getInputStream();
             hdfsService.createFileProgress(session, uuid, size, path, is, null, null, null, false);
-            hdfsService.createFile(path, is, null, null, null, false);
 
             return new ResponseEntity<>(HttpStatus.CREATED);
         } catch (Exception ex) {

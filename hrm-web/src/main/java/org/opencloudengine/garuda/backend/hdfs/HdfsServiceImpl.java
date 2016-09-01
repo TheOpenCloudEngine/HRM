@@ -175,8 +175,10 @@ public class HdfsServiceImpl implements HdfsService {
         FSDataOutputStream out = fs.append(fsPath);
         byte[] b = new byte[1024];
         int numBytes = 0;
+        int count = 0;
         while ((numBytes = is.read(b)) > 0) {
-            status = (int) (size / numBytes) * 100;
+            count++;
+            status = (int) (size / (numBytes * count)) * 100;
             session.setAttribute(uuid, status);
             out.write(b, 0, numBytes);
         }
