@@ -487,9 +487,8 @@ $(document).ready(function () {
                 success: function (response) {
                     var map = JSON.parse(response);
                     if(map.status){
-                        var status = Math.ceil(e.loaded / e.total) * 100;
-                        progressBar.css('width', status + '%');
-                        progressTitle.html('Uploading - ' + status + '%');
+                        progressBar.css('width', map.status + '%');
+                        progressTitle.html('Uploading - ' + map.status + '%');
                     }
                 }
             });

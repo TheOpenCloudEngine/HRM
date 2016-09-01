@@ -177,10 +177,10 @@ public class HdfsServiceImpl implements HdfsService {
         int numBytes = 0;
         int count = 0;
         while ((numBytes = is.read(b)) > 0) {
-            count++;
-            status = (int) (size / (numBytes * count)) * 100;
-            session.setAttribute(uuid, status);
             out.write(b, 0, numBytes);
+            count++;
+            status = (int) ((numBytes * count) / size) * 100;
+            session.setAttribute(uuid, status);
         }
         session.setAttribute(uuid, 100);
 
