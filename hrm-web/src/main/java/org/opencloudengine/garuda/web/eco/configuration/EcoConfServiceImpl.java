@@ -4,8 +4,8 @@ import org.opencloudengine.garuda.web.configuration.ConfigurationHelper;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.beans.factory.annotation.Qualifier;
 import org.springframework.stereotype.Service;
+import org.opencloudengine.garuda.model.EcoConf;
 
-import java.util.Map;
 import java.util.Properties;
 
 @Service

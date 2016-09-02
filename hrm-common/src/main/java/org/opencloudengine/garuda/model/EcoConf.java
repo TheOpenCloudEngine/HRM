@@ -1,4 +1,4 @@
-package org.opencloudengine.garuda.web.eco.configuration;
+package org.opencloudengine.garuda.model;
 
 import org.opencloudengine.garuda.couchdb.CouchDAO;
 

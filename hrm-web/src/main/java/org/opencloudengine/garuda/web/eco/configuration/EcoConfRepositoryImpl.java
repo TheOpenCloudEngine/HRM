@@ -8,6 +8,7 @@ import org.opencloudengine.garuda.util.JsonUtils;
 import org.springframework.beans.factory.InitializingBean;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Repository;
+import org.opencloudengine.garuda.model.EcoConf;
 
 import java.util.Date;
 

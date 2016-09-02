@@ -1,4 +1,4 @@
-package org.opencloudengine.garuda.backend.hdfs;
+package org.opencloudengine.garuda.model;
 
 import java.util.List;
 

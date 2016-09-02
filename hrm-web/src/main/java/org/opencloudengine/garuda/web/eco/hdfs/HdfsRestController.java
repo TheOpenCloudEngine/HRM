@@ -3,10 +3,10 @@ package org.opencloudengine.garuda.web.eco.hdfs;
 
 import org.apache.hadoop.fs.FileStatus;
 import org.apache.hadoop.fs.Path;
-import org.opencloudengine.garuda.backend.hdfs.HdfsFileInfo;
-import org.opencloudengine.garuda.backend.hdfs.HdfsListInfo;
 import org.opencloudengine.garuda.backend.hdfs.HdfsService;
 import org.opencloudengine.garuda.common.exception.ServiceException;
+import org.opencloudengine.garuda.model.HdfsFileInfo;
+import org.opencloudengine.garuda.model.HdfsListInfo;
 import org.opencloudengine.garuda.web.console.oauthclient.OauthClient;
 import org.opencloudengine.garuda.web.console.oauthclient.OauthClientService;
 import org.opencloudengine.garuda.web.management.Management;
@@ -37,15 +37,14 @@ public class HdfsRestController {
     HdfsService hdfsService;
 
     @RequestMapping(value = "/status/list", method = RequestMethod.GET, produces = "application/json")
-    public ResponseEntity<List<HdfsFileInfo>> list(HttpServletRequest request,
+    public ResponseEntity<HdfsListInfo> list(HttpServletRequest request,
                                                    @RequestParam(defaultValue = "") String path,
                                                    @RequestParam(defaultValue = "1") int start,
                                                    @RequestParam(defaultValue = "10") int end,
                                                    @RequestParam(defaultValue = "") String filter) {
         try {
             HdfsListInfo hdfsListInfo = hdfsService.list(path, start, end, filter);
-            List<HdfsFileInfo> fileStatuses = hdfsListInfo.getFileInfoList();
-            return new ResponseEntity<>(fileStatuses, HttpStatus.OK);
+            return new ResponseEntity<>(hdfsListInfo, HttpStatus.OK);
         } catch (Exception ex) {
             ex.printStackTrace();
             return new ResponseEntity<>(HttpStatus.BAD_REQUEST);

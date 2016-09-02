@@ -1,6 +1,6 @@
 package org.opencloudengine.garuda.web.eco.configuration;
 
-import java.util.Map;
+import org.opencloudengine.garuda.model.EcoConf;
 
 public interface EcoConfService {
 

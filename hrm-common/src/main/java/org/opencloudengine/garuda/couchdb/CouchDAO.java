@@ -1,7 +1,6 @@
 package org.opencloudengine.garuda.couchdb;
 
 import java.io.Serializable;
-import java.util.HashMap;
 
 /**
  * Created by uengine on 2016. 4. 28..

@@ -2,13 +2,9 @@ package org.opencloudengine.garuda.web.eco.hdfs;
 
 
 import net.minidev.json.JSONObject;
-import org.opencloudengine.garuda.backend.hdfs.HdfsFileInfo;
-import org.opencloudengine.garuda.backend.hdfs.HdfsListInfo;
 import org.opencloudengine.garuda.backend.hdfs.HdfsService;
-import org.opencloudengine.garuda.common.exception.ServiceException;
-import org.opencloudengine.garuda.util.StringUtils;
-import org.opencloudengine.garuda.web.eco.sysuser.Sysuser;
-import org.opencloudengine.garuda.web.eco.sysuser.SysuserService;
+import org.opencloudengine.garuda.model.HdfsFileInfo;
+import org.opencloudengine.garuda.model.HdfsListInfo;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.beans.factory.annotation.Qualifier;
 import org.springframework.http.HttpStatus;

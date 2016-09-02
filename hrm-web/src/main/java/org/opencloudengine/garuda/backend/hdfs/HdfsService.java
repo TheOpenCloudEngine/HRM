@@ -18,6 +18,8 @@ package org.opencloudengine.garuda.backend.hdfs;
 
 import org.apache.hadoop.fs.FileStatus;
 import org.apache.hadoop.fs.Path;
+import org.opencloudengine.garuda.model.HdfsFileInfo;
+import org.opencloudengine.garuda.model.HdfsListInfo;
 
 import javax.servlet.http.HttpServletResponse;
 import javax.servlet.http.HttpSession;

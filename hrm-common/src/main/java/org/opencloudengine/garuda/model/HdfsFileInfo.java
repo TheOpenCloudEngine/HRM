@@ -14,13 +14,11 @@
  * You should have received a copy of the GNU General Public License
  * along with this program.  If not, see <http://www.gnu.org/licenses/>.
  */
-package org.opencloudengine.garuda.backend.hdfs;
+package org.opencloudengine.garuda.model;
 
 import org.apache.commons.lang.SystemUtils;
 import org.apache.hadoop.fs.ContentSummary;
 import org.apache.hadoop.fs.FileStatus;
-import org.apache.hadoop.fs.Path;
-import org.opencloudengine.garuda.model.FileInfo;
 
 /**
  * HDFS File Info.

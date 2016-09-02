@@ -7,6 +7,7 @@ import org.opencloudengine.garuda.web.configuration.ConfigurationHelper;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.beans.factory.annotation.Qualifier;
 import org.springframework.stereotype.Service;
+import org.opencloudengine.garuda.model.Sysuser;
 
 import java.util.List;
 import java.util.Properties;

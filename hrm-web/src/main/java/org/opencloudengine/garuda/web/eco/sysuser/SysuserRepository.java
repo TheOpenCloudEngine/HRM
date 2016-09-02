@@ -1,6 +1,7 @@
 package org.opencloudengine.garuda.web.eco.sysuser;
 
 import java.util.List;
+import org.opencloudengine.garuda.model.Sysuser;
 
 public interface SysuserRepository {
 

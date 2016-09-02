@@ -3,6 +3,7 @@ package org.opencloudengine.garuda.web.eco.sysuser;
 
 import net.minidev.json.JSONObject;
 import org.opencloudengine.garuda.common.exception.ServiceException;
+import org.opencloudengine.garuda.model.Sysuser;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.beans.factory.annotation.Qualifier;
 import org.springframework.http.HttpStatus;

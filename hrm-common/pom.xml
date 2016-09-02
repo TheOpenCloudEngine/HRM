@@ -14,7 +14,61 @@
     <version>1.0.0-SNAPSHOT</version>
     <name>HRM - Common</name>
 
+    <profiles>
+        <!--
+            Cloudera CDH 5.2.3
+            http://www.cloudera.com/content/cloudera/en/documentation/core/v5-2-x/topics/cdh_vd_cdh5_maven_repo.html
+        -->
+        <profile>
+            <id>cdh523</id>
+            <activation>
+                <activeByDefault>true</activeByDefault>
+                <property>
+                    <name>cdh523</name>
+                </property>
+            </activation>
+            <dependencies>
+                <dependency>
+                    <groupId>org.apache.hive</groupId>
+                    <artifactId>hive-common</artifactId>
+                    <version>${hive.version}</version>
+                    <scope>provided</scope>
+                </dependency>
+
+                <dependency>
+                    <groupId>org.apache.hive</groupId>
+                    <artifactId>hive-metastore</artifactId>
+                    <version>${hive.version}</version>
+                    <scope>provided</scope>
+                </dependency>
+
+                <dependency>
+                    <groupId>org.apache.hadoop</groupId>
+                    <artifactId>hadoop-common</artifactId>
+                    <version>2.6.0</version>
+                    <scope>provided</scope>
+                </dependency>
+
+                <dependency>
+                    <groupId>org.apache.hadoop</groupId>
+                    <artifactId>hadoop-mapreduce-client-jobclient</artifactId>
+                    <version>2.6.0</version>
+                    <scope>provided</scope>
+                </dependency>
+            </dependencies>
+        </profile>
+    </profiles>
+
     <dependencies>
+
+        <!-- ================== -->
+        <!--  Cloudant  -->
+        <!-- ================== -->
+        <dependency>
+            <groupId>com.cloudant</groupId>
+            <artifactId>cloudant-client</artifactId>
+            <version>2.2.0</version>
+        </dependency>
 
         <!-- ================== -->
         <!--  Jwt  -->

@@ -438,81 +438,31 @@ $(document).ready(function () {
         progressBar.css('width', '0%');
         progressTitle.html('Uploading - 0%');
 
-        //var formData = new FormData();
-        //formData.append('file', _file.files[0]);
-        //formData.append('dir', srcPath);
-        //formData.append('uuid', uuid);
-
-        var bar = $('.bar');
-        var percent = $('.percent');
-        var status = $('#status');
-
         form.ajaxSubmit({
-            beforeSend: function() {
+            beforeSend: function () {
                 progressPanel.show();
             },
-            uploadProgress: function(event, position, total, percentComplete) {
+            uploadProgress: function (event, position, total, percentComplete) {
                 var percentVal = percentComplete + '%';
                 progressBar.css('width', percentVal);
                 progressTitle.html('Uploading - ' + percentVal);
             },
-            success: function() {
+            success: function () {
                 msgBox('File upload succeed');
             },
-            complete: function() {
+            complete: function () {
                 progressPanel.hide();
                 reload();
             }
         });
-
-        //$.ajax({
-        //    url: '/hdfs/upload',
-        //    processData: false,
-        //    contentType: false,
-        //    type: 'POST',
-        //    data: formData,
-        //    dataType: 'json',
-        //    beforeSend: function () {
-        //        progressPanel.show();
-        //    },
-        //    success: function (result) {
-        //        msgBox('File upload succeed');
-        //    },
-        //    error: function (e) {
-        //        msgBox('File upload failed');
-        //    },
-        //    complete: function () {
-        //        //clearInterval(interval);
-        //        progressPanel.hide();
-        //        reload();
-        //    }
-        //});
-
-        //var interval = setInterval(function () {
-        //    $.ajax({
-        //        type: "GET",
-        //        url: "/hdfs/upload/progress?uuid=" + uuid,
-        //        data: '',
-        //        dataType: "text",
-        //        contentType: "application/json; charset=utf-8",
-        //        success: function (response) {
-        //            console.log(response);
-        //            var map = JSON.parse(response);
-        //            if (map.status) {
-        //                progressBar.css('width', map.status + '%');
-        //                progressTitle.html('Uploading - ' + map.status + '%');
-        //            }
-        //        }
-        //    });
-        //}, 1000);
     });
 
     var downloadAction = function () {
         var file = getSelectedFiles()[0];
         var path = file['fullyQualifiedPath'];
         $.fileDownload('/rest/v1/hdfs/file?path=' + path, {
-            preparingMessageHtml: "We are preparing your file, please wait...",
-            failMessageHtml: "There was a problem generating your file, please try again."
+            //preparingMessageHtml: "We are preparing your file, please wait...",
+            //failMessageHtml: "There was a problem generating your file, please try again."
         });
     };
 
