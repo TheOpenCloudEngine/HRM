@@ -1,7 +1,6 @@
 package org.opencloudengine.garuda.web.eco.clientJob;
 
 import org.opencloudengine.garuda.backend.clientjob.ClientJobService;
-import org.opencloudengine.garuda.backend.hdfs.HdfsService;
 import org.opencloudengine.garuda.model.clientJob.ClientJob;
 import org.opencloudengine.garuda.model.clientJob.ClientStatus;
 import org.opencloudengine.garuda.model.request.*;
@@ -58,12 +57,12 @@ public class ClientJobRestController {
     }
 
     @RequestMapping(value = "/python", method = RequestMethod.POST)
-    public void runPython(HttpServletResponse response, @RequestBody PythonRequest pythonRequest) throws IOException {
+    public void runPython(HttpServletResponse response, @RequestBody PythonRequests pythonRequest) throws IOException {
         this.processClientJob(response, pythonRequest);
     }
 
     @RequestMapping(value = "/shell", method = RequestMethod.POST)
-    public void runShell(HttpServletResponse response, @RequestBody ShellRequest shellRequest) throws IOException {
+    public void runShell(HttpServletResponse response, @RequestBody ShellRequests shellRequest) throws IOException {
         this.processClientJob(response, shellRequest);
     }
 

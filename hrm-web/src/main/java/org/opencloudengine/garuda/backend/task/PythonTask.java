@@ -18,8 +18,7 @@ package org.opencloudengine.garuda.backend.task;
 
 import org.apache.commons.io.FileUtils;
 import org.opencloudengine.garuda.model.request.BasicClientRequest;
-import org.opencloudengine.garuda.model.request.JavaRequest;
-import org.opencloudengine.garuda.model.request.PythonRequest;
+import org.opencloudengine.garuda.model.request.PythonRequests;
 import org.opencloudengine.garuda.util.StringUtils;
 import org.opencloudengine.garuda.util.cli.FileWriter;
 import org.opencloudengine.garuda.util.cli.ManagedProcess;
@@ -45,7 +44,7 @@ public class PythonTask extends InterceptorAbstractTask {
      */
     private Logger logger = LoggerFactory.getLogger(PythonTask.class);
 
-    private PythonRequest pythonRequest;
+    private PythonRequests pythonRequest;
 
     @Override
     public void runTask() throws Exception {
