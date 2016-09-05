@@ -17,4 +17,7 @@ public class ClientStatus {
     public static String JOB_TYPE_MR = "mr";
     public static String JOB_TYPE_PIG = "pig";
     public static String JOB_TYPE_SPARK = "spark";
+    public static String JOB_TYPE_JAVA = "java";
+    public static String JOB_TYPE_PYTHON = "python";
+    public static String JOB_TYPE_SHELL = "shell";
 }

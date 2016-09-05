@@ -110,7 +110,7 @@ public class ClientJobServiceImpl implements ClientJobService {
     }
 
     @Override
-    public ClientJob getDataFromFileSystem(ClientJob clientJob){
+    public ClientJob getDataFromFileSystem(ClientJob clientJob) {
 
         String workingDir = clientJob.getWorkingDir();
 
@@ -184,13 +184,22 @@ public class ClientJobServiceImpl implements ClientJobService {
         if (clientRequest instanceof SparkRequest) {
             return ClientStatus.JOB_TYPE_SPARK;
         }
+        if (clientRequest instanceof JavaRequest) {
+            return ClientStatus.JOB_TYPE_JAVA;
+        }
+        if (clientRequest instanceof PythonRequest) {
+            return ClientStatus.JOB_TYPE_PYTHON;
+        }
+        if (clientRequest instanceof ShellRequest) {
+            return ClientStatus.JOB_TYPE_SHELL;
+        }
         logger.warn("Failed to parse jobType : {}", clientJobId);
         throw new ServiceException("Failed to parse jobType : " + clientJobId);
     }
 
-    private void setRequestTypeToClientJob(BasicClientRequest clientRequest, ClientJob clientJob){
+    private void setRequestTypeToClientJob(BasicClientRequest clientRequest, ClientJob clientJob) {
         if (clientRequest instanceof HiveRequest) {
-            clientJob.setHiveRequest((HiveRequest)clientRequest);
+            clientJob.setHiveRequest((HiveRequest) clientRequest);
         }
         if (clientRequest instanceof MrRequest) {
             clientJob.setMrRequest((MrRequest) clientRequest);
@@ -199,7 +208,16 @@ public class ClientJobServiceImpl implements ClientJobService {
             clientJob.setPigRequest((PigRequest) clientRequest);
         }
         if (clientRequest instanceof SparkRequest) {
-            clientJob.setSparkRequest((SparkRequest)clientRequest);
+            clientJob.setSparkRequest((SparkRequest) clientRequest);
+        }
+        if (clientRequest instanceof JavaRequest) {
+            clientJob.setJavaRequest((JavaRequest) clientRequest);
+        }
+        if (clientRequest instanceof PythonRequest) {
+            clientJob.setPythonRequest((PythonRequest) clientRequest);
+        }
+        if (clientRequest instanceof ShellRequest) {
+            clientJob.setShellRequest((ShellRequest) clientRequest);
         }
     }
 
@@ -228,30 +246,6 @@ public class ClientJobServiceImpl implements ClientJobService {
         }
     }
 
-    //    @Override
-//    public ClientJob insertCash(ClientJob clientJob) {
-//        return clientJobRepository.insertCash(clientJob);
-//    }
-//
-//    @Override
-//    public ClientJob selectByClientJobIdCash(String clientJobId) {
-//        return clientJobRepository.selectByClientJobIdCash(clientJobId);
-//    }
-//
-//    @Override
-//    public Map<String, ClientJob> selectAllCash() {
-//        return clientJobRepository.selectAllCash();
-//    }
-//
-//    @Override
-//    public ClientJob updateByClientJobIdCash(ClientJob clientJob) {
-//        return clientJobRepository.updateByClientJobIdCash(clientJob);
-//    }
-//
-//    @Override
-//    public void deleteByClientJobIdCash(String clientJobId) {
-//        clientJobRepository.deleteByClientJobIdCash(clientJobId);
-//    }
     public static String clientJobBasePath(String logDir, String jobId, Date current) {
         return logDir + "/" + DateUtils.parseDate(current, "yyyy") + "/" + DateUtils.parseDate(current, "MM") + "/" + DateUtils.parseDate(current, "dd") + "/clientJob/" + jobId;
     }

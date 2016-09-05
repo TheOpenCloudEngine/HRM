@@ -1,16 +1,10 @@
 package org.opencloudengine.garuda.web.eco.hdfs;
 
 
-import org.apache.hadoop.fs.FileStatus;
 import org.apache.hadoop.fs.Path;
 import org.opencloudengine.garuda.backend.hdfs.HdfsService;
-import org.opencloudengine.garuda.common.exception.ServiceException;
 import org.opencloudengine.garuda.model.HdfsFileInfo;
 import org.opencloudengine.garuda.model.HdfsListInfo;
-import org.opencloudengine.garuda.web.console.oauthclient.OauthClient;
-import org.opencloudengine.garuda.web.console.oauthclient.OauthClientService;
-import org.opencloudengine.garuda.web.management.Management;
-import org.opencloudengine.garuda.web.rest.RestAuthService;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.beans.factory.annotation.Qualifier;
 import org.springframework.http.HttpHeaders;

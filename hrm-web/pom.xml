@@ -336,38 +336,6 @@
             <version>${spring.version}</version>
         </dependency>
 
-        <!-- ================ -->
-        <!--  Spring Webflow  -->
-        <!-- ================ -->
-
-        <dependency>
-            <groupId>org.springframework.webflow</groupId>
-            <artifactId>spring-webflow</artifactId>
-            <version>${spring.webflow.version}</version>
-            <exclusions>
-                <exclusion>
-                    <groupId>commons-logging</groupId>
-                    <artifactId>commons-logging</artifactId>
-                </exclusion>
-                <exclusion>
-                    <groupId>opensymphony</groupId>
-                    <artifactId>ognl</artifactId>
-                </exclusion>
-            </exclusions>
-        </dependency>
-
-        <dependency>
-            <groupId>org.springframework.webflow</groupId>
-            <artifactId>spring-js</artifactId>
-            <version>${spring.webflow.version}</version>
-            <exclusions>
-                <exclusion>
-                    <groupId>commons-logging</groupId>
-                    <artifactId>commons-logging</artifactId>
-                </exclusion>
-            </exclusions>
-        </dependency>
-
         <!-- =========== -->
         <!--  Spring IO  -->
         <!-- =========== -->
@@ -472,22 +440,6 @@
             <version>${aopalliance.version}</version>
         </dependency>
 
-        <!-- ========= -->
-        <!--  Reactor  -->
-        <!-- ========= -->
-
-        <dependency>
-            <groupId>org.projectreactor</groupId>
-            <artifactId>reactor-core</artifactId>
-            <version>${reactor.version}</version>
-        </dependency>
-
-        <dependency>
-            <groupId>org.projectreactor.spring</groupId>
-            <artifactId>reactor-spring-context</artifactId>
-            <version>${reactor.spring.version}</version>
-        </dependency>
-
         <!-- ================= -->
         <!--  Jakarta Commons  -->
         <!-- ================= -->
@@ -540,16 +492,6 @@
             <version>${commons.codec.version}</version>
         </dependency>
 
-        <!-- ================= -->
-        <!--  License Manager  -->
-        <!-- ================= -->
-
-        <dependency>
-            <groupId>net.nicholaswilliams.java.licensing</groupId>
-            <artifactId>licensing-licensor-base</artifactId>
-            <version>${license.manager.version}</version>
-        </dependency>
-
         <!-- ============= -->
         <!--  HTTP Client  -->
         <!-- ============= -->
@@ -580,77 +522,6 @@
             <groupId>org.apache.poi</groupId>
             <artifactId>poi-ooxml</artifactId>
             <version>${poi.version}</version>
-        </dependency>
-
-        <!--===================-->
-        <!--JDBC Dependencies-->
-        <!--===================-->
-
-        <dependency>
-            <groupId>mysql</groupId>
-            <artifactId>mysql-connector-java</artifactId>
-            <version>${mysql.version}</version>
-        </dependency>
-
-        <dependency>
-            <groupId>com.zaxxer</groupId>
-            <artifactId>HikariCP-java6</artifactId>
-            <version>${hikaricp.version}</version>
-        </dependency>
-
-        <!-- ========== -->
-        <!--  Activiti  -->
-        <!-- ========== -->
-
-        <dependency>
-            <groupId>org.activiti</groupId>
-            <artifactId>activiti-engine</artifactId>
-            <version>${activiti.version}</version>
-        </dependency>
-
-        <dependency>
-            <groupId>org.activiti</groupId>
-            <artifactId>activiti-bpmn-model</artifactId>
-            <version>${activiti.version}</version>
-        </dependency>
-
-        <dependency>
-            <groupId>org.activiti</groupId>
-            <artifactId>activiti-bpmn-layout</artifactId>
-            <version>${activiti.version}</version>
-        </dependency>
-
-        <dependency>
-            <groupId>org.activiti</groupId>
-            <artifactId>activiti-spring</artifactId>
-            <version>${activiti.version}</version>
-        </dependency>
-
-        <!-- ====================== -->
-        <!--  MyBatis Dependencies  -->
-        <!-- ====================== -->
-
-        <dependency>
-            <groupId>org.mybatis</groupId>
-            <artifactId>mybatis</artifactId>
-            <version>${mybatis.version}</version>
-        </dependency>
-
-        <dependency>
-            <groupId>org.mybatis</groupId>
-            <artifactId>mybatis-spring</artifactId>
-            <version>${mybatis.spring.version}</version>
-            <exclusions>
-                <exclusion>
-                    <groupId>org.springframework</groupId>
-                    <artifactId>spring-tx</artifactId>
-                </exclusion>
-
-                <exclusion>
-                    <groupId>org.springframework</groupId>
-                    <artifactId>spring-jdbc</artifactId>
-                </exclusion>
-            </exclusions>
         </dependency>
 
         <!-- ============= -->

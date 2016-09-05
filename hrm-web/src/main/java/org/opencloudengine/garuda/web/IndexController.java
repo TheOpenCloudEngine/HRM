@@ -1,6 +1,5 @@
 package org.opencloudengine.garuda.web;
 
-import org.opencloudengine.garuda.web.contactus.ContactUs;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -62,19 +61,6 @@ public class IndexController {
         return new ModelAndView("index");
     }
 
-
-    @RequestMapping(value = "contact", method = RequestMethod.GET)
-    public ModelAndView contact(HttpSession session) {
-        Authentication auth = SecurityContextHolder.getContext().getAuthentication();
-        if (!(auth instanceof AnonymousAuthenticationToken)) {
-            ModelAndView index = new ModelAndView("/my/contact");
-            return index;
-        } else {
-            ModelAndView index = new ModelAndView("/contact");
-            index.addObject("contact", new ContactUs());
-            return index;
-        }
-    }
 
     @RequestMapping(value = "redirect", method = RequestMethod.GET)
     public ModelAndView redirect(@RequestParam String url) {

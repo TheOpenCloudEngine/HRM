@@ -16,10 +16,7 @@
  */
 package org.opencloudengine.garuda.backend.scheduler;
 
-import org.opencloudengine.garuda.backend.task.HiveTask;
-import org.opencloudengine.garuda.backend.task.MrTask;
-import org.opencloudengine.garuda.backend.task.PigTask;
-import org.opencloudengine.garuda.backend.task.SparkTask;
+import org.opencloudengine.garuda.backend.task.*;
 import org.opencloudengine.garuda.model.clientJob.ClientJob;
 import org.opencloudengine.garuda.model.clientJob.ClientStatus;
 import org.opencloudengine.garuda.model.request.HiveRequest;
@@ -48,6 +45,15 @@ public class DefaultClientJob implements Job {
         }
         if(ClientStatus.JOB_TYPE_SPARK.equalsIgnoreCase(clientJob.getClientJobType())){
             new SparkTask().executeClientJob(clientJob);
+        }
+        if(ClientStatus.JOB_TYPE_JAVA.equalsIgnoreCase(clientJob.getClientJobType())){
+            new JavaTask().executeClientJob(clientJob);
+        }
+        if(ClientStatus.JOB_TYPE_PYTHON.equalsIgnoreCase(clientJob.getClientJobType())){
+            new PythonTask().executeClientJob(clientJob);
+        }
+        if(ClientStatus.JOB_TYPE_SHELL.equalsIgnoreCase(clientJob.getClientJobType())){
+            new ShellTask().executeClientJob(clientJob);
         }
     }
 }

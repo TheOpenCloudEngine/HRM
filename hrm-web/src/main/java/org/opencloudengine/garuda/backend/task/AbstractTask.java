@@ -154,8 +154,8 @@ public abstract class AbstractTask {
         if (!StringUtils.isEmpty(value)) {
             command.add(option);
             command.add(value);
-        }else{
-            if(!StringUtils.isEmpty(dafultValue)){
+        } else {
+            if (!StringUtils.isEmpty(dafultValue)) {
                 command.add(option);
                 command.add(dafultValue);
             }
@@ -172,10 +172,21 @@ public abstract class AbstractTask {
         }
     }
 
+    public void buildJavaOpts(List<String> command, Map<String, String> value) {
+        if (value != null) {
+            Set<String> keySet = value.keySet();
+            for (String key : keySet) {
+                command.add("-D" + key + "=" + value.get(key));
+            }
+        }
+    }
+
     public void saveToFileOption(List<String> command, String option, String value, String filePath) throws IOException {
         if (!StringUtils.isEmpty(value)) {
             FileCopyUtils.copy(value.getBytes(), new File(filePath));
-            command.add(option);
+            if(!StringUtils.isEmpty(option)){
+                command.add(option);
+            }
             command.add(filePath);
         }
     }

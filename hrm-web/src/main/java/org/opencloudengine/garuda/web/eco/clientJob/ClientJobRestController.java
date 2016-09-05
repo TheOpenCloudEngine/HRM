@@ -4,7 +4,7 @@ import org.opencloudengine.garuda.backend.clientjob.ClientJobService;
 import org.opencloudengine.garuda.backend.hdfs.HdfsService;
 import org.opencloudengine.garuda.model.clientJob.ClientJob;
 import org.opencloudengine.garuda.model.clientJob.ClientStatus;
-import org.opencloudengine.garuda.model.request.HiveRequest;
+import org.opencloudengine.garuda.model.request.*;
 import org.opencloudengine.garuda.util.JsonFormatterUtils;
 import org.opencloudengine.garuda.util.JsonUtils;
 import org.opencloudengine.garuda.util.StringUtils;
@@ -38,9 +38,43 @@ public class ClientJobRestController {
     ClientJobService clientJobService;
 
     @RequestMapping(value = "/hive", method = RequestMethod.POST)
-    public void updateUser(HttpServletRequest request, HttpServletResponse response, @RequestBody HiveRequest hiveRequest) throws IOException {
+    public void runHive(HttpServletResponse response, @RequestBody HiveRequest hiveRequest) throws IOException {
+        this.processClientJob(response, hiveRequest);
+    }
+
+    @RequestMapping(value = "/pig", method = RequestMethod.POST)
+    public void runPig(HttpServletResponse response, @RequestBody PigRequest pigRequest) throws IOException {
+        this.processClientJob(response, pigRequest);
+    }
+
+    @RequestMapping(value = "/mr", method = RequestMethod.POST)
+    public void runMr(HttpServletResponse response, @RequestBody MrRequest mrRequest) throws IOException {
+        this.processClientJob(response, mrRequest);
+    }
+
+    @RequestMapping(value = "/spark", method = RequestMethod.POST)
+    public void runSpark(HttpServletResponse response, @RequestBody SparkRequest sparkRequest) throws IOException {
+        this.processClientJob(response, sparkRequest);
+    }
+
+    @RequestMapping(value = "/python", method = RequestMethod.POST)
+    public void runPython(HttpServletResponse response, @RequestBody PythonRequest pythonRequest) throws IOException {
+        this.processClientJob(response, pythonRequest);
+    }
+
+    @RequestMapping(value = "/shell", method = RequestMethod.POST)
+    public void runShell(HttpServletResponse response, @RequestBody ShellRequest shellRequest) throws IOException {
+        this.processClientJob(response, shellRequest);
+    }
+
+    @RequestMapping(value = "/java", method = RequestMethod.POST)
+    public void runJava(HttpServletResponse response, @RequestBody JavaRequest javaRequest) throws IOException {
+        this.processClientJob(response, javaRequest);
+    }
+
+    private void processClientJob(HttpServletResponse response, BasicClientRequest clientRequest) throws IOException {
         try {
-            String clientJobId = hiveRequest.getClientJobId();
+            String clientJobId = clientRequest.getClientJobId();
             if (!StringUtils.isEmpty(clientJobId)) {
                 if (clientJobService.selectByClientJobId(clientJobId) != null) {
                     logger.warn("Requested clientJobId already exist : {}", clientJobId);
@@ -48,7 +82,7 @@ public class ClientJobRestController {
                     return;
                 }
             }
-            ClientJob clientJob = clientJobService.run(hiveRequest, ClientStatus.EXECUTE_FROM_REST);
+            ClientJob clientJob = clientJobService.run(clientRequest, ClientStatus.EXECUTE_FROM_REST);
 
             String marshal = JsonUtils.marshal(clientJob);
             String prettyPrint = JsonFormatterUtils.prettyPrint(marshal);
@@ -63,10 +97,10 @@ public class ClientJobRestController {
 
     @RequestMapping(value = "/job/{clientJobId}", method = RequestMethod.GET)
     public ResponseEntity<ClientJob> createFile(HttpServletRequest request,
-                                           @PathVariable("clientJobId") String clientJobId) {
+                                                @PathVariable("clientJobId") String clientJobId) {
         try {
             ClientJob clientJob = clientJobService.selectByClientJobId(clientJobId);
-            if(clientJob == null){
+            if (clientJob == null) {
                 return new ResponseEntity<>(HttpStatus.NOT_FOUND);
             }
             return new ResponseEntity<>(clientJob, HttpStatus.OK);
