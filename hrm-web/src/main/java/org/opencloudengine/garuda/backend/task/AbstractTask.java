@@ -89,10 +89,12 @@ public abstract class AbstractTask {
     }
 
     public void buildMapToMultipleOption(List<String> command, String option, Map<String, String> value) {
-        Set<String> keySet = value.keySet();
-        for (String key : keySet) {
-            command.add(option);
-            command.add(key + "=" + value.get(key));
+        if(value != null){
+            Set<String> keySet = value.keySet();
+            for (String key : keySet) {
+                command.add(option);
+                command.add(key + "=" + value.get(key));
+            }
         }
     }
 
