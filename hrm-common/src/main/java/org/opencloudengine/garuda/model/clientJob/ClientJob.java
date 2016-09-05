@@ -30,7 +30,6 @@ public class ClientJob extends CouchDAO {
     private String exception;
     private String cause;
     private String stdout;
-    private String stderr;
 
     private List<String> applicationIds;
     private List<String> mapreduceIds;
@@ -205,14 +204,6 @@ public class ClientJob extends CouchDAO {
 
     public void setStdout(String stdout) {
         this.stdout = stdout;
-    }
-
-    public String getStderr() {
-        return stderr;
-    }
-
-    public void setStderr(String stderr) {
-        this.stderr = stderr;
     }
 
     public List<String> getApplicationIds() {

@@ -118,7 +118,6 @@ public class ClientJobServiceImpl implements ClientJobService {
             File pidFile = new File(workingDir + "/PID");
             File codeFile = new File(workingDir + "/CODE");
             File logFile = new File(workingDir + "/task.log");
-            File errFile = new File(workingDir + "/err.log");
 
             File sciptFile = new File(workingDir + "/script.sh");
             File cmdFile = new File(workingDir + "/command.sh");
@@ -132,9 +131,6 @@ public class ClientJobServiceImpl implements ClientJobService {
                 }
                 if (logFile.exists()) {
                     clientJob.setStdout(FileCopyUtils.copyToString(new FileReader(logFile)));
-                }
-                if (errFile.exists()) {
-                    clientJob.setStderr(FileCopyUtils.copyToString(new FileReader(errFile)));
                 }
                 if (sciptFile.exists()) {
                     clientJob.setExecuteScript(FileCopyUtils.copyToString(new FileReader(sciptFile)));
@@ -256,27 +252,27 @@ public class ClientJobServiceImpl implements ClientJobService {
 
     @Override
     public List<ClientJob> selectAll() {
-        return clientJobRepository.selectAll();
+        return this.setRunningTaskData(clientJobRepository.selectAll());
     }
 
     @Override
     public List<ClientJob> select(int limit, Long skip) {
-        return clientJobRepository.select(limit, skip);
+        return this.setRunningTaskData(clientJobRepository.select(limit, skip));
     }
 
     @Override
     public List<ClientJob> selectRunning() {
-        return clientJobRepository.selectRunning();
+        return this.setRunningTaskData(clientJobRepository.selectRunning());
     }
 
     @Override
     public ClientJob selectById(String id) {
-        return clientJobRepository.selectById(id);
+        return this.setRunningTaskData(clientJobRepository.selectById(id));
     }
 
     @Override
     public ClientJob selectByClientJobId(String clientJobId) {
-        return clientJobRepository.selectByClientJobId(clientJobId);
+        return this.setRunningTaskData(clientJobRepository.selectByClientJobId(clientJobId));
     }
 
     @Override
@@ -297,5 +293,20 @@ public class ClientJobServiceImpl implements ClientJobService {
     @Override
     public void bulk(List<ClientJob> clientJobList) {
         clientJobRepository.bulk(clientJobList);
+    }
+
+    private List<ClientJob> setRunningTaskData(List<ClientJob> clientJobList) {
+        for (int i = 0; i < clientJobList.size(); i++) {
+            clientJobList.set(i, this.setRunningTaskData(clientJobList.get(i)));
+        }
+        return clientJobList;
+    }
+
+    private ClientJob setRunningTaskData(ClientJob clientJob) {
+        if (ClientStatus.RUNNING.equals(clientJob.getStatus())) {
+            clientJob = this.getDataFromFileSystem(clientJob);
+        }
+        this.convertHumanReadable(clientJob);
+        return clientJob;
     }
 }
