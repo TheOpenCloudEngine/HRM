@@ -35,9 +35,7 @@ import java.util.*;
 import static org.apache.commons.lang.StringUtils.isEmpty;
 
 /**
- * Hive 스크립트를 실행하는 태스크.
- *
- * @author Jae Hee, Lee
+ * @author Seungpil, Park
  * @since 2.0
  */
 public class PigTask extends InterceptorAbstractTask {

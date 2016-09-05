@@ -150,6 +150,18 @@ public abstract class AbstractTask {
         }
     }
 
+    public void buildBasicOption(List<String> command, String option, String value, String dafultValue) {
+        if (!StringUtils.isEmpty(value)) {
+            command.add(option);
+            command.add(value);
+        }else{
+            if(!StringUtils.isEmpty(dafultValue)){
+                command.add(option);
+                command.add(dafultValue);
+            }
+        }
+    }
+
     public void buildMapToMultipleOption(List<String> command, String option, Map<String, String> value) {
         if (value != null) {
             Set<String> keySet = value.keySet();
