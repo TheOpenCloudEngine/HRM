@@ -5,25 +5,25 @@ import java.util.List;
 /**
  * Created by uengine on 2016. 9. 1..
  */
-public class shellRequestTest extends BasicClientRequest {
+public class PythonRequest extends BasicClientRequest {
 
 
     /**
      * The script to execute
-     * bin/sh <generated script file> [arg] ...
+     * python [option] ... [-c cmd | -m mod | <generated script file> | -] [arg] ...
      */
     private String script;
 
     /**
      * Path to the script to execute.
      * It overrides script parameter.
-     * bin/sh <exist script file> [arg] ...
+     * python [option] ... [-c cmd | -m mod | <exist script file path> | -] [arg] ...
      */
     private String scriptPath;
 
     /**
      * arguments.
-     * bin/sh file [arg] ...
+     * ex) python [option] ... [-c cmd | -m mod | file | -] [arg] ...
      */
     private List<String> arguments;
 
