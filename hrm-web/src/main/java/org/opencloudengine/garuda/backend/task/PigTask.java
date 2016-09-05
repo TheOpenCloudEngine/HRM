@@ -17,9 +17,8 @@
 package org.opencloudengine.garuda.backend.task;
 
 import org.apache.commons.io.FileUtils;
-import org.opencloudengine.garuda.model.clientJob.ClientResult;
 import org.opencloudengine.garuda.model.request.BasicClientRequest;
-import org.opencloudengine.garuda.model.request.HiveRequest;
+import org.opencloudengine.garuda.model.request.PigRequest;
 import org.opencloudengine.garuda.util.StringUtils;
 import org.opencloudengine.garuda.util.cli.FileWriter;
 import org.opencloudengine.garuda.util.cli.ManagedProcess;
@@ -41,19 +40,19 @@ import static org.apache.commons.lang.StringUtils.isEmpty;
  * @author Jae Hee, Lee
  * @since 2.0
  */
-public class HiveTask extends InterceptorAbstractTask {
+public class PigTask extends InterceptorAbstractTask {
 
     /**
      * SLF4J Logging
      */
-    private Logger logger = LoggerFactory.getLogger(HiveTask.class);
+    private Logger logger = LoggerFactory.getLogger(PigTask.class);
 
-    private HiveRequest hiveRequest;
+    private PigRequest pigRequest;
 
     @Override
     public void runTask() throws Exception {
-        this.hiveRequest = clientJob.getHiveRequest();
-        this.clientRequest = (BasicClientRequest) this.hiveRequest;
+        this.pigRequest = clientJob.getPigRequest();
+        this.clientRequest = (BasicClientRequest) this.pigRequest;
 
         FileUtils.forceMkdir(new File(workingDir));
 
@@ -72,14 +71,6 @@ public class HiveTask extends InterceptorAbstractTask {
         ManagedProcess managedProcess = new ManagedProcess(cmds, getDefaultEnvs(), workingDir, logger, fileWriter);
         managedProcess.setSocketParams(socketParams);
         managedProcess.run();
-
-        //하이브 결과물을 등록한다.
-        File csv = new File(workingDir + "/hive.csv");
-        if (csv.exists()) {
-            ClientResult clientResult = new ClientResult();
-            clientResult.setCsv(FileCopyUtils.copyToString(new FileReader(csv)));
-            clientJob.setClientResult(clientResult);
-        }
     }
 
     /**
@@ -102,30 +93,73 @@ public class HiveTask extends InterceptorAbstractTask {
             }
         }
 
-        command.add(ecoConf.getHiveHome() + "/bin/hive");
+        command.add(ecoConf.getPigHome() + "/bin/pig");
 
-        //하이브 쿼리가 있다면 저장한다.
-        saveToFileOption(command, "-f", hiveRequest.getSql(), workingDir + "/hive.sql");
+        //프로퍼티 파일 파라미터가 있는경우
+        if (!StringUtils.isEmpty(pigRequest.getPropertyFile())) {
+            buildBasicOption(command, "-propertyFile", pigRequest.getPropertyFile());
+        }
+        //프로퍼티 파일 파라미터가 없는경우
+        else {
+            String propertyString = makeMapToPropertyString(pigRequest.getProperties());
+            saveToFileOption(command, "-propertyFile", propertyString, workingDir + "/pig.properties");
+        }
 
-        //인티얼라이징 쿼리가 있다면 저장한다.
-        saveToFileOption(command, "-i", hiveRequest.getInitializationSql(), workingDir + "/initialization.sql");
+        //피그 스크립트 파일 파라미터가 있는경우
+        if (!StringUtils.isEmpty(pigRequest.getScriptPath())) {
+            buildBasicOption(command, "-file", pigRequest.getScriptPath());
+        }
+        //피그 스크립트 파일 파라미터가 없는 경우
+        else {
+            saveToFileOption(command, "-file", pigRequest.getScript(), workingDir + "/script.pig");
+        }
 
-        //define 을 정의한다.
-        buildMapToMultipleOption(command, "--define", hiveRequest.getDefine());
+        //피그 파라미터 파일이 있는경우
+        if (!StringUtils.isEmpty(pigRequest.getParamPath())) {
+            buildBasicOption(command, "-param_file", pigRequest.getParamPath());
+        }
+        //피그 파라미터 파일이 없는경우
+        else {
+            buildMapToMultipleOption(command, "--param", pigRequest.getParam());
+        }
 
-        //database 를 정의한다.
-        buildBasicOption(command, "--database", hiveRequest.getDatabase());
+        //log4jconf
+        buildBasicOption(command, "-log4jconf", pigRequest.getLog4jconf());
 
-        //hiveconf 를 정의한다.
-        buildMapToMultipleOption(command, "--hiveconf", hiveRequest.getHiveconf());
+        //-check
+        if (pigRequest.getCheck()) {
+            buildSingleOption(command, "-check");
+        }
 
-        //hivevar 를 정의한다.
-        buildMapToMultipleOption(command, "--hivevar", hiveRequest.getHivevar());
+        //dryrun
+        if (pigRequest.getDryrun()) {
+            buildSingleOption(command, "-dryrun");
+        }
 
-        //결과물 저장 경로를 지정한다.
-        command.add(">");
-        command.add("hive.csv");
+        //verbose
+        if (pigRequest.getVerbose()) {
+            buildSingleOption(command, "-verbose");
+        }
 
+        //warning
+        if (pigRequest.getWarning()) {
+            buildSingleOption(command, "-warning");
+        }
+
+        //stop_on_failure
+        if (pigRequest.getStopOnFailure()) {
+            buildSingleOption(command, "-stop_on_failure");
+        }
+
+        //no_multiquery
+        if (pigRequest.getNoMultiquery()) {
+            buildSingleOption(command, "-no_multiquery");
+        }
+
+        //no_fetch
+        if (pigRequest.getNoFetch()) {
+            buildSingleOption(command, "-no_fetch");
+        }
         return StringUtils.listToDelimitedString(command, " ");
     }
 
@@ -135,7 +169,7 @@ public class HiveTask extends InterceptorAbstractTask {
      * @param script  커맨드 라인
      * @param baseDir 파일을 저장할 기준경로
      * @return 저장한 파일의 절대 경로
-     * @throws java.io.IOException 파일을 저장할 수 없는 경우
+     * @throws IOException 파일을 저장할 수 없는 경우
      */
     private String saveScriptFile(String script, String baseDir) throws IOException {
         File cliPath = new File(baseDir, "script.sh");
@@ -149,7 +183,7 @@ public class HiveTask extends InterceptorAbstractTask {
      * @param command 스크립트
      * @param baseDir 파일을 저장할 기준경로
      * @return 저장한 파일의 절대 경로
-     * @throws java.io.IOException 파일을 저장할 수 없는 경우
+     * @throws IOException 파일을 저장할 수 없는 경우
      */
     private String saveCommandFile(String command, String baseDir) throws IOException {
         File cliPath = new File(baseDir, "command.sh");

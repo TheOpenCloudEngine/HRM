@@ -29,8 +29,12 @@ import org.slf4j.LoggerFactory;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.beans.factory.annotation.Qualifier;
 import org.springframework.stereotype.Service;
+import org.springframework.util.FileCopyUtils;
 
 import javax.servlet.http.HttpServletResponse;
+import java.io.File;
+import java.io.FileReader;
+import java.io.IOException;
 import java.text.SimpleDateFormat;
 import java.util.*;
 import java.util.concurrent.TimeUnit;
@@ -84,7 +88,14 @@ public class ClientJobServiceImpl implements ClientJobService {
         clientJob.setExecuteFrom(executeFrom);
 
         //클라이언트 리퀘스트 등록
-        clientJob.setClientRequest(clientRequest);
+        this.setRequestTypeToClientJob(clientRequest, clientJob);
+
+        //시작 시간 등록
+        Date currentDate = new Date();
+        clientJob.setStartDate(currentDate.getTime());
+
+        //워킹 디렉토리 등록
+        clientJob.setWorkingDir(clientJobBasePath(config.getProperty("application.home"), clientJobId, currentDate));
 
         //클라이언트 잡 시작
         Map params = new HashMap();
@@ -98,21 +109,98 @@ public class ClientJobServiceImpl implements ClientJobService {
         return clientJob;
     }
 
+    @Override
+    public ClientJob getDataFromFileSystem(ClientJob clientJob){
+
+        String workingDir = clientJob.getWorkingDir();
+
+        //로그 및 종료코드, 실행 스크립트 등록
+        if (!StringUtils.isEmpty(workingDir)) {
+            File pidFile = new File(workingDir + "/PID");
+            File codeFile = new File(workingDir + "/CODE");
+            File logFile = new File(workingDir + "/task.log");
+            File errFile = new File(workingDir + "/err.log");
+
+            File sciptFile = new File(workingDir + "/script.sh");
+            File cmdFile = new File(workingDir + "/command.sh");
+
+            try {
+                if (pidFile.exists()) {
+                    clientJob.setPid(FileCopyUtils.copyToString(new FileReader(pidFile)));
+                }
+                if (codeFile.exists()) {
+                    clientJob.setExitCode(FileCopyUtils.copyToString(new FileReader(codeFile)));
+                }
+                if (logFile.exists()) {
+                    clientJob.setStdout(FileCopyUtils.copyToString(new FileReader(logFile)));
+                }
+                if (errFile.exists()) {
+                    clientJob.setStderr(FileCopyUtils.copyToString(new FileReader(errFile)));
+                }
+                if (sciptFile.exists()) {
+                    clientJob.setExecuteScript(FileCopyUtils.copyToString(new FileReader(sciptFile)));
+                }
+                if (cmdFile.exists()) {
+                    clientJob.setExecuteCli(FileCopyUtils.copyToString(new FileReader(cmdFile)));
+                }
+            } catch (IOException ex) {
+                ex.printStackTrace();
+            }
+
+            //얀 applicationId 와 맵리듀스 아이디를 등록한다.
+            List<String> applicationIds = new ArrayList<>();
+            List<String> mapreduceIds = new ArrayList<>();
+            File working = new File(workingDir);
+            if (working.exists()) {
+                File[] files = working.listFiles();
+                for (int i = 0; i < files.length; i++) {
+                    File file = files[i];
+                    if (file.getName().startsWith("app.")) {
+                        String appId = file.getName().replace("app.", "");
+                        applicationIds.add(appId);
+                    }
+                    if (file.getName().startsWith("hadoop.")) {
+                        String mrId = file.getName().replace("hadoop.", "");
+                        mapreduceIds.add(mrId);
+                    }
+                }
+            }
+            clientJob.setApplicationIds(applicationIds);
+            clientJob.setMapreduceIds(mapreduceIds);
+        }
+        return clientJob;
+    }
+
     private String getClientRequestType(BasicClientRequest clientRequest, String clientJobId) {
         if (clientRequest instanceof HiveRequest) {
-            return "hive";
+            return ClientStatus.JOB_TYPE_HIVE;
         }
         if (clientRequest instanceof MrRequest) {
-            return "mr";
+            return ClientStatus.JOB_TYPE_MR;
         }
         if (clientRequest instanceof PigRequest) {
-            return "pig";
+            return ClientStatus.JOB_TYPE_PIG;
         }
         if (clientRequest instanceof SparkRequest) {
-            return "spark";
+            return ClientStatus.JOB_TYPE_SPARK;
         }
         logger.warn("Failed to parse jobType : {}", clientJobId);
         throw new ServiceException("Failed to parse jobType : " + clientJobId);
+    }
+
+    private void setRequestTypeToClientJob(BasicClientRequest clientRequest, ClientJob clientJob){
+        if (clientRequest instanceof HiveRequest) {
+            clientJob.setHiveRequest((HiveRequest)clientRequest);
+        }
+        if (clientRequest instanceof MrRequest) {
+            clientJob.setMrRequest((MrRequest) clientRequest);
+        }
+        if (clientRequest instanceof PigRequest) {
+            clientJob.setPigRequest((PigRequest) clientRequest);
+        }
+        if (clientRequest instanceof SparkRequest) {
+            clientJob.setSparkRequest((SparkRequest)clientRequest);
+        }
     }
 
     private void convertHumanReadable(ClientJob clientJob) {
@@ -140,7 +228,7 @@ public class ClientJobServiceImpl implements ClientJobService {
         }
     }
 
-//    @Override
+    //    @Override
 //    public ClientJob insertCash(ClientJob clientJob) {
 //        return clientJobRepository.insertCash(clientJob);
 //    }
@@ -164,6 +252,9 @@ public class ClientJobServiceImpl implements ClientJobService {
 //    public void deleteByClientJobIdCash(String clientJobId) {
 //        clientJobRepository.deleteByClientJobIdCash(clientJobId);
 //    }
+    public static String clientJobBasePath(String logDir, String jobId, Date current) {
+        return logDir + "/" + DateUtils.parseDate(current, "yyyy") + "/" + DateUtils.parseDate(current, "MM") + "/" + DateUtils.parseDate(current, "dd") + "/clientJob/" + jobId;
+    }
 
     @Override
     public ClientJob insert(ClientJob clientJob) {

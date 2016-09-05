@@ -1,14 +1,14 @@
 package org.opencloudengine.garuda.model.clientJob;
 
 import org.opencloudengine.garuda.couchdb.CouchDAO;
-import org.opencloudengine.garuda.model.request.BasicClientRequest;
+import org.opencloudengine.garuda.model.request.*;
 
 import java.util.List;
 
 /**
  * Created by uengine on 2016. 9. 2..
  */
-public class ClientJob extends CouchDAO{
+public class ClientJob extends CouchDAO {
 
     private String clientJobId;
     private String clientJobType;
@@ -32,7 +32,13 @@ public class ClientJob extends CouchDAO{
     private String stdout;
     private String stderr;
 
-    private BasicClientRequest clientRequest;
+    private List<String> applicationIds;
+    private List<String> mapreduceIds;
+
+    private HiveRequest hiveRequest;
+    private MrRequest mrRequest;
+    private PigRequest pigRequest;
+    private SparkRequest sparkRequest;
     private ClientResult clientResult;
 
     private Long regDate;
@@ -190,12 +196,68 @@ public class ClientJob extends CouchDAO{
         this.cause = cause;
     }
 
-    public BasicClientRequest getClientRequest() {
-        return clientRequest;
+    public String getStdout() {
+        return stdout;
     }
 
-    public void setClientRequest(BasicClientRequest clientRequest) {
-        this.clientRequest = clientRequest;
+    public void setStdout(String stdout) {
+        this.stdout = stdout;
+    }
+
+    public String getStderr() {
+        return stderr;
+    }
+
+    public void setStderr(String stderr) {
+        this.stderr = stderr;
+    }
+
+    public List<String> getApplicationIds() {
+        return applicationIds;
+    }
+
+    public void setApplicationIds(List<String> applicationIds) {
+        this.applicationIds = applicationIds;
+    }
+
+    public List<String> getMapreduceIds() {
+        return mapreduceIds;
+    }
+
+    public void setMapreduceIds(List<String> mapreduceIds) {
+        this.mapreduceIds = mapreduceIds;
+    }
+
+    public HiveRequest getHiveRequest() {
+        return hiveRequest;
+    }
+
+    public void setHiveRequest(HiveRequest hiveRequest) {
+        this.hiveRequest = hiveRequest;
+    }
+
+    public MrRequest getMrRequest() {
+        return mrRequest;
+    }
+
+    public void setMrRequest(MrRequest mrRequest) {
+        this.mrRequest = mrRequest;
+    }
+
+    public PigRequest getPigRequest() {
+        return pigRequest;
+    }
+
+    public void setPigRequest(PigRequest pigRequest) {
+        this.pigRequest = pigRequest;
+    }
+
+    public SparkRequest getSparkRequest() {
+        return sparkRequest;
+    }
+
+    public void setSparkRequest(SparkRequest sparkRequest) {
+        this.sparkRequest = sparkRequest;
     }
 
     public ClientResult getClientResult() {
@@ -220,21 +282,5 @@ public class ClientJob extends CouchDAO{
 
     public void setUpdDate(Long updDate) {
         this.updDate = updDate;
-    }
-
-    public String getStdout() {
-        return stdout;
-    }
-
-    public void setStdout(String stdout) {
-        this.stdout = stdout;
-    }
-
-    public String getStderr() {
-        return stderr;
-    }
-
-    public void setStderr(String stderr) {
-        this.stderr = stderr;
     }
 }

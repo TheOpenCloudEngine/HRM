@@ -15,9 +15,7 @@ import org.springframework.beans.factory.annotation.Qualifier;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
 import org.springframework.stereotype.Controller;
-import org.springframework.web.bind.annotation.RequestBody;
-import org.springframework.web.bind.annotation.RequestMapping;
-import org.springframework.web.bind.annotation.RequestMethod;
+import org.springframework.web.bind.annotation.*;
 
 import javax.servlet.http.HttpServletRequest;
 import javax.servlet.http.HttpServletResponse;
@@ -35,9 +33,6 @@ public class ClientJobRestController {
      * SLF4J Application Logging
      */
     private Logger logger = LoggerFactory.getLogger(ClientJobRestController.class);
-
-    @Autowired
-    HdfsService hdfsService;
 
     @Autowired
     ClientJobService clientJobService;
@@ -63,6 +58,22 @@ public class ClientJobRestController {
         } catch (Exception ex) {
             ex.printStackTrace();
             response.sendError(400, "Failed to run client job");
+        }
+    }
+
+    @RequestMapping(value = "/job/{clientJobId}", method = RequestMethod.GET)
+    public ResponseEntity<ClientJob> createFile(HttpServletRequest request,
+                                           @PathVariable("clientJobId") String clientJobId) {
+        try {
+            ClientJob clientJob = clientJobService.selectByClientJobId(clientJobId);
+            if(clientJob == null){
+                return new ResponseEntity<>(HttpStatus.NOT_FOUND);
+            }
+            return new ResponseEntity<>(clientJob, HttpStatus.OK);
+
+        } catch (Exception ex) {
+            ex.printStackTrace();
+            return new ResponseEntity<>(HttpStatus.BAD_REQUEST);
         }
     }
 }

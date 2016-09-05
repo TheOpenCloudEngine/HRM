@@ -11,15 +11,7 @@ public interface ClientJobService {
 
     ClientJob run(BasicClientRequest clientRequest, String executeFrom) throws Exception;
 
-//    ClientJob insertCash(ClientJob clientJob);
-//
-//    ClientJob selectByClientJobIdCash(String clientJobId);
-//
-//    Map<String, ClientJob> selectAllCash();
-//
-//    ClientJob updateByClientJobIdCash(ClientJob clientJob);
-//
-//    void deleteByClientJobIdCash(String clientJobId);
+    ClientJob getDataFromFileSystem(ClientJob clientJob);
 
     ClientJob insert(ClientJob clientJob);
 

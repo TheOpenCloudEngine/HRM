@@ -33,6 +33,7 @@ import java.io.File;
 import java.io.IOException;
 import java.util.*;
 
+import static org.apache.commons.lang.StringUtils.isEmpty;
 import static org.apache.commons.lang.StringUtils.splitPreserveAllTokens;
 
 public abstract class AbstractTask {
@@ -71,8 +72,8 @@ public abstract class AbstractTask {
         this.clientJobId = clientJob.getClientJobId();
         this.clientJobType = clientJob.getClientJobType();
         this.clientJobName = clientJob.getClientJobName();
-        this.clientRequest = clientJob.getClientRequest();
         this.ecoConf = ecoConfService.select();
+        this.workingDir = clientJob.getWorkingDir();
 
         this.mrAgentPath = config.getProperty("mr.agent.path");
 
@@ -80,6 +81,67 @@ public abstract class AbstractTask {
     }
 
     abstract public void doClientExecute();
+
+    public String makeMapToPropertyString(Map<String, String> value) {
+        String properties = "";
+        if (value != null) {
+            if (!value.isEmpty()) {
+                Properties props = new Properties();
+                Set<String> keySet = value.keySet();
+                for (String key : keySet) {
+                    props.put(key, value.get(key));
+                }
+                properties = StringUtils.propertiesToString(props);
+            }
+        }
+        return properties;
+    }
+
+    public void buildArgs(List<String> command, List<String> value) {
+        if (value != null) {
+            for (int i = 0; i < value.size(); i++) {
+                command.add(value.get(i));
+            }
+        }
+    }
+
+    public void buildCommaSeparatedOptions(List<String> command, String option, List<String> value) {
+        if (value != null) {
+            command.add(option);
+            String args = "\"";
+            for (int i = 0; i < value.size(); i++) {
+                if (i == 0) {
+                    args += value.get(i);
+                } else {
+                    args += "," + value.get(i);
+                }
+            }
+            args += "\"";
+            command.add(args);
+        }
+    }
+
+    public void buildSpaceSeparatedOptions(List<String> command, String option, List<String> value) {
+        if (value != null) {
+            command.add(option);
+            String args = "\"";
+            for (int i = 0; i < value.size(); i++) {
+                if (i == 0) {
+                    args += value.get(i);
+                } else {
+                    args += " " + value.get(i);
+                }
+            }
+            args += "\"";
+            command.add(args);
+        }
+    }
+
+    public void buildSingleOption(List<String> command, String option) {
+        if (!StringUtils.isEmpty(option)) {
+            command.add(option);
+        }
+    }
 
     public void buildBasicOption(List<String> command, String option, String value) {
         if (!StringUtils.isEmpty(value)) {
@@ -89,7 +151,7 @@ public abstract class AbstractTask {
     }
 
     public void buildMapToMultipleOption(List<String> command, String option, Map<String, String> value) {
-        if(value != null){
+        if (value != null) {
             Set<String> keySet = value.keySet();
             for (String key : keySet) {
                 command.add(option);

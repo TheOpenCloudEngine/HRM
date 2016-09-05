@@ -429,7 +429,7 @@ public class SparkRequest extends BasicClientRequest {
         this.driverCores = driverCores;
     }
 
-    public boolean isSupervise() {
+    public boolean getSupervise() {
         return supervise;
     }
 

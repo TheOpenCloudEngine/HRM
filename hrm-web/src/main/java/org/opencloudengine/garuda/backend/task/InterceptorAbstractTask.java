@@ -18,16 +18,10 @@ package org.opencloudengine.garuda.backend.task;
 
 import com.fasterxml.jackson.databind.ObjectMapper;
 import org.opencloudengine.garuda.model.clientJob.ClientStatus;
-import org.opencloudengine.garuda.util.DateUtils;
 import org.opencloudengine.garuda.util.ExceptionUtils;
-import org.opencloudengine.garuda.util.StringUtils;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
-import org.springframework.util.FileCopyUtils;
 
-import java.io.File;
-import java.io.FileReader;
-import java.io.IOException;
 import java.util.*;
 
 public abstract class InterceptorAbstractTask extends AbstractTask {
@@ -75,49 +69,11 @@ public abstract class InterceptorAbstractTask extends AbstractTask {
             clientJob.setDuration(duration);
         }
 
-        //로그 및 종료코드, 실행 스크립트 등록
-        if (!StringUtils.isEmpty(workingDir)) {
-            File pidFile = new File(workingDir + "/PID");
-            File codeFile = new File(workingDir + "/CODE");
-            File logFile = new File(workingDir + "/task.log");
-            File errFile = new File(workingDir + "/err.log");
-
-            File sciptFile = new File(workingDir + "/script.sh");
-            File cmdFile = new File(workingDir + "/command.sh");
-
-            try{
-                if (pidFile.exists()) {
-                    clientJob.setPid(FileCopyUtils.copyToString(new FileReader(pidFile)));
-                }
-                if (codeFile.exists()) {
-                    clientJob.setExitCode(FileCopyUtils.copyToString(new FileReader(codeFile)));
-                }
-                if (logFile.exists()) {
-                    clientJob.setStdout(FileCopyUtils.copyToString(new FileReader(logFile)));
-                }
-                if (errFile.exists()) {
-                    clientJob.setStderr(FileCopyUtils.copyToString(new FileReader(errFile)));
-                }
-                if (sciptFile.exists()) {
-                    clientJob.setExecuteScript(FileCopyUtils.copyToString(new FileReader(sciptFile)));
-                }
-                if (cmdFile.exists()) {
-                    clientJob.setExecuteCli(FileCopyUtils.copyToString(new FileReader(cmdFile)));
-                }
-            }catch (IOException ex){
-                ex.printStackTrace();
-            }
-        }
+        //로그디렉토리로부터 로그 및 종료코드, 실행 스크립트를 등록한다.
+        clientJob = clientJobService.getDataFromFileSystem(clientJob);
     }
 
     private void preRunClientJob() {
-        //시작 시간 등록
-        Date currentDate = new Date();
-        clientJob.setStartDate(currentDate.getTime());
-
-        //워킹 디렉토리 등록
-        clientJob.setWorkingDir(clientJobBasePath(config.getProperty("application.home"), clientJobId, currentDate));
-        this.workingDir = clientJob.getWorkingDir();
 
         //스테이터스 RUNNING 등록
         clientJob.setStatus(ClientStatus.RUNNING);
@@ -130,9 +86,6 @@ public abstract class InterceptorAbstractTask extends AbstractTask {
 
     public abstract void runTask() throws Exception;
 
-    public static String clientJobBasePath(String logDir, String jobId, Date current) {
-        return logDir + "/" + DateUtils.parseDate(current, "yyyy") + "/" + DateUtils.parseDate(current, "MM") + "/" + DateUtils.parseDate(current, "dd") + "/clientJob/" + jobId;
-    }
 
     private void updateClientJobAsFinished() {
         clientJob.setStatus(ClientStatus.FINISHED);

@@ -12,4 +12,9 @@ public class ClientStatus {
     public static String EXECUTE_FROM_REST = "rest";
     public static String EXECUTE_FROM_CONSOLE = "console";
     public static String EXECUTE_FROM_BATCH = "batch";
+
+    public static String JOB_TYPE_HIVE = "hive";
+    public static String JOB_TYPE_MR = "mr";
+    public static String JOB_TYPE_PIG = "pig";
+    public static String JOB_TYPE_SPARK = "spark";
 }

@@ -96,6 +96,7 @@ public class PigRequest extends BasicClientRequest {
      */
     private boolean noFetch;
 
+
     public String getScript() {
         return script;
     }
@@ -136,7 +137,7 @@ public class PigRequest extends BasicClientRequest {
         this.log4jconf = log4jconf;
     }
 
-    public boolean isCheck() {
+    public boolean getCheck() {
         return check;
     }
 
@@ -160,7 +161,7 @@ public class PigRequest extends BasicClientRequest {
         this.paramPath = paramPath;
     }
 
-    public boolean isDryrun() {
+    public boolean getDryrun() {
         return dryrun;
     }
 
@@ -168,7 +169,7 @@ public class PigRequest extends BasicClientRequest {
         this.dryrun = dryrun;
     }
 
-    public boolean isVerbose() {
+    public boolean getVerbose() {
         return verbose;
     }
 
@@ -176,7 +177,7 @@ public class PigRequest extends BasicClientRequest {
         this.verbose = verbose;
     }
 
-    public boolean isWarning() {
+    public boolean getWarning() {
         return warning;
     }
 
@@ -184,7 +185,7 @@ public class PigRequest extends BasicClientRequest {
         this.warning = warning;
     }
 
-    public boolean isStopOnFailure() {
+    public boolean getStopOnFailure() {
         return stopOnFailure;
     }
 
@@ -192,7 +193,7 @@ public class PigRequest extends BasicClientRequest {
         this.stopOnFailure = stopOnFailure;
     }
 
-    public boolean isNoMultiquery() {
+    public boolean getNoMultiquery() {
         return noMultiquery;
     }
 
@@ -200,7 +201,7 @@ public class PigRequest extends BasicClientRequest {
         this.noMultiquery = noMultiquery;
     }
 
-    public boolean isNoFetch() {
+    public boolean getNoFetch() {
         return noFetch;
     }
 

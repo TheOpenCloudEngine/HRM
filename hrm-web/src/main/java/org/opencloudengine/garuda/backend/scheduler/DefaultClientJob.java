@@ -17,7 +17,10 @@
 package org.opencloudengine.garuda.backend.scheduler;
 
 import org.opencloudengine.garuda.backend.task.HiveTask;
+import org.opencloudengine.garuda.backend.task.MrTask;
+import org.opencloudengine.garuda.backend.task.PigTask;
 import org.opencloudengine.garuda.model.clientJob.ClientJob;
+import org.opencloudengine.garuda.model.clientJob.ClientStatus;
 import org.opencloudengine.garuda.model.request.HiveRequest;
 import org.quartz.Job;
 import org.quartz.JobDataMap;
@@ -32,13 +35,15 @@ public class DefaultClientJob implements Job {
         JobDataMap mergedJobDataMap = jobExecutionContext.getMergedJobDataMap();
 
         ClientJob clientJob = (ClientJob) mergedJobDataMap.get(JobVariable.CLIENT_JOB);
-//        String executeFrom = clientJob.getExecuteFrom();
-//
-//        String jobType = clientJob.getClientJobType();
 
-        //TODO 클라이언트 잡을 상속받아 돌아가는 클래스들을 생성할것.
-        if (clientJob.getClientRequest() instanceof HiveRequest) {
+        if(ClientStatus.JOB_TYPE_HIVE.equalsIgnoreCase(clientJob.getClientJobType())){
             new HiveTask().executeClientJob(clientJob);
+        }
+        if(ClientStatus.JOB_TYPE_PIG.equalsIgnoreCase(clientJob.getClientJobType())){
+            new PigTask().executeClientJob(clientJob);
+        }
+        if(ClientStatus.JOB_TYPE_MR.equalsIgnoreCase(clientJob.getClientJobType())){
+            new MrTask().executeClientJob(clientJob);
         }
     }
 }
