@@ -153,10 +153,12 @@ public class SparkTask extends InterceptorAbstractTask {
         buildBasicOption(command, "--proxy-user", sparkRequest.getProxyUser());
 
         //--driver-cores
-        buildBasicOption(command, "--driver-cores", sparkRequest.getDriverCores() + "");
+        if (sparkRequest.getDriverCores() != null) {
+            buildBasicOption(command, "--driver-cores", sparkRequest.getDriverCores() + "");
+        }
 
         //--supervise
-        if(sparkRequest.getSupervise()){
+        if (sparkRequest.getSupervise()) {
             buildSingleOption(command, "--supervise");
         }
 
@@ -164,25 +166,33 @@ public class SparkTask extends InterceptorAbstractTask {
         buildBasicOption(command, "--kill", sparkRequest.getKill());
 
         // --status
-        buildBasicOption(command, " --status" ,sparkRequest.getStatus());
+        buildBasicOption(command, " --status", sparkRequest.getStatus());
 
         //--total-executor-cores
-        buildBasicOption(command, "--total-executor-cores", sparkRequest.getTotalExecutorCores()+"");
+        if (sparkRequest.getTotalExecutorCores() != null) {
+            buildBasicOption(command, "--total-executor-cores", sparkRequest.getTotalExecutorCores() + "");
+        }
 
         //--executor-cores
-        buildBasicOption(command, "--executor-cores", sparkRequest.getExecutorCores() + "");
+        if (sparkRequest.getExecutorCores() != null) {
+            buildBasicOption(command, "--executor-cores", sparkRequest.getExecutorCores() + "");
+        }
 
         //yarnonly--driver-cores
-        buildBasicOption(command, "--driver-cores" , sparkRequest.getYarnDriverCores()+ "");
+        if (sparkRequest.getYarnDriverCores() != null) {
+            buildBasicOption(command, "--driver-cores", sparkRequest.getYarnDriverCores() + "");
+        }
 
         //--queue
-        buildBasicOption(command, "--queue" , sparkRequest.getQueue());
+        buildBasicOption(command, "--queue", sparkRequest.getQueue());
 
         //--num-executors
-        buildBasicOption(command, "--num-executors" , sparkRequest.getNumExecutors() + "");
+        if(sparkRequest.getNumExecutors() != null){
+            buildBasicOption(command, "--num-executors", sparkRequest.getNumExecutors() + "");
+        }
 
         //--archives
-        buildCommaSeparatedOptions(command,"--archives", sparkRequest.getArchives());
+        buildCommaSeparatedOptions(command, "--archives", sparkRequest.getArchives());
 
         //--principal
         buildBasicOption(command, "--principal", sparkRequest.getPrincipal());
