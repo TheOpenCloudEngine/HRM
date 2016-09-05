@@ -303,7 +303,7 @@ public class ClientJobServiceImpl implements ClientJobService {
     }
 
     private ClientJob setRunningTaskData(ClientJob clientJob) {
-        if (ClientStatus.RUNNING.equals(clientJob.getStatus())) {
+        if (ClientStatus.RUNNING.equalsIgnoreCase(clientJob.getStatus())) {
             clientJob = this.getDataFromFileSystem(clientJob);
         }
         this.convertHumanReadable(clientJob);

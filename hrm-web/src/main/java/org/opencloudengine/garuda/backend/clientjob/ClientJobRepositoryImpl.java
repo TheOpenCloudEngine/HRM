@@ -28,34 +28,6 @@ public class ClientJobRepositoryImpl implements ClientJobRepository, Initializin
         cash = new HashMap<>();
     }
 
-//    @Override
-//    public ClientJob insertCash(ClientJob clientJob) {
-//        ClientJob insert = this.insert(clientJob);
-//        return this.updateByClientJobIdCash(insert);
-//    }
-//
-//    @Override
-//    public ClientJob selectByClientJobIdCash(String clientJobId) {
-//        return cash.get(clientJobId);
-//    }
-//
-//    @Override
-//    public Map<String, ClientJob> selectAllCash() {
-//        return cash;
-//    }
-//
-//    @Override
-//    public ClientJob updateByClientJobIdCash(ClientJob clientJob) {
-//        String clientJobId = clientJob.getClientJobId();
-//        cash.put(clientJobId, clientJob);
-//        return clientJob;
-//    }
-//
-//    @Override
-//    public void deleteByClientJobIdCash(String clientJobId) {
-//        cash.remove(clientJobId);
-//    }
-
     @Override
     public ClientJob insert(ClientJob clientJob) {
         long time = new Date().getTime();

@@ -79,8 +79,6 @@ public class ManagedProcess {
 
     private FileWriter fileWriter;
 
-    private FileWriter errWriter;
-
     /**
      * 기본 생성자.
      *
@@ -127,7 +125,6 @@ public class ManagedProcess {
         this.logger = logger;
         this.fileWriter = fileWriter;
         String baseDir = fileWriter.getBaseDir();
-        this.errWriter = new FileWriter(logger, baseDir + "/err.log");
     }
 
     public ManagedProcess(final List<String> cmd, final Map<String, String> env, final String workingDir, final Logger logger, FileWriter fileWriter) {
@@ -140,7 +137,6 @@ public class ManagedProcess {
         this.logger = logger;
         this.fileWriter = fileWriter;
         String baseDir = fileWriter.getBaseDir();
-        this.errWriter = new FileWriter(logger, baseDir + "/err.log");
 
     }
 
@@ -154,7 +150,6 @@ public class ManagedProcess {
         this.logger = logger;
         this.fileWriter = fileWriter;
         String baseDir = fileWriter.getBaseDir();
-        this.errWriter = new FileWriter(logger, baseDir + "/err.log");
     }
 
     public Map getSocketParams() {
@@ -230,12 +225,12 @@ public class ManagedProcess {
         this.startupLatch.countDown();
 
         LogGobbler outputGobbler = new LogGobbler(new InputStreamReader(process.getInputStream()), logger, 30, fileWriter, socketParams);
-        LogGobbler errorGobbler = new LogGobbler(new InputStreamReader(process.getErrorStream()), logger, 30, errWriter, socketParams);
-        LogGobbler totalGobbler = new LogGobbler(new InputStreamReader(process.getErrorStream()), logger, 30, fileWriter, socketParams);
+        LogGobbler errorGobbler = new LogGobbler(new InputStreamReader(process.getInputStream()), logger, 30, fileWriter, socketParams);
+        //LogGobbler totalGobbler = new LogGobbler(new InputStreamReader(process.getErrorStream()), logger, 30, fileWriter, socketParams);
 
         outputGobbler.start();
         errorGobbler.start();
-        totalGobbler.start();
+        //totalGobbler.start();
         int exitCode = -1;
         try {
             exitCode = process.waitFor();
