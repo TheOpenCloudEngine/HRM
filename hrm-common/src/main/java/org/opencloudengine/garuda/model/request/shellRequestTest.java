@@ -5,7 +5,7 @@ import java.util.List;
 /**
  * Created by uengine on 2016. 9. 1..
  */
-public class shellRequest extends BasicClientRequest {
+public class shellRequestTest extends BasicClientRequest {
 
 
     /**

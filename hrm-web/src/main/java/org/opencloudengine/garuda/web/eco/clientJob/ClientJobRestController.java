@@ -57,12 +57,12 @@ public class ClientJobRestController {
     }
 
     @RequestMapping(value = "/python", method = RequestMethod.POST)
-    public void runPython(HttpServletResponse response, @RequestBody pythonRequest pythonRequest) throws IOException {
+    public void runPython(HttpServletResponse response, @RequestBody pythonRequestTest pythonRequest) throws IOException {
         this.processClientJob(response, pythonRequest);
     }
 
     @RequestMapping(value = "/shell", method = RequestMethod.POST)
-    public void runShell(HttpServletResponse response, @RequestBody shellRequest shellRequest) throws IOException {
+    public void runShell(HttpServletResponse response, @RequestBody shellRequestTest shellRequest) throws IOException {
         this.processClientJob(response, shellRequest);
     }
 

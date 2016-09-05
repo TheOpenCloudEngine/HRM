@@ -186,10 +186,10 @@ public class ClientJobServiceImpl implements ClientJobService {
         if (clientRequest instanceof JavaRequest) {
             return ClientStatus.JOB_TYPE_JAVA;
         }
-        if (clientRequest instanceof pythonRequest) {
+        if (clientRequest instanceof pythonRequestTest) {
             return ClientStatus.JOB_TYPE_PYTHON;
         }
-        if (clientRequest instanceof shellRequest) {
+        if (clientRequest instanceof shellRequestTest) {
             return ClientStatus.JOB_TYPE_SHELL;
         }
         logger.warn("Failed to parse jobType : {}", clientJobId);
@@ -212,11 +212,11 @@ public class ClientJobServiceImpl implements ClientJobService {
         if (clientRequest instanceof JavaRequest) {
             clientJob.setJavaRequest((JavaRequest) clientRequest);
         }
-        if (clientRequest instanceof pythonRequest) {
-            clientJob.setPythonRequest((pythonRequest) clientRequest);
+        if (clientRequest instanceof pythonRequestTest) {
+            clientJob.setPythonRequest((pythonRequestTest) clientRequest);
         }
-        if (clientRequest instanceof shellRequest) {
-            clientJob.setShellRequest((shellRequest) clientRequest);
+        if (clientRequest instanceof shellRequestTest) {
+            clientJob.setShellRequest((shellRequestTest) clientRequest);
         }
     }
 

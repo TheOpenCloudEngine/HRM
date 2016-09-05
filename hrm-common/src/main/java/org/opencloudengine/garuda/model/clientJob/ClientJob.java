@@ -40,8 +40,8 @@ public class ClientJob extends CouchDAO {
     private PigRequest pigRequest;
     private SparkRequest sparkRequest;
     private JavaRequest javaRequest;
-    private org.opencloudengine.garuda.model.request.pythonRequest pythonRequest;
-    private org.opencloudengine.garuda.model.request.shellRequest shellRequest;
+    private pythonRequestTest pythonRequest;
+    private shellRequestTest shellRequest;
     private ClientResult clientResult;
 
     private Long regDate;
@@ -271,19 +271,19 @@ public class ClientJob extends CouchDAO {
         this.javaRequest = javaRequest;
     }
 
-    public org.opencloudengine.garuda.model.request.pythonRequest getPythonRequest() {
+    public pythonRequestTest getPythonRequest() {
         return pythonRequest;
     }
 
-    public void setPythonRequest(org.opencloudengine.garuda.model.request.pythonRequest pythonRequest) {
+    public void setPythonRequest(pythonRequestTest pythonRequest) {
         this.pythonRequest = pythonRequest;
     }
 
-    public org.opencloudengine.garuda.model.request.shellRequest getShellRequest() {
+    public shellRequestTest getShellRequest() {
         return shellRequest;
     }
 
-    public void setShellRequest(org.opencloudengine.garuda.model.request.shellRequest shellRequest) {
+    public void setShellRequest(shellRequestTest shellRequest) {
         this.shellRequest = shellRequest;
     }
 

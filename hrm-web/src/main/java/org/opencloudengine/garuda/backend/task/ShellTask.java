@@ -18,6 +18,7 @@ package org.opencloudengine.garuda.backend.task;
 
 import org.apache.commons.io.FileUtils;
 import org.opencloudengine.garuda.model.request.BasicClientRequest;
+import org.opencloudengine.garuda.model.request.shellRequestTest;
 import org.opencloudengine.garuda.util.StringUtils;
 import org.opencloudengine.garuda.util.cli.FileWriter;
 import org.opencloudengine.garuda.util.cli.ManagedProcess;
@@ -43,7 +44,7 @@ public class ShellTask extends InterceptorAbstractTask {
      */
     private Logger logger = LoggerFactory.getLogger(ShellTask.class);
 
-    private org.opencloudengine.garuda.model.request.shellRequest shellRequest;
+    private shellRequestTest shellRequest;
 
     @Override
     public void runTask() throws Exception {
