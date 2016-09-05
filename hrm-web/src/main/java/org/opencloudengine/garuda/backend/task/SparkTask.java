@@ -90,7 +90,7 @@ public class SparkTask extends InterceptorAbstractTask {
             }
         }
 
-        command.add(ecoConf.getSparkHome() + "/bin/spark");
+        command.add(ecoConf.getSparkHome() + "/bin/spark-submit");
 
         //--master (default yarn)
         buildBasicOption(command, "--master", sparkRequest.getMaster(), "yarn");
