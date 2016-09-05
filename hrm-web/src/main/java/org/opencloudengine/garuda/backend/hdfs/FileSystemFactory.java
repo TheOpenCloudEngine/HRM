@@ -1,22 +1,21 @@
 package org.opencloudengine.garuda.backend.hdfs;
 
-import com.cloudant.client.api.ClientBuilder;
-import com.cloudant.client.api.CloudantClient;
-import com.cloudant.client.api.Database;
 import org.apache.hadoop.conf.Configuration;
 import org.apache.hadoop.fs.FileSystem;
 import org.apache.hadoop.fs.Path;
 import org.opencloudengine.garuda.common.exception.ServiceException;
-import org.opencloudengine.garuda.util.StringUtils;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import org.springframework.beans.factory.annotation.Value;
 import org.springframework.stereotype.Component;
 
-import java.net.URL;
 
 /**
  * Created by uengine on 2016. 8. 26..
+ */
+/**
+ * @author Seungpil, Park
+ * @since 0.1
  */
 @Component
 public class FileSystemFactory {

@@ -1,21 +1,22 @@
 package org.opencloudengine.garuda.model.request;
 
-import java.util.List;
 import java.util.Map;
 
 /**
  * Created by uengine on 2016. 9. 1..
  */
-public class HiveRequest extends BasicRequest {
+public class HiveRequest extends BasicClientRequest {
 
 
     /**
      * SQL
+     * It will save as a sql file, -f <filename>
      */
     private String sql;
 
     /**
      * Initialization SQL
+     * It will save as a sql file, -i <filename>
      */
     private String initializationSql;
 

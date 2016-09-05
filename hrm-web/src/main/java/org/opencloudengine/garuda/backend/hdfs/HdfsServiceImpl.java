@@ -40,7 +40,10 @@ import java.net.URLEncoder;
 import java.util.*;
 import java.util.concurrent.TimeUnit;
 
-
+/**
+ * @author Seungpil, Park
+ * @since 0.1
+ */
 @Service
 public class HdfsServiceImpl implements HdfsService {
 

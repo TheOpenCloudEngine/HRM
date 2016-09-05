@@ -1,0 +1,44 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<beans xmlns="http://www.springframework.org/schema/beans"
+       xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
+       xsi:schemaLocation="http://www.springframework.org/schema/beans http://www.springframework.org/schema/beans/spring-beans.xsd">
+
+    <!-- ========================= SCHEDULER DEFINITION ========================= -->
+
+    <bean id="quartzJobScheduler" class="org.springframework.scheduling.quartz.SchedulerFactoryBean">
+        <property name="autoStartup" value="true"/>
+        <property name="beanName" value="scheduler"/>
+        <property name="applicationContextSchedulerContextKey" value="CTX"/>
+        <property name="waitForJobsToCompleteOnShutdown" value="true"/>
+        <property name="configLocation" value="/WEB-INF/quartz.properties"/>
+        <!--<property name="dataSource" ref="dataSource"/>-->
+        <!--<property name="jobDetails">-->
+            <!--<list>-->
+                <!--<ref bean="runningJob"/>-->
+            <!--</list>-->
+        <!--</property>-->
+
+        <!--<property name="triggers">-->
+            <!--<list>-->
+                <!--<ref bean="runningJobTrigger"/>-->
+            <!--</list>-->
+        <!--</property>-->
+    </bean>
+
+    <bean id="jobScheduler" class="org.opencloudengine.garuda.backend.scheduler.QuartzJobScheduler">
+        <property name="scheduler" ref="quartzJobScheduler"/>
+    </bean>
+
+    <!-- ========================= JOB DEFINITION ========================= -->
+
+    <!--<bean name="runningJob" class="org.springframework.scheduling.quartz.JobDetailFactoryBean">-->
+        <!--<property name="durability" value="true"/>-->
+        <!--<property name="jobClass" value="org.opencloudengine.flamingo2.engine.scheduler.jobs.RunningJob"/>-->
+        <!--&lt;!&ndash;<property name="applicationContextJobDataKey" value="spring"/>&ndash;&gt;-->
+    <!--</bean>-->
+
+    <!--<bean id="runningJobTrigger" class="org.opencloudengine.garuda.backend.scheduler.QuartzCronTriggerFactoryBean">-->
+        <!--<property name="jobDetail" ref="runningJob"/>-->
+        <!--<property name="cronExpression" value="0 * * * * ?"/>-->
+    <!--</bean>-->
+</beans>

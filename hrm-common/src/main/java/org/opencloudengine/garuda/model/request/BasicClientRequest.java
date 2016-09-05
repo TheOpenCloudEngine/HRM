@@ -3,7 +3,7 @@ package org.opencloudengine.garuda.model.request;
 /**
  * Created by uengine on 2016. 9. 2..
  */
-public class BasicRequest {
+public class BasicClientRequest {
 
     /**
      * export HADOOP_USER_NAME variable before execute
@@ -24,11 +24,18 @@ public class BasicRequest {
     private String stremingHook;
 
     /**
-     * Specify job id.
-     * If Job id is already exist, it would be failed.
-     * ex) random-job-id
+     * Specify clientJob id.
+     * If clientJob Id is already exist, it would be failed.
+     * ex) random-clientJob-Id
      */
-    private String jobId;
+    private String clientJobId;
+
+    /**
+     * Specify clientJob Name.
+     * If null, it will return "Default {jobType} job"
+     * ex) clientJobName
+     */
+    private String clientJobName;
 
     public String getDoAs() {
         return doAs;
@@ -54,11 +61,19 @@ public class BasicRequest {
         this.stremingHook = stremingHook;
     }
 
-    public String getJobId() {
-        return jobId;
+    public String getClientJobId() {
+        return clientJobId;
     }
 
-    public void setJobId(String jobId) {
-        this.jobId = jobId;
+    public void setClientJobId(String clientJobId) {
+        this.clientJobId = clientJobId;
+    }
+
+    public String getClientJobName() {
+        return clientJobName;
+    }
+
+    public void setClientJobName(String clientJobName) {
+        this.clientJobName = clientJobName;
     }
 }

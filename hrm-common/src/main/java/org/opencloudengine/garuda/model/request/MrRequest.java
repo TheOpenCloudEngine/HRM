@@ -6,7 +6,7 @@ import java.util.Map;
 /**
  * Created by uengine on 2016. 9. 1..
  */
-public class MrRequest extends BasicRequest {
+public class MrRequest extends BasicClientRequest {
 
 
     /**

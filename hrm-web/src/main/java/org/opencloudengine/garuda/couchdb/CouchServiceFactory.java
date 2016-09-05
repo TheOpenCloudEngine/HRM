@@ -15,6 +15,10 @@ import java.net.URL;
 /**
  * Created by uengine on 2016. 4. 28..
  */
+/**
+ * @author Seungpil, Park
+ * @since 0.1
+ */
 @Component
 public class CouchServiceFactory {
 

@@ -1,12 +1,9 @@
 package org.opencloudengine.garuda.model.request;
 
-import java.util.List;
-import java.util.Map;
-
 /**
  * Created by uengine on 2016. 9. 1..
  */
-public class WorkflowRequest extends BasicRequest {
+public class WorkflowRequest extends BasicClientRequest {
 
     private String workflowId;
 

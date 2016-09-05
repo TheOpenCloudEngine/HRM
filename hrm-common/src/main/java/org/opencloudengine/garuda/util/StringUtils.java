@@ -6,9 +6,9 @@
  * to you under the Apache License, Version 2.0 (the
  * "License"); you may not use this file except in compliance
  * with the License.  You may obtain a copy of the License at
- *
- *      http://www.apache.org/licenses/LICENSE-2.0
- *
+ * <p/>
+ * http://www.apache.org/licenses/LICENSE-2.0
+ * <p/>
  * Unless required by applicable law or agreed to in writing, software
  * distributed under the License is distributed on an "AS IS" BASIS,
  * WITHOUT WARRANTIES OR CONDITIONS OF ANY KIND, either express or implied.
@@ -26,8 +26,8 @@ import java.util.*;
 /**
  * String Utility.
  *
- * @author Seungpil, Park
- * @since 0.1
+ * @author Byoung Gon, Kim
+ * @since 2.0
  */
 public class StringUtils {
 
@@ -80,7 +80,7 @@ public class StringUtils {
      * @return 콤마 구분자를 포함한 문자열
      */
     public static String collectionToCommaDelimitedString(List<String> values) {
-        return collectionToDelimitedString(values, ",");
+        return listToDelimitedString(values, ",");
     }
 
     /**
@@ -90,8 +90,30 @@ public class StringUtils {
      * @param delimiter 구분자
      * @return 구분자를 포함한 문자열
      */
-    public static String collectionToDelimitedString(List<String> values, String delimiter) {
+    public static String listToDelimitedString(List<String> values, String delimiter) {
         return Joiner.on(delimiter).join(values);
+    }
+
+    /**
+     * 지정한 구분자로 리스트를 하나의 문자열로 구성한다.
+     *
+     * @param collection 리스트
+     * @param delimiter  구분자
+     * @return 구분자를 포함한 문자열. 단, collection.size() 가 1 이하일 경우 구분자를 포함하지 않는다.
+     */
+    public static String collectionToDelimitedString(Collection<?> collection, String delimiter) {
+        return Joiner.on(delimiter).join(collection);
+    }
+
+    /**
+     * 지정한 구분자로 리스트를 하나의 문자열로 구성한다.
+     *
+     * @param collection 리스트
+     * @param delimiter  구분자
+     * @return 구분자를 포함한 문자열. 단, collection.size() 가 1 이하일 경우 구분자를 포함하지 않는다.
+     */
+    public static String join(Collection<?> collection, String delimiter) {
+        return Joiner.on(delimiter).join(collection);
     }
 
     /**
@@ -101,7 +123,7 @@ public class StringUtils {
      * @return 문자열 리스트
      */
     public static List<String> arrayToCollection(String[] values) {
-        List<String> list = new ArrayList<String>(values.length);
+        List<String> list = new ArrayList<>(values.length);
         Collections.addAll(list, values);
         return list;
     }
@@ -160,7 +182,7 @@ public class StringUtils {
     public static String unescape(String string) {
         StringBuilder builder = new StringBuilder();
         builder.ensureCapacity(string.length());
-        int lastPos = 0, pos = 0;
+        int lastPos = 0, pos;
         char ch;
         while (lastPos < string.length()) {
             pos = string.indexOf("%", lastPos);
@@ -218,9 +240,38 @@ public class StringUtils {
     }
 
     /**
-     * 지정한 문자열을 base64 인코딩
+     * apache commons splitPreserveAllTokens 처리한다.
      *
-     * @param string Escape 처리할 문자열
+     * @param string    처리할 문자열
+     * @param delimiter 구분자
      * @return escape 처리한 문자열
      */
+    public static String[] splitPreserveAllTokens(String string, String delimiter) {
+        return org.apache.commons.lang.StringUtils.splitPreserveAllTokens(string, delimiter);
+    }
+
+    /**
+     * 전체 문자열에서 마지막 Separator를 기준으로 좌측 문자열을 반환한다.
+     *
+     * @param variable  Variable : ex) localhost:hostname
+     * @param separator Separater
+     * @return 마지막 Separator를 기준으로 좌측 문자열
+     */
+    public static String getVariableKey(String variable, String separator) {
+        int sep = variable.lastIndexOf(separator);
+        return variable.substring(0, sep);
+    }
+
+    /**
+     * 전체 문자열에서 마지막 Separator를 기준으로 우측 문자열을 반환한다.
+     *
+     * @param variable  Variable : ex) address:port
+     * @param separator Separator
+     * @return 마지막 Separator를 기준으로 우측 문자열
+     */
+    public static String getVariableValue(String variable, String separator) {
+        int sep = variable.lastIndexOf(separator);
+        int length = variable.getBytes().length;
+        return variable.substring(sep + 1, length);
+    }
 }

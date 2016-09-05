@@ -5,7 +5,7 @@ import java.util.Map;
 /**
  * Created by uengine on 2016. 9. 2..
  */
-public class PigRequest extends BasicRequest {
+public class PigRequest extends BasicClientRequest {
 
     /**
      * The script to execute

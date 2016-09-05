@@ -6,7 +6,7 @@ import java.util.Map;
 /**
  * Created by uengine on 2016. 9. 1..
  */
-public class SparkRequest extends BasicRequest {
+public class SparkRequest extends BasicClientRequest {
 
     /**
      * spark://host:port, mesos://host:port, yarn, or local.

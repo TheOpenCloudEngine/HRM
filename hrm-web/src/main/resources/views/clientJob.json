@@ -1,0 +1,22 @@
+{
+  "_id": "_design/clientJob",
+  "language": "javascript",
+  "views": {
+    "select": {
+      "map": "function(doc) { if(doc.docType == \"clientJob\"){ emit(null, doc); }}"
+    },
+    "selectRunning": {
+      "map": "function(doc) { if(doc.docType == \"clientJob\" && doc.status == \"RUNNING\"){ emit(null, doc); }}"
+    },
+    "selectById": {
+      "map": "function(doc) { if(doc.docType == \"clientJob\"){ emit([doc._id], doc); }}"
+    },
+    "selectByClientJobId": {
+      "map": "function(doc) { if(doc.docType == \"clientJob\"){ emit([doc.clientJobId], doc); }}"
+    },
+    "count": {
+      "map": "function(doc) { if(doc.docType == \"clientJob\"){ emit(null, null); }}",
+      "reduce": "_count"
+    }
+  }
+}

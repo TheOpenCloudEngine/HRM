@@ -33,6 +33,10 @@ import java.util.concurrent.TimeUnit;
 import static net.sf.expectit.matcher.Matchers.eof;
 import static net.sf.expectit.matcher.Matchers.regexp;
 
+/**
+ * @author Seungpil, Park
+ * @since 0.1
+ */
 @Service
 public class SystemServiceImpl implements SystemService, InitializingBean {
 
