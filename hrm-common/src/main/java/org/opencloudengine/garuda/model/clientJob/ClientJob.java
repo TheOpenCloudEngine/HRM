@@ -40,8 +40,8 @@ public class ClientJob extends CouchDAO {
     private PigRequest pigRequest;
     private SparkRequest sparkRequest;
     private JavaRequest javaRequest;
-    private PythonRequests pythonRequest;
-    private ShellRequests shellRequest;
+    private PythonRequest pythonRequest;
+    private ShellRequest shellRequest;
     private ClientResult clientResult;
 
     private Long regDate;
@@ -271,19 +271,19 @@ public class ClientJob extends CouchDAO {
         this.javaRequest = javaRequest;
     }
 
-    public PythonRequests getPythonRequest() {
+    public PythonRequest getPythonRequest() {
         return pythonRequest;
     }
 
-    public void setPythonRequest(PythonRequests pythonRequest) {
+    public void setPythonRequest(PythonRequest pythonRequest) {
         this.pythonRequest = pythonRequest;
     }
 
-    public ShellRequests getShellRequest() {
+    public ShellRequest getShellRequest() {
         return shellRequest;
     }
 
-    public void setShellRequest(ShellRequests shellRequest) {
+    public void setShellRequest(ShellRequest shellRequest) {
         this.shellRequest = shellRequest;
     }
 
