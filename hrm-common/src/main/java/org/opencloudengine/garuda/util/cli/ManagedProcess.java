@@ -198,11 +198,11 @@ public class ManagedProcess {
 
         LogGobbler outputGobbler = new LogGobbler(new InputStreamReader(process.getInputStream()), logger, 30, fileWriter, socketParams);
         LogGobbler errorGobbler = new LogGobbler(new InputStreamReader(process.getErrorStream()), logger, 30, errWriter, socketParams);
-        LogGobbler totalGobbler = new LogGobbler(new InputStreamReader(process.getErrorStream()), logger, 30, fileWriter, socketParams);
+        //LogGobbler totalGobbler = new LogGobbler(new InputStreamReader(process.getInputStream()), logger, 30, fileWriter, socketParams);
 
         outputGobbler.start();
         errorGobbler.start();
-        totalGobbler.start();
+        //totalGobbler.start();
 }
 
     /**
