@@ -176,7 +176,8 @@ $(function () {
     };
 
     var controller = {
-        baseUrl: 'http://52.78.88.87:8080',
+        //baseUrl: 'http://52.78.88.87:8080',
+        baseUrl: 'http://localhost:8080',
         maxTab: 7,
         async: true,
         init: function () {
@@ -229,35 +230,34 @@ $(function () {
                 jobType: jobType
             };
             eval('data["'+jobType+'Request"] = this.getFormData();');
-            console.log(data);
-            //var modal = $('#saveAsModal');
-            //modal.find('[name=action]').unbind('click');
-            //modal.find('[name=action]').click(function () {
-            //    modal.find('.close').click();
-            //    var name = modal.find('[name=name]').val().trim();
-            //    if (name.length < 1) {
-            //        return;
-            //    }
-            //    blockStart();
-            //    $.ajax({
-            //        type: "PUT",
-            //        url: "/rest/v1/hdfs/rename?path=" + path + '&rename=' + name,
-            //        data: '',
-            //        dataType: "text",
-            //        contentType: "application/json; charset=utf-8",
-            //        success: function (response) {
-            //
-            //            blockStop();
-            //        },
-            //        error: function (request, status, errorThrown) {
-            //
-            //            blockStop();
-            //        }
-            //    });
-            //});
-            //modal.modal({
-            //    show: true
-            //});
+            var modal = $('#saveAsModal');
+            modal.find('[name=action]').unbind('click');
+            modal.find('[name=action]').click(function () {
+                modal.find('.close').click();
+                var name = modal.find('[name=name]').val().trim();
+                if (name.length < 1) {
+                    return;
+                }
+                blockStart();
+                $.ajax({
+                    type: "PUT",
+                    url: "/rest/v1/hdfs/rename?path=" + path + '&rename=' + name,
+                    data: '',
+                    dataType: "text",
+                    contentType: "application/json; charset=utf-8",
+                    success: function (response) {
+
+                        blockStop();
+                    },
+                    error: function (request, status, errorThrown) {
+
+                        blockStop();
+                    }
+                });
+            });
+            modal.modal({
+                show: true
+            });
             //this.getMatchingCollection(data.clientJobName);
 
         },
@@ -336,6 +336,7 @@ $(function () {
                 type: "GET",
                 url: me.baseUrl + "/rest/v1/clientJob/consoleJob?jobType=" + jobType,
                 async: me.async,
+                crossDomain: true,
                 data: '',
                 dataType: "text",
                 contentType: "application/json; charset=utf-8",
@@ -354,6 +355,7 @@ $(function () {
                 type: "GET",
                 url: me.baseUrl + "/rest/v1/collection?jobType=" + jobType,
                 async: me.async,
+                crossDomain: true,
                 data: '',
                 dataType: "text",
                 contentType: "application/json; charset=utf-8",
@@ -372,6 +374,7 @@ $(function () {
             $.ajax({
                 type: "GET",
                 url: me.baseUrl + "/eco/clientJob/requestDesc?jobType=" + jobType,
+                crossDomain: true,
                 async: false,
                 data: '',
                 dataType: "text",
