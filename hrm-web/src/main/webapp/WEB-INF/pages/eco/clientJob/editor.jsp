@@ -187,4 +187,31 @@
         </div>
     </div>
 </div>
+
+<div class="modal fade" id="saveAsModal" tabindex="-1" role="dialog" aria-labelledby="myModalLabel"
+     aria-hidden="true">
+    <div class="modal-dialog">
+        <div class="modal-content">
+            <div class="modal-header">
+                <button aria-hidden="true" data-dismiss="modal" class="close" type="button">×</button>
+                <h4 class="modal-title">Save As</h4>
+            </div>
+            <div class="modal-body">
+                <form action="#" class="form-horizontal" role="form">
+                    <div class="form-group">
+                        <label class="col-md-2 control-label">Name <span class="color-red">*</span></label>
+
+                        <div class="col-md-6">
+                            <input name="name" type="text" class="form-control" value="">
+                        </div>
+                    </div>
+                </form>
+            </div>
+            <div class="modal-footer">
+                <button class="btn-u" type="button" name="action">Save</button>
+                <button class="btn-u" type="button" name="close">Cancle</button>
+            </div>
+        </div>
+    </div>
+</div>
 </html>

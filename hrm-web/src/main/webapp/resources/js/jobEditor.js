@@ -168,7 +168,7 @@ $(function () {
                     field.find('.value-space').attr('name', data.name);
                 }
 
-                if(name == 'clientJobId' || name =='clientJobName'){
+                if (name == 'clientJobId' || name == 'clientJobName') {
                     field.find('.value-space').attr('readonly', true);
                 }
             }
@@ -176,7 +176,7 @@ $(function () {
     };
 
     var controller = {
-        baseUrl: 'http://localhost:8080',
+        baseUrl: 'http://52.78.88.87:8080',
         maxTab: 7,
         async: true,
         init: function () {
@@ -225,7 +225,39 @@ $(function () {
         }
         ,
         saveAs: function () {
-            var data = this.getFormData();
+            var data = {
+                jobType: jobType
+            };
+            eval('data["'+jobType+'Request"] = this.getFormData();');
+            console.log(data);
+            //var modal = $('#saveAsModal');
+            //modal.find('[name=action]').unbind('click');
+            //modal.find('[name=action]').click(function () {
+            //    modal.find('.close').click();
+            //    var name = modal.find('[name=name]').val().trim();
+            //    if (name.length < 1) {
+            //        return;
+            //    }
+            //    blockStart();
+            //    $.ajax({
+            //        type: "PUT",
+            //        url: "/rest/v1/hdfs/rename?path=" + path + '&rename=' + name,
+            //        data: '',
+            //        dataType: "text",
+            //        contentType: "application/json; charset=utf-8",
+            //        success: function (response) {
+            //
+            //            blockStop();
+            //        },
+            //        error: function (request, status, errorThrown) {
+            //
+            //            blockStop();
+            //        }
+            //    });
+            //});
+            //modal.modal({
+            //    show: true
+            //});
             //this.getMatchingCollection(data.clientJobName);
 
         },
@@ -302,7 +334,7 @@ $(function () {
             var me = this;
             $.ajax({
                 type: "GET",
-                url: me.baseUrl +"/rest/v1/clientJob/consoleJob?jobType=" + jobType,
+                url: me.baseUrl + "/rest/v1/clientJob/consoleJob?jobType=" + jobType,
                 async: me.async,
                 data: '',
                 dataType: "text",
