@@ -261,6 +261,11 @@ public class ClientJobServiceImpl implements ClientJobService {
     }
 
     @Override
+    public List<ClientJob> selectByClientJobTypeAndExecuteFrom(int limit, Long skip, String clientJobType, String executeFrom) {
+        return this.setRunningTaskData(clientJobRepository.selectByClientJobTypeAndExecuteFrom(limit, skip, clientJobType, executeFrom));
+    }
+
+    @Override
     public List<ClientJob> selectRunning() {
         return this.setRunningTaskData(clientJobRepository.selectRunning());
     }

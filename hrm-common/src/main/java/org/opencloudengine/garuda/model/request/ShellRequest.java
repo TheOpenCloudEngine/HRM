@@ -14,19 +14,11 @@ public class ShellRequest extends BasicClientRequest {
      */
     private String script;
 
-    /**
-     * Path to the script to execute.
-     * It overrides script parameter.
-     * bin/sh <exist script file> [arg] ...
-     */
-    private String scriptPath;
-
-    /**
-     * arguments.
-     * bin/sh file [arg] ...
-     */
-    private List<String> arguments;
-
+    @FieldType(type = "textarea",
+            description = "/**\n" +
+                    "     * The script to execute\n" +
+                    "     * bin/sh <generated script file> [arg] ...\n" +
+                    "     */")
     public String getScript() {
         return script;
     }
@@ -35,6 +27,19 @@ public class ShellRequest extends BasicClientRequest {
         this.script = script;
     }
 
+    /**
+     * Path to the script to execute.
+     * It overrides script parameter.
+     * bin/sh <exist script file> [arg] ...
+     */
+    private String scriptPath;
+
+    @FieldType(type = "text",
+            description = "/**\n" +
+                    "     * Path to the script to execute.\n" +
+                    "     * It overrides script parameter.\n" +
+                    "     * bin/sh <exist script file> [arg] ...\n" +
+                    "     */")
     public String getScriptPath() {
         return scriptPath;
     }
@@ -43,6 +48,17 @@ public class ShellRequest extends BasicClientRequest {
         this.scriptPath = scriptPath;
     }
 
+    /**
+     * arguments.
+     * bin/sh file [arg] ...
+     */
+    private List<String> arguments;
+
+    @FieldType(type = "textList",
+            description = "/**\n" +
+                    "     * arguments.\n" +
+                    "     * bin/sh file [arg] ...\n" +
+                    "     */")
     public List<String> getArguments() {
         return arguments;
     }

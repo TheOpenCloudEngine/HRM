@@ -79,6 +79,27 @@ public class ClientJobRepositoryImpl implements ClientJobRepository, Initializin
     }
 
     @Override
+    public List<ClientJob> selectByClientJobTypeAndExecuteFrom(int limit, Long skip, String clientJobType, String executeFrom) {
+        List<ClientJob> list = new ArrayList<>();
+        try {
+            ViewRequestBuilder builder = serviceFactory.getDb().getViewRequestBuilder(NAMESPACE, "selectByClientJobTypeAndExecuteFrom");
+            Key.ComplexKey complex = new Key().complex(clientJobType).add(executeFrom);
+            List<ViewResponse.Row<Key.ComplexKey, ClientJob>> rows = builder.newRequest(Key.Type.COMPLEX, ClientJob.class).
+                    limit(limit).skip(skip).descending(true).
+                    startKey(complex).endKey(complex).
+                    build().getResponse().getRows();
+
+            for (ViewResponse.Row<Key.ComplexKey, ClientJob> row : rows) {
+                list.add(row.getValue());
+            }
+            return list;
+
+        } catch (Exception ex) {
+            return list;
+        }
+    }
+
+    @Override
     public List<ClientJob> selectRunning() {
         List<ClientJob> list = new ArrayList<>();
         try {

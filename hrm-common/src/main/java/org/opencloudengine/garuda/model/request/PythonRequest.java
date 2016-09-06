@@ -14,19 +14,11 @@ public class PythonRequest extends BasicClientRequest {
      */
     private String script;
 
-    /**
-     * Path to the script to execute.
-     * It overrides script parameter.
-     * python [option] ... [-c cmd | -m mod | <exist script file path> | -] [arg] ...
-     */
-    private String scriptPath;
-
-    /**
-     * arguments.
-     * ex) python [option] ... [-c cmd | -m mod | file | -] [arg] ...
-     */
-    private List<String> arguments;
-
+    @FieldType(type = "textarea",
+            description = "/**\n" +
+                    "     * The script to execute\n" +
+                    "     * python [option] ... [-c cmd | -m mod | <generated script file> | -] [arg] ...\n" +
+                    "     */")
     public String getScript() {
         return script;
     }
@@ -35,6 +27,19 @@ public class PythonRequest extends BasicClientRequest {
         this.script = script;
     }
 
+    /**
+     * Path to the script to execute.
+     * It overrides script parameter.
+     * python [option] ... [-c cmd | -m mod | <exist script file path> | -] [arg] ...
+     */
+    private String scriptPath;
+
+    @FieldType(type = "text",
+            description = "/**\n" +
+                    "     * Path to the script to execute.\n" +
+                    "     * It overrides script parameter.\n" +
+                    "     * python [option] ... [-c cmd | -m mod | <exist script file path> | -] [arg] ...\n" +
+                    "     */")
     public String getScriptPath() {
         return scriptPath;
     }
@@ -43,6 +48,17 @@ public class PythonRequest extends BasicClientRequest {
         this.scriptPath = scriptPath;
     }
 
+    /**
+     * arguments.
+     * ex) python [option] ... [-c cmd | -m mod | file | -] [arg] ...
+     */
+    private List<String> arguments;
+
+    @FieldType(type = "textList",
+            description = "/**\n" +
+                    "     * arguments.\n" +
+                    "     * ex) python [option] ... [-c cmd | -m mod | file | -] [arg] ...\n" +
+                    "     */")
     public List<String> getArguments() {
         return arguments;
     }

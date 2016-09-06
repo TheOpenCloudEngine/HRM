@@ -19,6 +19,8 @@ public interface ClientJobService {
 
     List<ClientJob> select(int limit, Long skip);
 
+    List<ClientJob> selectByClientJobTypeAndExecuteFrom(int limit, Long skip, String clientJobType, String executeFrom);
+
     List<ClientJob> selectRunning();
 
     ClientJob selectById(String id);

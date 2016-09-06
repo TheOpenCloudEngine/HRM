@@ -1,0 +1,15 @@
+{
+  "_id": "_design/jobCollection",
+  "language": "javascript",
+  "views": {
+    "select": {
+      "map": "function(doc) { if(doc.docType == \"jobCollection\"){ emit(null, doc); }}"
+    },
+    "selectByJobType": {
+      "map": "function(doc) { if(doc.docType == \"jobCollection\"){ emit(doc.jobType, doc); }}"
+    },
+    "selectById": {
+      "map": "function(doc) { if(doc.docType == \"jobCollection\"){ emit([doc._id], doc); }}"
+    }
+  }
+}

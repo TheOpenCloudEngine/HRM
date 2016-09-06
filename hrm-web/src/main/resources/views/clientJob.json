@@ -5,6 +5,9 @@
     "select": {
       "map": "function(doc) { if(doc.docType == \"clientJob\"){ emit(null, doc); }}"
     },
+    "selectByClientJobTypeAndExecuteFrom": {
+      "map": "function(doc) { if(doc.docType == \"clientJob\"){ emit([doc.clientJobType, doc.executeFrom, doc.startDate], doc); }}"
+    },
     "selectRunning": {
       "map": "function(doc) { if(doc.docType == \"clientJob\" && doc.status == \"RUNNING\"){ emit(null, doc); }}"
     },

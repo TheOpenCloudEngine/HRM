@@ -6,22 +6,14 @@ import java.util.List;
 import java.util.Map;
 
 public interface ClientJobRepository {
-//
-//    ClientJob insertCash(ClientJob clientJob);
-//
-//    ClientJob selectByClientJobIdCash(String clientJobId);
-//
-//    Map<String, ClientJob> selectAllCash();
-//
-//    ClientJob updateByClientJobIdCash(ClientJob clientJob);
-//
-//    void deleteByClientJobIdCash(String clientJobId);
 
     ClientJob insert(ClientJob clientJob);
 
     List<ClientJob> selectAll();
 
     List<ClientJob> select(int limit, Long skip);
+
+    List<ClientJob> selectByClientJobTypeAndExecuteFrom(int limit, Long skip, String clientJobType, String executeFrom);
 
     List<ClientJob> selectRunning();
 

@@ -14,15 +14,24 @@
         <a href="/eco/sysuser"><i class="fa fa-bar-chart-o"></i> System Users </a>
     </li>
     <li class="list-group-item" name="list-menu-hive">
-        <a href="/eco/hive"><i class="fa fa-group"></i> Hive </a>
+        <a href="/eco/clientJob/editor/hive"><i class="fa fa-group"></i> Hive </a>
     </li>
     <li class="list-group-item" name="list-menu-spark">
-        <a href="/eco/spark"><i class="fa fa-group"></i> Spark </a>
+        <a href="/eco/clientJob/editor/spark"><i class="fa fa-group"></i> Spark </a>
     </li>
-    <li class="list-group-item" name="list-menu-mapreduce">
-        <a href="/eco/reduce"><i class="fa fa-cubes"></i> Map reduce </a>
+    <li class="list-group-item" name="list-menu-mr">
+        <a href="/eco/clientJob/editor/mr"><i class="fa fa-cubes"></i> Map reduce </a>
     </li>
     <li class="list-group-item" name="list-menu-pig">
-        <a href="/eco/pig"><i class="fa fa-cubes"></i> Pig </a>
+        <a href="/eco/clientJob/editor/pig"><i class="fa fa-cubes"></i> Pig </a>
+    </li>
+    <li class="list-group-item" name="list-menu-java">
+        <a href="/eco/clientJob/editor/java"><i class="fa fa-cubes"></i> Java </a>
+    </li>
+    <li class="list-group-item" name="list-menu-python">
+        <a href="/eco/clientJob/editor/python"><i class="fa fa-cubes"></i> Python </a>
+    </li>
+    <li class="list-group-item" name="list-menu-shell">
+        <a href="/eco/clientJob/editor/shell"><i class="fa fa-cubes"></i> Shell </a>
     </li>
 </ul>

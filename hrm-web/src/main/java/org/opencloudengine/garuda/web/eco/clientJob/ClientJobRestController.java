@@ -19,10 +19,11 @@ import org.springframework.web.bind.annotation.*;
 import javax.servlet.http.HttpServletRequest;
 import javax.servlet.http.HttpServletResponse;
 import java.io.IOException;
+import java.util.List;
 import java.util.Properties;
 
 @Controller
-@RequestMapping("/rest/v1/client/")
+@RequestMapping("/rest/v1/clientJob/")
 public class ClientJobRestController {
     @Autowired
     @Qualifier("config")
@@ -95,14 +96,28 @@ public class ClientJobRestController {
     }
 
     @RequestMapping(value = "/job/{clientJobId}", method = RequestMethod.GET)
-    public ResponseEntity<ClientJob> createFile(HttpServletRequest request,
-                                                @PathVariable("clientJobId") String clientJobId) {
+    public ResponseEntity<ClientJob> getClientJob(HttpServletRequest request,
+                                                  @PathVariable("clientJobId") String clientJobId) {
         try {
             ClientJob clientJob = clientJobService.selectByClientJobId(clientJobId);
             if (clientJob == null) {
                 return new ResponseEntity<>(HttpStatus.NOT_FOUND);
             }
             return new ResponseEntity<>(clientJob, HttpStatus.OK);
+
+        } catch (Exception ex) {
+            ex.printStackTrace();
+            return new ResponseEntity<>(HttpStatus.BAD_REQUEST);
+        }
+    }
+
+    @RequestMapping(value = "/consoleJob", method = RequestMethod.GET)
+    public ResponseEntity<List<ClientJob>> getConsoleJobs(HttpServletRequest request,
+                                                          @RequestParam(value = "jobType", defaultValue = "") String jobType) {
+        try {
+            List<ClientJob> clientJobs = clientJobService.selectByClientJobTypeAndExecuteFrom(
+                    7, Long.parseLong("0"), jobType, ClientStatus.EXECUTE_FROM_CONSOLE);
+            return new ResponseEntity<>(clientJobs, HttpStatus.OK);
 
         } catch (Exception ex) {
             ex.printStackTrace();
