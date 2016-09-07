@@ -614,6 +614,7 @@ $(function () {
             $('.job-status').hide();
             $('#logArea').val('');
             $('#detailArea').val('');
+            $('#killArea').val('');
         },
         /**
          * 탭을 초기화하고, 클라이언트잡으로부터 데이터를 받아 폼을 재구성한다.

@@ -39,7 +39,17 @@ public class StopJob extends QuartzJobBean {
             List<ClientJob> clientJobs = clientJobService.selectStopping();
 
             for (ClientJob clientJob : clientJobs) {
-                try{
+                try {
+                    /**
+                     * 임시 트리거 파일을 생성함으로써 스케쥴러가 동일한 작업수행을 하지 못하도록 방지한다.
+                     */
+                    File triggerFile = new File(clientJob.getWorkingDir() + "/TRIGGER");
+                    if (triggerFile.exists()) {
+                        return;
+                    } else {
+                        triggerFile.createNewFile();
+                    }
+
                     String signal = "";
                     File killLogFile = new File(clientJob.getWorkingDir() + "/kill.log");
                     if (!killLogFile.exists()) {
@@ -79,7 +89,7 @@ public class StopJob extends QuartzJobBean {
                         clientJob.setKillLog(FileCopyUtils.copyToString(new FileReader(killLogFile)));
                         clientJobService.updateById(clientJob);
                     }
-                }catch (Exception ex){
+                } catch (Exception ex) {
                     clientJob.setStatus(ClientStatus.KILL_FAIL);
                     clientJobService.updateById(clientJob);
                 }
@@ -90,7 +100,7 @@ public class StopJob extends QuartzJobBean {
         }
     }
 
-    private void runProcess(String cmd, OutputStream out, String type){
+    private void runProcess(String cmd, OutputStream out, String type) {
         Process pidProcess = null;
         String log = "";
         String closing = "";
@@ -148,9 +158,9 @@ public class StopJob extends QuartzJobBean {
             ex.printStackTrace();
             closing += "\n" + "Stop cmd result : Stop Failed \n\n";
         } finally {
-            try{
+            try {
                 out.write(closing.getBytes());
-            }catch (IOException ex){
+            } catch (IOException ex) {
                 ex.printStackTrace();
             }
             if (pidProcess != null) {
