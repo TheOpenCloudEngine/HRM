@@ -75,6 +75,11 @@ public class JobCollectionServiceImpl implements JobCollectionService {
     }
 
     @Override
+    public JobCollection selectByJobNameAndJobType(String jobName, String jobType) {
+        return jobCollectionRepository.selectByJobNameAndJobType(jobName, jobType);
+    }
+
+    @Override
     public List<JobCollection> selectByJobType(String jobType) {
         return jobCollectionRepository.selectByJobType(jobType);
     }

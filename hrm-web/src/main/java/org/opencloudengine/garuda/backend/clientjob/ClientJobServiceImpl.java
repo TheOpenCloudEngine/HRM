@@ -96,6 +96,9 @@ public class ClientJobServiceImpl implements ClientJobService {
         //워킹 디렉토리 등록
         clientJob.setWorkingDir(clientJobBasePath(config.getProperty("application.home"), clientJobId, currentDate));
 
+        //스테이터스 등록
+        clientJob.setStatus(ClientStatus.STANDBY);
+
         //클라이언트 잡 시작
         Map params = new HashMap();
         params.put(JobVariable.CLIENT_JOB, clientJob);
@@ -106,6 +109,28 @@ public class ClientJobServiceImpl implements ClientJobService {
 
         jobScheduler.startJobImmediatly(clientJobId, clientJobType, params);
         return clientJob;
+    }
+
+    @Override
+    public ClientJob kill(String clientJobId) throws Exception {
+        ClientJob clientJob = this.selectByClientJobId(clientJobId);
+        if (!ClientStatus.RUNNING.equals(clientJob.getStatus())) {
+            return clientJob;
+        } else {
+            //STOPPING 업데이트
+            clientJob.setStatus(ClientStatus.STOPPING);
+            this.updateById(clientJob);
+            /**
+             * 과정상 메모리상에서 쿼츠잡이 드랍될 수 있으므로 이 과정에서 폴트를 내지는 않도록한다.
+             * 후 처리상의 PID 와 app,hadoop 잡을 종료시키는 과정이 남아있다.
+             */
+            try {
+                jobScheduler.stopJob(clientJob.getClientJobId(), clientJob.getClientJobType());
+            } catch (Exception ex) {
+                ex.printStackTrace();
+            }
+            return clientJob;
+        }
     }
 
     @Override
@@ -122,6 +147,8 @@ public class ClientJobServiceImpl implements ClientJobService {
             File sciptFile = new File(workingDir + "/script.sh");
             File cmdFile = new File(workingDir + "/command.sh");
 
+            File signalFile = new File(workingDir + "/SIGNAL");
+
             try {
                 if (pidFile.exists()) {
                     clientJob.setPid(FileCopyUtils.copyToString(new FileReader(pidFile)));
@@ -137,6 +164,9 @@ public class ClientJobServiceImpl implements ClientJobService {
                 }
                 if (cmdFile.exists()) {
                     clientJob.setExecuteCli(FileCopyUtils.copyToString(new FileReader(cmdFile)));
+                }
+                if (signalFile.exists()) {
+                    clientJob.setSignal(FileCopyUtils.copyToString(new FileReader(signalFile)));
                 }
             } catch (IOException ex) {
                 ex.printStackTrace();
@@ -271,6 +301,11 @@ public class ClientJobServiceImpl implements ClientJobService {
     }
 
     @Override
+    public List<ClientJob> selectStopping() {
+        return setRunningTaskData(clientJobRepository.selectStopping());
+    }
+
+    @Override
     public ClientJob selectById(String id) {
         return this.setRunningTaskData(clientJobRepository.selectById(id));
     }
@@ -308,10 +343,12 @@ public class ClientJobServiceImpl implements ClientJobService {
     }
 
     private ClientJob setRunningTaskData(ClientJob clientJob) {
-        if (ClientStatus.RUNNING.equalsIgnoreCase(clientJob.getStatus())) {
-            clientJob = this.getDataFromFileSystem(clientJob);
+        if (clientJob != null) {
+            if (ClientStatus.RUNNING.equalsIgnoreCase(clientJob.getStatus())) {
+                clientJob = this.getDataFromFileSystem(clientJob);
+            }
+            this.convertHumanReadable(clientJob);
         }
-        this.convertHumanReadable(clientJob);
         return clientJob;
     }
 }

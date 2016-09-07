@@ -23,7 +23,7 @@ import java.util.List;
 import java.util.Properties;
 
 @Controller
-@RequestMapping("/rest/v1/clientJob/")
+@RequestMapping("/rest/v1/clientJob")
 public class ClientJobRestController {
     @Autowired
     @Qualifier("config")
@@ -38,41 +38,48 @@ public class ClientJobRestController {
     ClientJobService clientJobService;
 
     @RequestMapping(value = "/hive", method = RequestMethod.POST)
-    public void runHive(HttpServletResponse response, @RequestBody HiveRequest hiveRequest) throws IOException {
-        this.processClientJob(response, hiveRequest);
+    public void runHive(HttpServletResponse response, @RequestBody HiveRequest hiveRequest,
+                        @RequestParam(value = "executeFrom", defaultValue = "") String executeFrom) throws IOException {
+        this.processClientJob(response, hiveRequest, executeFrom);
     }
 
     @RequestMapping(value = "/pig", method = RequestMethod.POST)
-    public void runPig(HttpServletResponse response, @RequestBody PigRequest pigRequest) throws IOException {
-        this.processClientJob(response, pigRequest);
+    public void runPig(HttpServletResponse response, @RequestBody PigRequest pigRequest,
+                       @RequestParam(value = "executeFrom", defaultValue = "") String executeFrom) throws IOException {
+        this.processClientJob(response, pigRequest, executeFrom);
     }
 
     @RequestMapping(value = "/mr", method = RequestMethod.POST)
-    public void runMr(HttpServletResponse response, @RequestBody MrRequest mrRequest) throws IOException {
-        this.processClientJob(response, mrRequest);
+    public void runMr(HttpServletResponse response, @RequestBody MrRequest mrRequest,
+                      @RequestParam(value = "executeFrom", defaultValue = "") String executeFrom) throws IOException {
+        this.processClientJob(response, mrRequest, executeFrom);
     }
 
     @RequestMapping(value = "/spark", method = RequestMethod.POST)
-    public void runSpark(HttpServletResponse response, @RequestBody SparkRequest sparkRequest) throws IOException {
-        this.processClientJob(response, sparkRequest);
+    public void runSpark(HttpServletResponse response, @RequestBody SparkRequest sparkRequest,
+                         @RequestParam(value = "executeFrom", defaultValue = "") String executeFrom) throws IOException {
+        this.processClientJob(response, sparkRequest, executeFrom);
     }
 
     @RequestMapping(value = "/python", method = RequestMethod.POST)
-    public void runPython(HttpServletResponse response, @RequestBody PythonRequest pythonRequest) throws IOException {
-        this.processClientJob(response, pythonRequest);
+    public void runPython(HttpServletResponse response, @RequestBody PythonRequest pythonRequest,
+                          @RequestParam(value = "executeFrom", defaultValue = "") String executeFrom) throws IOException {
+        this.processClientJob(response, pythonRequest, executeFrom);
     }
 
     @RequestMapping(value = "/shell", method = RequestMethod.POST)
-    public void runShell(HttpServletResponse response, @RequestBody ShellRequest shellRequest) throws IOException {
-        this.processClientJob(response, shellRequest);
+    public void runShell(HttpServletResponse response, @RequestBody ShellRequest shellRequest,
+                         @RequestParam(value = "executeFrom", defaultValue = "") String executeFrom) throws IOException {
+        this.processClientJob(response, shellRequest, executeFrom);
     }
 
     @RequestMapping(value = "/java", method = RequestMethod.POST)
-    public void runJava(HttpServletResponse response, @RequestBody JavaRequest javaRequest) throws IOException {
-        this.processClientJob(response, javaRequest);
+    public void runJava(HttpServletResponse response, @RequestBody JavaRequest javaRequest,
+                        @RequestParam(value = "executeFrom", defaultValue = "") String executeFrom) throws IOException {
+        this.processClientJob(response, javaRequest, executeFrom);
     }
 
-    private void processClientJob(HttpServletResponse response, BasicClientRequest clientRequest) throws IOException {
+    private void processClientJob(HttpServletResponse response, BasicClientRequest clientRequest, String executeFrom) throws IOException {
         try {
             String clientJobId = clientRequest.getClientJobId();
             if (!StringUtils.isEmpty(clientJobId)) {
@@ -82,7 +89,12 @@ public class ClientJobRestController {
                     return;
                 }
             }
-            ClientJob clientJob = clientJobService.run(clientRequest, ClientStatus.EXECUTE_FROM_REST);
+            if (!ClientStatus.EXECUTE_FROM_CONSOLE.equals(executeFrom) &&
+                    !ClientStatus.EXECUTE_FROM_BATCH.equals(executeFrom) &&
+                    !ClientStatus.EXECUTE_FROM_REST.equals(executeFrom)) {
+                executeFrom = ClientStatus.EXECUTE_FROM_REST;
+            }
+            ClientJob clientJob = clientJobService.run(clientRequest, executeFrom);
 
             String marshal = JsonUtils.marshal(clientJob);
             String prettyPrint = JsonFormatterUtils.prettyPrint(marshal);
@@ -103,6 +115,23 @@ public class ClientJobRestController {
             if (clientJob == null) {
                 return new ResponseEntity<>(HttpStatus.NOT_FOUND);
             }
+            return new ResponseEntity<>(clientJob, HttpStatus.OK);
+
+        } catch (Exception ex) {
+            ex.printStackTrace();
+            return new ResponseEntity<>(HttpStatus.BAD_REQUEST);
+        }
+    }
+
+    @RequestMapping(value = "/kill/{clientJobId}", method = RequestMethod.DELETE)
+    public ResponseEntity<ClientJob> killClientJob(HttpServletRequest request,
+                                                  @PathVariable("clientJobId") String clientJobId) {
+        try {
+            ClientJob clientJob = clientJobService.selectByClientJobId(clientJobId);
+            if (clientJob == null) {
+                return new ResponseEntity<>(HttpStatus.NOT_FOUND);
+            }
+            clientJob = clientJobService.kill(clientJobId);
             return new ResponseEntity<>(clientJob, HttpStatus.OK);
 
         } catch (Exception ex) {

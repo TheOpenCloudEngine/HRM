@@ -39,7 +39,9 @@ public abstract class InterceptorAbstractTask extends AbstractTask {
             preRunClientJob();
             runTask();
             getData();
-            if ("0".equals(clientJob.getExitCode())) {
+            if (ClientStatus.KILLED.equals(clientJob.getSignal())) {
+                updateClientJobAsKilled();
+            } else if ("0".equals(clientJob.getExitCode())) {
                 updateClientJobAsFinished();
             } else {
                 updateClientJobAsFailed();
@@ -57,7 +59,7 @@ public abstract class InterceptorAbstractTask extends AbstractTask {
         }
     }
 
-    private void getData(){
+    private void getData() {
 
         //종료시간 등록
         Date endDate = new Date();
@@ -96,6 +98,13 @@ public abstract class InterceptorAbstractTask extends AbstractTask {
 
     public void updateClientJobAsFailed() {
         clientJob.setStatus(ClientStatus.FAILED);
+        clientJob = clientJobService.updateById(clientJob);
+
+        //TODO 서비스 훅이 있다면 잡이 실패하였음을 통지한다.
+    }
+
+    public void updateClientJobAsKilled() {
+        clientJob.setStatus(ClientStatus.KILLED);
         clientJob = clientJobService.updateById(clientJob);
 
         //TODO 서비스 훅이 있다면 잡이 실패하였음을 통지한다.

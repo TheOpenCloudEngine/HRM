@@ -83,10 +83,11 @@ public class ClientJobRepositoryImpl implements ClientJobRepository, Initializin
         List<ClientJob> list = new ArrayList<>();
         try {
             ViewRequestBuilder builder = serviceFactory.getDb().getViewRequestBuilder(NAMESPACE, "selectByClientJobTypeAndExecuteFrom");
-            Key.ComplexKey complex = new Key().complex(clientJobType).add(executeFrom);
+            Key.ComplexKey startKey = new Key().complex(clientJobType).add(executeFrom).add("{}");
+            Key.ComplexKey endKey = new Key().complex(clientJobType).add(executeFrom);
             List<ViewResponse.Row<Key.ComplexKey, ClientJob>> rows = builder.newRequest(Key.Type.COMPLEX, ClientJob.class).
                     limit(limit).skip(skip).descending(true).
-                    startKey(complex).endKey(complex).
+                    startKey(startKey).endKey(endKey).
                     build().getResponse().getRows();
 
             for (ViewResponse.Row<Key.ComplexKey, ClientJob> row : rows) {
@@ -104,6 +105,23 @@ public class ClientJobRepositoryImpl implements ClientJobRepository, Initializin
         List<ClientJob> list = new ArrayList<>();
         try {
             ViewRequestBuilder builder = serviceFactory.getDb().getViewRequestBuilder(NAMESPACE, "selectRunning");
+            List<ViewResponse.Row<Key.ComplexKey, ClientJob>> rows = builder.newRequest(Key.Type.COMPLEX, ClientJob.class).
+                    build().getResponse().getRows();
+
+            for (ViewResponse.Row<Key.ComplexKey, ClientJob> row : rows) {
+                list.add(row.getValue());
+            }
+            return list;
+        } catch (Exception ex) {
+            return list;
+        }
+    }
+
+    @Override
+    public List<ClientJob> selectStopping() {
+        List<ClientJob> list = new ArrayList<>();
+        try {
+            ViewRequestBuilder builder = serviceFactory.getDb().getViewRequestBuilder(NAMESPACE, "selectStopping");
             List<ViewResponse.Row<Key.ComplexKey, ClientJob>> rows = builder.newRequest(Key.Type.COMPLEX, ClientJob.class).
                     build().getResponse().getRows();
 

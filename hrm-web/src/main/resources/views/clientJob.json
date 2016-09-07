@@ -11,6 +11,9 @@
     "selectRunning": {
       "map": "function(doc) { if(doc.docType == \"clientJob\" && doc.status == \"RUNNING\"){ emit(null, doc); }}"
     },
+    "selectStopping": {
+      "map": "function(doc) { if(doc.docType == \"clientJob\" && doc.status == \"STOPPING\"){ emit(null, doc); }}"
+    },
     "selectById": {
       "map": "function(doc) { if(doc.docType == \"clientJob\"){ emit([doc._id], doc); }}"
     },

@@ -17,6 +17,8 @@ public interface ClientJobRepository {
 
     List<ClientJob> selectRunning();
 
+    List<ClientJob> selectStopping();
+
     ClientJob selectById(String id);
 
     ClientJob selectByClientJobId(String clientJobId);

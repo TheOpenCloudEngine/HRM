@@ -3,6 +3,7 @@ package org.opencloudengine.garuda.util.cli;
 import com.fasterxml.jackson.databind.ObjectMapper;
 import com.google.common.base.Joiner;
 import org.opencloudengine.garuda.common.exception.ServiceException;
+import org.opencloudengine.garuda.model.clientJob.ClientStatus;
 import org.opencloudengine.garuda.util.ApplicationContextRegistry;
 import org.opencloudengine.garuda.util.StringUtils;
 import org.slf4j.Logger;
@@ -68,7 +69,7 @@ public class ManagedProcess {
 
     /**
      * Jackson Json
-     * */
+     */
     private static ObjectMapper objectMapper = new ObjectMapper();
 
 
@@ -198,7 +199,7 @@ public class ManagedProcess {
         outputGobbler.start();
         errorGobbler.start();
         //totalGobbler.start();
-}
+    }
 
     /**
      * 이 프로세스를 실행한다. 프로세스가 완료될 때까지 블로킹한다.
@@ -250,8 +251,21 @@ public class ManagedProcess {
         FileCopyUtils.copy(String.valueOf(exitCode).getBytes(), code);
 
         if (exitCode != 0) {
-            logger.warn("프로세스의 종료 코드는 {}입니다.", exitCode);
-            throw new ServiceException(exitCode, errorGobbler.getRecentLog());
+            boolean killed = false;
+            File signalFile = new File(workingDir + "/SIGNAL");
+            if (signalFile.exists()) {
+                String signal = FileCopyUtils.copyToString(new FileReader(signalFile));
+                if (ClientStatus.KILLED.equals(signal)) {
+                    killed = true;
+                }
+            }
+            if (!killed) {
+                logger.warn("프로세스의 종료 코드는 {}입니다.", exitCode);
+                throw new ServiceException(exitCode, errorGobbler.getRecentLog());
+            } else {
+                logger.warn("프로세스가 정상적으로 종료되었습니다. 종료코드 : {}", exitCode);
+            }
+
         }
     }
 

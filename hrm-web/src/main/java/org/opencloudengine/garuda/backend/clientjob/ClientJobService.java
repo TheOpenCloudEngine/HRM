@@ -11,6 +11,8 @@ public interface ClientJobService {
 
     ClientJob run(BasicClientRequest clientRequest, String executeFrom) throws Exception;
 
+    ClientJob kill(String clientJobId) throws Exception;
+
     ClientJob getDataFromFileSystem(ClientJob clientJob);
 
     ClientJob insert(ClientJob clientJob);
@@ -22,6 +24,8 @@ public interface ClientJobService {
     List<ClientJob> selectByClientJobTypeAndExecuteFrom(int limit, Long skip, String clientJobType, String executeFrom);
 
     List<ClientJob> selectRunning();
+
+    List<ClientJob> selectStopping();
 
     ClientJob selectById(String id);
 

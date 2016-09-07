@@ -18,7 +18,7 @@ import java.util.List;
 import java.util.Properties;
 
 @Controller
-@RequestMapping("/rest/v1/")
+@RequestMapping("/rest/v1")
 public class JobCollectionRestController {
     @Autowired
     @Qualifier("config")
@@ -32,17 +32,15 @@ public class JobCollectionRestController {
     public ResponseEntity<List<JobCollection>> listCollection(HttpServletRequest request,
                                                               @RequestParam(defaultValue = "") String jobType) {
         try {
-            List<JobCollection> jobCollections;
+            List<JobCollection> jobCollections = new ArrayList<>();
             if (StringUtils.isEmpty(jobType)) {
                 jobCollections = jobCollectionService.selectAll();
             } else {
                 jobCollections = jobCollectionService.selectByJobType(jobType);
             }
-            if (jobCollections.isEmpty()) {
-                return new ResponseEntity<>(HttpStatus.NO_CONTENT);
-            }
             return new ResponseEntity<>(jobCollections, HttpStatus.OK);
         } catch (Exception ex) {
+            ex.printStackTrace();
             return new ResponseEntity<>(HttpStatus.BAD_REQUEST);
         }
     }
@@ -57,6 +55,7 @@ public class JobCollectionRestController {
             }
             return new ResponseEntity<>(jobCollection, HttpStatus.OK);
         } catch (Exception ex) {
+            ex.printStackTrace();
             return new ResponseEntity<>(HttpStatus.BAD_REQUEST);
         }
     }
@@ -65,12 +64,17 @@ public class JobCollectionRestController {
     public ResponseEntity<Void> createCollection(HttpServletRequest request,
                                                  @RequestBody JobCollection jobCollection, UriComponentsBuilder ucBuilder) {
         try {
+            JobCollection exist = jobCollectionService.selectByJobNameAndJobType(jobCollection.getJobName(), jobCollection.getJobType());
+            if (exist != null) {
+                return new ResponseEntity<>(HttpStatus.CONFLICT);
+            }
             JobCollection insert = jobCollectionService.insert(jobCollection);
 
             HttpHeaders headers = new HttpHeaders();
             headers.setLocation(ucBuilder.path("/rest/v1/collection/{_id}").buildAndExpand(insert.get_id()).toUri());
             return new ResponseEntity<>(headers, HttpStatus.CREATED);
         } catch (Exception ex) {
+            ex.printStackTrace();
             return new ResponseEntity<>(HttpStatus.BAD_REQUEST);
         }
     }
@@ -82,15 +86,22 @@ public class JobCollectionRestController {
 
         try {
             JobCollection currentCollection = jobCollectionService.selectById(_id);
-
             if (currentCollection == null) {
                 return new ResponseEntity<>(HttpStatus.NOT_FOUND);
+            }
+
+            JobCollection exist = jobCollectionService.selectByJobNameAndJobType(jobCollection.getJobName(), jobCollection.getJobType());
+            if (exist != null) {
+                if (!exist.get_id().equals(_id)) {
+                    return new ResponseEntity<>(HttpStatus.CONFLICT);
+                }
             }
             jobCollection.set_id(currentCollection.get_id());
             currentCollection = jobCollectionService.updateById(jobCollection);
 
             return new ResponseEntity<>(currentCollection, HttpStatus.OK);
         } catch (Exception ex) {
+            ex.printStackTrace();
             return new ResponseEntity<>(HttpStatus.BAD_REQUEST);
         }
     }
@@ -106,6 +117,7 @@ public class JobCollectionRestController {
             jobCollectionService.deleteById(currentCollection.get_id());
             return new ResponseEntity<>(HttpStatus.NO_CONTENT);
         } catch (Exception ex) {
+            ex.printStackTrace();
             return new ResponseEntity<>(HttpStatus.BAD_REQUEST);
         }
     }

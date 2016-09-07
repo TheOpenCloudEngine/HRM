@@ -12,6 +12,8 @@ public interface JobCollectionService {
 
     JobCollection selectById(String id);
 
+    JobCollection selectByJobNameAndJobType(String jobName, String jobType);
+
     List<JobCollection> selectByJobType(String jobType);
 
     JobCollection updateById(JobCollection jobCollection);

@@ -8,6 +8,10 @@ public class ClientStatus {
     public static String RUNNING = "RUNNING";
     public static String FAILED = "FAILED";
     public static String FINISHED = "FINISHED";
+    public static String STOPPING = "STOPPING";
+    public static String KILLED = "KILLED";
+    public static String STANDBY = "STANDBY";
+    public static String KILL_FAIL = "KILL_FAIL";
 
     public static String EXECUTE_FROM_REST = "rest";
     public static String EXECUTE_FROM_CONSOLE = "console";

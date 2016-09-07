@@ -12,17 +12,17 @@
         <property name="waitForJobsToCompleteOnShutdown" value="true"/>
         <property name="configLocation" value="/WEB-INF/quartz.properties"/>
         <!--<property name="dataSource" ref="dataSource"/>-->
-        <!--<property name="jobDetails">-->
-            <!--<list>-->
-                <!--<ref bean="runningJob"/>-->
-            <!--</list>-->
-        <!--</property>-->
+        <property name="jobDetails">
+            <list>
+                <ref bean="stopJob"/>
+            </list>
+        </property>
 
-        <!--<property name="triggers">-->
-            <!--<list>-->
-                <!--<ref bean="runningJobTrigger"/>-->
-            <!--</list>-->
-        <!--</property>-->
+        <property name="triggers">
+            <list>
+                <ref bean="stopJobTrigger"/>
+            </list>
+        </property>
     </bean>
 
     <bean id="jobScheduler" class="org.opencloudengine.garuda.backend.scheduler.QuartzJobScheduler">
@@ -31,14 +31,14 @@
 
     <!-- ========================= JOB DEFINITION ========================= -->
 
-    <!--<bean name="runningJob" class="org.springframework.scheduling.quartz.JobDetailFactoryBean">-->
-        <!--<property name="durability" value="true"/>-->
-        <!--<property name="jobClass" value="org.opencloudengine.flamingo2.engine.scheduler.jobs.RunningJob"/>-->
-        <!--&lt;!&ndash;<property name="applicationContextJobDataKey" value="spring"/>&ndash;&gt;-->
-    <!--</bean>-->
+    <bean name="stopJob" class="org.springframework.scheduling.quartz.JobDetailFactoryBean">
+        <property name="durability" value="true"/>
+        <property name="jobClass" value="org.opencloudengine.garuda.backend.scheduler.jobs.StopJob"/>
+        <!--<property name="applicationContextJobDataKey" value="spring"/>-->
+    </bean>
 
-    <!--<bean id="runningJobTrigger" class="org.opencloudengine.garuda.backend.scheduler.QuartzCronTriggerFactoryBean">-->
-        <!--<property name="jobDetail" ref="runningJob"/>-->
-        <!--<property name="cronExpression" value="0 * * * * ?"/>-->
-    <!--</bean>-->
+    <bean id="stopJobTrigger" class="org.opencloudengine.garuda.backend.scheduler.QuartzCronTriggerFactoryBean">
+        <property name="jobDetail" ref="stopJob"/>
+        <property name="cronExpression" value="0/2 * * * * ?"/>
+    </bean>
 </beans>

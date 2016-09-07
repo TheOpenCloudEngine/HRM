@@ -31,6 +31,9 @@ public class ClientJob extends CouchDAO {
     private String cause;
     private String stdout;
 
+    private String killlog;
+    private String signal;
+
     private List<String> applicationIds;
     private List<String> mapreduceIds;
 
@@ -300,5 +303,21 @@ public class ClientJob extends CouchDAO {
 
     public void setUpdDate(Long updDate) {
         this.updDate = updDate;
+    }
+
+    public String getKilllog() {
+        return killlog;
+    }
+
+    public void setKilllog(String killlog) {
+        this.killlog = killlog;
+    }
+
+    public String getSignal() {
+        return signal;
+    }
+
+    public void setSignal(String signal) {
+        this.signal = signal;
     }
 }

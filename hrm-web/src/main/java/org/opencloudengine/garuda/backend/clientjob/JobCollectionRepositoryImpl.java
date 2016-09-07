@@ -53,6 +53,19 @@ public class JobCollectionRepositoryImpl implements JobCollectionRepository {
     }
 
     @Override
+    public JobCollection selectByJobNameAndJobType(String jobName, String jobType) {
+        try {
+            ViewRequestBuilder builder = serviceFactory.getDb().getViewRequestBuilder(NAMESPACE, "selectByJobNameAndJobType");
+            Key.ComplexKey complex = new Key().complex(jobName).add(jobType);
+            return builder.newRequest(Key.Type.COMPLEX, JobCollection.class).
+                    keys(complex).
+                    build().getResponse().getRows().get(0).getValue();
+        } catch (Exception ex) {
+            return null;
+        }
+    }
+
+    @Override
     public List<JobCollection> selectByJobType(String jobType) {
         List<JobCollection> list = new ArrayList<>();
         try {
