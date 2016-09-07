@@ -41,7 +41,7 @@ public abstract class InterceptorAbstractTask extends AbstractTask {
             runTask();
             getData();
             /**
-             * 시그널 데이터가 있을 경우 처리.
+             * 시그널 데이터가 있을 경우 처리(프로세스가 사용자에 의해 중단된 경우)
              */
             if (ClientStatus.STOPPING.equals(clientJob.getSignal())) {
 
@@ -52,7 +52,11 @@ public abstract class InterceptorAbstractTask extends AbstractTask {
             } else if (ClientStatus.KILL_FAIL.equals(clientJob.getSignal())) {
 
                 updateClientJobAs(ClientStatus.KILL_FAIL);
-            } else if ("0".equals(clientJob.getExitCode())) {
+            }
+            /**
+             * 시그널이 없을 경우 처리(프로세스가 사용자에 의해 중단되지 않은 경우)
+             */
+            else if ("0".equals(clientJob.getExitCode())) {
 
                 updateClientJobAs(ClientStatus.FINISHED);
             } else {

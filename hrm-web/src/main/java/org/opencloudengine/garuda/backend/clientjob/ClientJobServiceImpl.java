@@ -111,6 +111,13 @@ public class ClientJobServiceImpl implements ClientJobService {
         return clientJob;
     }
 
+    /**
+     * 종료명령은 작업중인 디렉토리에 시그널 파일을 남김으로써,
+     * 쿼츠잡이 타스크 수행 도중 시그널 파일로 인해 사용자에 의해 인터럽트 되었다는 것을 알 수 있다.
+     * @param clientJobId
+     * @return
+     * @throws Exception
+     */
     @Override
     public ClientJob kill(String clientJobId) throws Exception {
         ClientJob clientJob = this.selectByClientJobId(clientJobId);
@@ -144,6 +151,7 @@ public class ClientJobServiceImpl implements ClientJobService {
             File cmdFile = new File(workingDir + "/command.sh");
 
             File signalFile = new File(workingDir + "/SIGNAL");
+            File killLogFile = new File(workingDir + "/kill.log");
 
             try {
                 if (pidFile.exists()) {
@@ -163,6 +171,9 @@ public class ClientJobServiceImpl implements ClientJobService {
                 }
                 if (signalFile.exists()) {
                     clientJob.setSignal(FileCopyUtils.copyToString(new FileReader(signalFile)));
+                }
+                if (killLogFile.exists()) {
+                    clientJob.setKillLog(FileCopyUtils.copyToString(new FileReader(killLogFile)));
                 }
             } catch (IOException ex) {
                 ex.printStackTrace();

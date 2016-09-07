@@ -39,43 +39,48 @@ public class StopJob extends QuartzJobBean {
             List<ClientJob> clientJobs = clientJobService.selectStopping();
 
             for (ClientJob clientJob : clientJobs) {
-                String signal = "";
-                File killLogFile = new File(clientJob.getWorkingDir() + "/kill.log");
-                if (!killLogFile.exists()) {
-                    killLogFile.createNewFile();
-                }
-                FileOutputStream out = new FileOutputStream(killLogFile);
-                try {
-                    String pid = clientJob.getPid();
-                    String pidKillCmd = "kill -9 " + pid;
-                    this.runProcess(pidKillCmd, out, "hrm");
+                try{
+                    String signal = "";
+                    File killLogFile = new File(clientJob.getWorkingDir() + "/kill.log");
+                    if (!killLogFile.exists()) {
+                        killLogFile.createNewFile();
+                    }
+                    FileOutputStream out = new FileOutputStream(killLogFile);
+                    try {
+                        String pid = clientJob.getPid();
+                        String pidKillCmd = "kill -9 " + pid;
+                        this.runProcess(pidKillCmd, out, "hrm");
 
-                    List<String> applicationIds = clientJob.getApplicationIds();
-                    for (String applicationId : applicationIds) {
-                        String yarnKillCmd = "yarn application -kill " + applicationId;
-                        this.runProcess(yarnKillCmd, out, "yarn");
-                    }
+                        List<String> applicationIds = clientJob.getApplicationIds();
+                        for (String applicationId : applicationIds) {
+                            String yarnKillCmd = "yarn application -kill " + applicationId;
+                            this.runProcess(yarnKillCmd, out, "yarn");
+                        }
 
-                    List<String> mapreduceIds = clientJob.getMapreduceIds();
-                    for (String mapreduceId : mapreduceIds) {
-                        String jobKillCmd = "hadoop job -kill " + mapreduceId;
-                        this.runProcess(jobKillCmd, out, "mr");
+                        List<String> mapreduceIds = clientJob.getMapreduceIds();
+                        for (String mapreduceId : mapreduceIds) {
+                            String jobKillCmd = "hadoop job -kill " + mapreduceId;
+                            this.runProcess(jobKillCmd, out, "mr");
+                        }
+                        signal = ClientStatus.KILLED;
+                    } catch (Exception ex) {
+                        signal = ClientStatus.KILL_FAIL;
+                        ex.printStackTrace();
+                    } finally {
+                        if (out != null) {
+                            out.close();
+                        }
+                        File signalFile = new File(clientJob.getWorkingDir() + "/SIGNAL");
+                        if (signalFile.exists()) {
+                            signalFile.delete();
+                        }
+                        FileCopyUtils.copy(signal.getBytes(), new File(clientJob.getWorkingDir() + "/SIGNAL"));
+                        clientJob.setStatus(signal);
+                        clientJob.setKillLog(FileCopyUtils.copyToString(new FileReader(killLogFile)));
+                        clientJobService.updateById(clientJob);
                     }
-                    signal = ClientStatus.KILLED;
-                } catch (Exception ex) {
-                    signal = ClientStatus.KILL_FAIL;
-                    ex.printStackTrace();
-                } finally {
-                    if (out != null) {
-                        out.close();
-                    }
-                    File signalFile = new File(clientJob.getWorkingDir() + "/SIGNAL");
-                    if (signalFile.exists()) {
-                        signalFile.delete();
-                    }
-                    FileCopyUtils.copy(signal.getBytes(), new File(clientJob.getWorkingDir() + "/SIGNAL"));
-                    clientJob.setStatus(signal);
-                    clientJob.setKilllog(FileCopyUtils.copyToString(new FileReader(killLogFile)));
+                }catch (Exception ex){
+                    clientJob.setStatus(ClientStatus.KILL_FAIL);
                     clientJobService.updateById(clientJob);
                 }
             }
@@ -119,6 +124,8 @@ public class StopJob extends QuartzJobBean {
             Process p = Runtime.getRuntime().exec(cmd);
             InputStream logStream = p.getInputStream();
             InputStream errStream = p.getErrorStream();
+            OutputStream outStream = p.getOutputStream();
+            outStream.close();
 
             byte[] b = new byte[1024];
             int numBytes = 0;
@@ -133,7 +140,7 @@ public class StopJob extends QuartzJobBean {
                 out.write(c, 0, errBytes);
             }
             errStream.close();
-            p.waitFor();
+            //p.waitFor();
 
             closing += "\n" + "Stop cmd result : Stop succeed \n\n";
 

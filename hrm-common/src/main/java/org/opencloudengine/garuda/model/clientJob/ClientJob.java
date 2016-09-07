@@ -31,7 +31,7 @@ public class ClientJob extends CouchDAO {
     private String cause;
     private String stdout;
 
-    private String killlog;
+    private String killLog;
     private String signal;
 
     private List<String> applicationIds;
@@ -305,12 +305,12 @@ public class ClientJob extends CouchDAO {
         this.updDate = updDate;
     }
 
-    public String getKilllog() {
-        return killlog;
+    public String getKillLog() {
+        return killLog;
     }
 
-    public void setKilllog(String killlog) {
-        this.killlog = killlog;
+    public void setKillLog(String killLog) {
+        this.killLog = killLog;
     }
 
     public String getSignal() {
