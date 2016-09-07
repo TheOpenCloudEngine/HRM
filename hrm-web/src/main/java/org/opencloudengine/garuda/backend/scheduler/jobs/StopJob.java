@@ -140,7 +140,7 @@ public class StopJob extends QuartzJobBean {
                 out.write(c, 0, errBytes);
             }
             errStream.close();
-            //p.waitFor();
+            p.waitFor();
 
             closing += "\n" + "Stop cmd result : Stop succeed \n\n";
 

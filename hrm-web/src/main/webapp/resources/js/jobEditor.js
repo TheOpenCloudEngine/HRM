@@ -575,7 +575,7 @@ $(function () {
                 if (data['clientJobId'] == clientJob['clientJobId']) {
                     $('#logArea').val(clientJob['stdout'] ? clientJob['stdout'] : '');
                     $('#detailArea').val(JSON.stringify(clientJob, null, 2));
-                    $('#killArea').val(clientJob['killlog'] ? clientJob['killlog'] : '');
+                    $('#killArea').val(clientJob['killLog'] ? clientJob['killLog'] : '');
                     $('.job-status').hide();
                     var status = clientJob['status'];
                     switch (status) {
