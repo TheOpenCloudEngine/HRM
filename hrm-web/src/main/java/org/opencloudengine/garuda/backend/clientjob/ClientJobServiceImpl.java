@@ -117,18 +117,14 @@ public class ClientJobServiceImpl implements ClientJobService {
         if (!ClientStatus.RUNNING.equals(clientJob.getStatus())) {
             return clientJob;
         } else {
-            //STOPPING 업데이트
+            /**
+             * STOPPING 시그널을 남기고 데이터베이스에 업데이트한다.
+             */
+            String signal = ClientStatus.STOPPING;
+            FileCopyUtils.copy(signal.getBytes(), new File(clientJob.getWorkingDir() + "/SIGNAL"));
+
             clientJob.setStatus(ClientStatus.STOPPING);
             this.updateById(clientJob);
-            /**
-             * 과정상 메모리상에서 쿼츠잡이 드랍될 수 있으므로 이 과정에서 폴트를 내지는 않도록한다.
-             * 후 처리상의 PID 와 app,hadoop 잡을 종료시키는 과정이 남아있다.
-             */
-            try {
-                jobScheduler.stopJob(clientJob.getClientJobId(), clientJob.getClientJobType());
-            } catch (Exception ex) {
-                ex.printStackTrace();
-            }
             return clientJob;
         }
     }
@@ -282,37 +278,37 @@ public class ClientJobServiceImpl implements ClientJobService {
 
     @Override
     public List<ClientJob> selectAll() {
-        return this.setRunningTaskData(clientJobRepository.selectAll());
+        return this.setFileBaseTaskData(clientJobRepository.selectAll());
     }
 
     @Override
     public List<ClientJob> select(int limit, Long skip) {
-        return this.setRunningTaskData(clientJobRepository.select(limit, skip));
+        return this.setFileBaseTaskData(clientJobRepository.select(limit, skip));
     }
 
     @Override
     public List<ClientJob> selectByClientJobTypeAndExecuteFrom(int limit, Long skip, String clientJobType, String executeFrom) {
-        return this.setRunningTaskData(clientJobRepository.selectByClientJobTypeAndExecuteFrom(limit, skip, clientJobType, executeFrom));
+        return this.setFileBaseTaskData(clientJobRepository.selectByClientJobTypeAndExecuteFrom(limit, skip, clientJobType, executeFrom));
     }
 
     @Override
     public List<ClientJob> selectRunning() {
-        return this.setRunningTaskData(clientJobRepository.selectRunning());
+        return this.setFileBaseTaskData(clientJobRepository.selectRunning());
     }
 
     @Override
     public List<ClientJob> selectStopping() {
-        return setRunningTaskData(clientJobRepository.selectStopping());
+        return setFileBaseTaskData(clientJobRepository.selectStopping());
     }
 
     @Override
     public ClientJob selectById(String id) {
-        return this.setRunningTaskData(clientJobRepository.selectById(id));
+        return this.setFileBaseTaskData(clientJobRepository.selectById(id));
     }
 
     @Override
     public ClientJob selectByClientJobId(String clientJobId) {
-        return this.setRunningTaskData(clientJobRepository.selectByClientJobId(clientJobId));
+        return this.setFileBaseTaskData(clientJobRepository.selectByClientJobId(clientJobId));
     }
 
     @Override
@@ -335,18 +331,16 @@ public class ClientJobServiceImpl implements ClientJobService {
         clientJobRepository.bulk(clientJobList);
     }
 
-    private List<ClientJob> setRunningTaskData(List<ClientJob> clientJobList) {
+    private List<ClientJob> setFileBaseTaskData(List<ClientJob> clientJobList) {
         for (int i = 0; i < clientJobList.size(); i++) {
-            clientJobList.set(i, this.setRunningTaskData(clientJobList.get(i)));
+            clientJobList.set(i, this.setFileBaseTaskData(clientJobList.get(i)));
         }
         return clientJobList;
     }
 
-    private ClientJob setRunningTaskData(ClientJob clientJob) {
+    private ClientJob setFileBaseTaskData(ClientJob clientJob) {
         if (clientJob != null) {
-            if (ClientStatus.RUNNING.equalsIgnoreCase(clientJob.getStatus())) {
-                clientJob = this.getDataFromFileSystem(clientJob);
-            }
+            clientJob = this.getDataFromFileSystem(clientJob);
             this.convertHumanReadable(clientJob);
         }
         return clientJob;

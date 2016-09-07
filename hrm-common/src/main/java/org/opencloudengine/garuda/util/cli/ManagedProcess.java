@@ -251,21 +251,13 @@ public class ManagedProcess {
         FileCopyUtils.copy(String.valueOf(exitCode).getBytes(), code);
 
         if (exitCode != 0) {
-            boolean killed = false;
             File signalFile = new File(workingDir + "/SIGNAL");
             if (signalFile.exists()) {
-                String signal = FileCopyUtils.copyToString(new FileReader(signalFile));
-                if (ClientStatus.KILLED.equals(signal)) {
-                    killed = true;
-                }
-            }
-            if (!killed) {
+                logger.warn("프로세스가 정상적으로 종료되었습니다. 종료코드 : {}", exitCode);
+            } else {
                 logger.warn("프로세스의 종료 코드는 {}입니다.", exitCode);
                 throw new ServiceException(exitCode, errorGobbler.getRecentLog());
-            } else {
-                logger.warn("프로세스가 정상적으로 종료되었습니다. 종료코드 : {}", exitCode);
             }
-
         }
     }
 

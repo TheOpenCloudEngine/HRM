@@ -15,9 +15,7 @@ import org.springframework.context.ApplicationContext;
 import org.springframework.scheduling.quartz.QuartzJobBean;
 import org.springframework.util.FileCopyUtils;
 
-import java.io.BufferedReader;
-import java.io.File;
-import java.io.InputStreamReader;
+import java.io.*;
 import java.util.List;
 
 /**
@@ -41,34 +39,43 @@ public class StopJob extends QuartzJobBean {
             List<ClientJob> clientJobs = clientJobService.selectStopping();
 
             for (ClientJob clientJob : clientJobs) {
-                String killLog = "";
+                String signal = "";
+                File killLogFile = new File(clientJob.getWorkingDir() + "/kill.log");
+                if (!killLogFile.exists()) {
+                    killLogFile.createNewFile();
+                }
+                FileOutputStream out = new FileOutputStream(killLogFile);
                 try {
-                    /**
-                     * 킬 시그널을 남겨 AbstractTask 에서 타스크 실행 후 실패처리를 하지 않도록 한다.
-                     */
-                    String signal = ClientStatus.KILLED;
-                    FileCopyUtils.copy(signal.getBytes(), new File(clientJob.getWorkingDir() + "/SIGNAL"));
-
                     String pid = clientJob.getPid();
                     String pidKillCmd = "kill -9 " + pid;
-                    killLog += this.runProcess(pidKillCmd, "hrm");
+                    this.runProcess(pidKillCmd, out, "hrm");
 
                     List<String> applicationIds = clientJob.getApplicationIds();
                     for (String applicationId : applicationIds) {
                         String yarnKillCmd = "yarn application -kill " + applicationId;
-                        killLog += this.runProcess(yarnKillCmd, "yarn");
+                        this.runProcess(yarnKillCmd, out, "yarn");
                     }
 
                     List<String> mapreduceIds = clientJob.getMapreduceIds();
                     for (String mapreduceId : mapreduceIds) {
                         String jobKillCmd = "hadoop job -kill " + mapreduceId;
-                        killLog += this.runProcess(jobKillCmd, "mr");
+                        this.runProcess(jobKillCmd, out, "mr");
                     }
+                    signal = ClientStatus.KILLED;
                 } catch (Exception ex) {
+                    signal = ClientStatus.KILL_FAIL;
                     ex.printStackTrace();
                 } finally {
-                    clientJob.setStatus(ClientStatus.KILLED);
-                    clientJob.setKilllog(killLog);
+                    if (out != null) {
+                        out.close();
+                    }
+                    File signalFile = new File(clientJob.getWorkingDir() + "/SIGNAL");
+                    if (signalFile.exists()) {
+                        signalFile.delete();
+                    }
+                    FileCopyUtils.copy(signal.getBytes(), new File(clientJob.getWorkingDir() + "/SIGNAL"));
+                    clientJob.setStatus(signal);
+                    clientJob.setKilllog(FileCopyUtils.copyToString(new FileReader(killLogFile)));
                     clientJobService.updateById(clientJob);
                 }
             }
@@ -78,10 +85,10 @@ public class StopJob extends QuartzJobBean {
         }
     }
 
-    private String runProcess(String cmd, String type) {
+    private void runProcess(String cmd, OutputStream out, String type){
         Process pidProcess = null;
         String log = "";
-        String line;
+        String closing = "";
         switch (type) {
             case "hrm":
                 log += "============================================================" + "\n";
@@ -107,28 +114,41 @@ public class StopJob extends QuartzJobBean {
 
         log += "\n Stop cmd execute : " + cmd + "\n";
         try {
+            out.write(log.getBytes());
+
             Process p = Runtime.getRuntime().exec(cmd);
-            BufferedReader bri = new BufferedReader(new InputStreamReader(p.getInputStream()));
-            BufferedReader bre = new BufferedReader(new InputStreamReader(p.getErrorStream()));
-            while ((line = bri.readLine()) != null) {
-                log += line + "\n";
+            InputStream logStream = p.getInputStream();
+            InputStream errStream = p.getErrorStream();
+
+            byte[] b = new byte[1024];
+            int numBytes = 0;
+            while ((numBytes = logStream.read(b)) > 0) {
+                out.write(b, 0, numBytes);
             }
-            bri.close();
-            while ((line = bre.readLine()) != null) {
-                log += line + "\n";
+            logStream.close();
+
+            byte[] c = new byte[1024];
+            int errBytes = 0;
+            while ((errBytes = errStream.read(b)) > 0) {
+                out.write(c, 0, errBytes);
             }
-            bre.close();
+            errStream.close();
             p.waitFor();
-            log += "\n" + "Stop cmd result : Stop succeed \n\n";
+
+            closing += "\n" + "Stop cmd result : Stop succeed \n\n";
 
         } catch (Exception ex) {
             ex.printStackTrace();
-            log += "\n" + "Stop cmd result : Stop Failed \n\n";
+            closing += "\n" + "Stop cmd result : Stop Failed \n\n";
         } finally {
+            try{
+                out.write(closing.getBytes());
+            }catch (IOException ex){
+                ex.printStackTrace();
+            }
             if (pidProcess != null) {
                 pidProcess.destroy();
             }
-            return log;
         }
     }
 }

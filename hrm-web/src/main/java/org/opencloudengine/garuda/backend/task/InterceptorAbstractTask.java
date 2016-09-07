@@ -19,6 +19,7 @@ package org.opencloudengine.garuda.backend.task;
 import com.fasterxml.jackson.databind.ObjectMapper;
 import org.opencloudengine.garuda.model.clientJob.ClientStatus;
 import org.opencloudengine.garuda.util.ExceptionUtils;
+import org.opencloudengine.garuda.util.StringUtils;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 
@@ -39,12 +40,24 @@ public abstract class InterceptorAbstractTask extends AbstractTask {
             preRunClientJob();
             runTask();
             getData();
-            if (ClientStatus.KILLED.equals(clientJob.getSignal())) {
-                updateClientJobAsKilled();
+            /**
+             * 시그널 데이터가 있을 경우 처리.
+             */
+            if (ClientStatus.STOPPING.equals(clientJob.getSignal())) {
+
+                updateClientJobAs(ClientStatus.STOPPING);
+            } else if (ClientStatus.KILLED.equals(clientJob.getSignal())) {
+
+                updateClientJobAs(ClientStatus.KILLED);
+            } else if (ClientStatus.KILL_FAIL.equals(clientJob.getSignal())) {
+
+                updateClientJobAs(ClientStatus.KILL_FAIL);
             } else if ("0".equals(clientJob.getExitCode())) {
-                updateClientJobAsFinished();
+
+                updateClientJobAs(ClientStatus.FINISHED);
             } else {
-                updateClientJobAsFailed();
+
+                updateClientJobAs(ClientStatus.FAILED);
             }
         } catch (Exception ex) {
             getData();
@@ -52,7 +65,7 @@ public abstract class InterceptorAbstractTask extends AbstractTask {
             clientJob.setException(ExceptionUtils.getFullStackTrace(ex));
             if (ex.getCause() != null) clientJob.setCause(ex.getCause().getMessage());
             try {
-                updateClientJobAsFailed();
+                updateClientJobAs(ClientStatus.FAILED);
             } catch (Exception e) {
                 logger.warn("You can not save clientJob information.", e);
             }
@@ -88,25 +101,10 @@ public abstract class InterceptorAbstractTask extends AbstractTask {
 
     public abstract void runTask() throws Exception;
 
-
-    private void updateClientJobAsFinished() {
-        clientJob.setStatus(ClientStatus.FINISHED);
+    public void updateClientJobAs(String status) {
+        clientJob.setStatus(status);
         clientJob = clientJobService.updateById(clientJob);
 
-        //TODO 서비스 훅이 있다면 잡이 성공하였음을 통지한다.
-    }
-
-    public void updateClientJobAsFailed() {
-        clientJob.setStatus(ClientStatus.FAILED);
-        clientJob = clientJobService.updateById(clientJob);
-
-        //TODO 서비스 훅이 있다면 잡이 실패하였음을 통지한다.
-    }
-
-    public void updateClientJobAsKilled() {
-        clientJob.setStatus(ClientStatus.KILLED);
-        clientJob = clientJobService.updateById(clientJob);
-
-        //TODO 서비스 훅이 있다면 잡이 실패하였음을 통지한다.
+        //TODO 서비스 훅이 있다면 통지한다.
     }
 }
