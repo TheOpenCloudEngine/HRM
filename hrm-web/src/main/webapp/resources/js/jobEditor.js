@@ -247,7 +247,8 @@ $(function () {
 
     var controller = {
         //baseUrl: 'http://52.78.88.87:8080',
-        baseUrl: 'http://localhost:8080',
+        //baseUrl: 'http://localhost:8080',
+        baseUrl: '',
         maxTab: 7,
         async: true,
         metadata: {},
