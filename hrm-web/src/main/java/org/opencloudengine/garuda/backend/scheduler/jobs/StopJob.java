@@ -33,7 +33,7 @@ public class StopJob extends QuartzJobBean {
     @Override
     protected void executeInternal(JobExecutionContext jobExecutionContext) throws JobExecutionException {
         try {
-            logger.debug("Now check the stopping jobs of HRM.");
+            //logger.debug("Now check the stopping jobs of HRM.");
             ApplicationContext applicationContext = ApplicationContextRegistry.getApplicationContext();
             ClientJobService clientJobService = applicationContext.getBean(ClientJobService.class);
             List<ClientJob> clientJobs = clientJobService.selectStopping();

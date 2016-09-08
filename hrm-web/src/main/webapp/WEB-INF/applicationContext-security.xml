@@ -33,18 +33,14 @@
 
         <logout logout-url="/auth/logout" invalidate-session="true" logout-success-url="/auth/login"/>
 
-        <intercept-url pattern="/my/**" access="hasAnyRole('ROLE_USER','ROLE_ADMIN')"/>
-        <intercept-url pattern="/management/**" access="hasAnyRole('ROLE_USER','ROLE_ADMIN')"/>
-        <intercept-url pattern="/console/**" access="hasAnyRole('ROLE_USER','ROLE_ADMIN')"/>
-        <intercept-url pattern="/license/**" access="hasAnyRole('ROLE_USER','ROLE_ADMIN')"/>
-        <intercept-url pattern="/shop/**" access="hasAnyRole('ROLE_USER','ROLE_ADMIN')"/>
-        <intercept-url pattern="/shop/**" access="hasAnyRole('ROLE_USER','ROLE_ADMIN')"/>
+        <intercept-url pattern="/hdfs/**" access="hasAnyRole('ROLE_USER','ROLE_ADMIN')"/>
+        <intercept-url pattern="/eco/**" access="hasAnyRole('ROLE_USER','ROLE_ADMIN')"/>
+        <intercept-url pattern="/job/**" access="hasAnyRole('ROLE_USER','ROLE_ADMIN')"/>
         <custom-filter ref="sessionManagementFilter" before="SESSION_MANAGEMENT_FILTER"/>
     </http>
 
     <beans:bean id="csrfSecurityRequestMatcher"
                 class="org.opencloudengine.garuda.web.security.CsrfSecurityRequestMatcher">
-
     </beans:bean>
 
     <beans:bean id="authenticationFilter"

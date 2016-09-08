@@ -57,6 +57,10 @@ public class SessionFilter implements Filter {
         HttpServletRequest req = (HttpServletRequest) request;
         HttpSession session = req.getSession(false);
 
+        if(session == null){
+            filterChain.doFilter(request, response);
+        }
+
         //session에 User 객체가 있는경우 SessionUtils 유저 등록
         if (session != null && session.getAttribute("user") != null) {
             User user = (User) session.getAttribute("user");

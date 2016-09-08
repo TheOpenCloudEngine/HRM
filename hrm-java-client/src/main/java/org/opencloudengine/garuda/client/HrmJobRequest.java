@@ -123,14 +123,21 @@ public class HrmJobRequest {
             portUrl = ":" + this.port;
         }
         String url = this.schema + "://" + this.host + portUrl + this.basePath + "/" + jobType;
+        System.out.println("url" + url);
 
         Map<String, String> headers = new HashMap();
         headers.put("Content-Type", "application/json");
-        headers.put("Cache-Control", "no-cache");
+        //headers.put("Cache-Control", "no-cache");
 
         HttpResponse response = httpUtils.makeRequest("POST", url, marshal, headers);
         HttpEntity entity = response.getEntity();
         String responseText = EntityUtils.toString(entity);
+        System.out.println("responseText "  + responseText);
+        HttpResponse post = httpUtils.makeRequest("POST", url, marshal, headers);
+        HttpEntity entity2 = post.getEntity();
+        String responseText2 = EntityUtils.toString(entity2);
+        System.out.println("responseText2 "  + responseText2);
+
         Map unmarshal = JsonUtils.unmarshal(responseText);
         ObjectMapper objectMapper = new ObjectMapper();
         return objectMapper.convertValue(unmarshal, ClientJob.class);
