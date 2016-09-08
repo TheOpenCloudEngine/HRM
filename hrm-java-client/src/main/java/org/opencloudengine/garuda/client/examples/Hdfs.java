@@ -1,6 +1,7 @@
 package org.opencloudengine.garuda.client.examples;
 
 import org.opencloudengine.garuda.client.HrmJobRequest;
+import org.opencloudengine.garuda.model.clientJob.ClientJob;
 import org.opencloudengine.garuda.model.request.HiveRequest;
 import org.opencloudengine.garuda.util.HttpUtils;
 
@@ -9,11 +10,11 @@ import org.opencloudengine.garuda.util.HttpUtils;
  */
 public class Hdfs {
     public static void main(String[] args) throws Exception {
-        HrmJobRequest request = new HrmJobRequest();
+        HrmJobRequest request = new HrmJobRequest("localhost", 8080);
         HiveRequest hive = new HiveRequest();
-        hive.setSql("bbb");
+        hive.setSql("Show tables;");
         request.setRequest(hive);
-        String send = request.send();
-        System.out.println(send);
+        ClientJob job = request.createJob();
+        System.out.println(job);
     }
 }

@@ -39,43 +39,43 @@ public class ClientJobRestController {
 
     @RequestMapping(value = "/hive", method = RequestMethod.POST)
     public void runHive(HttpServletResponse response, @RequestBody HiveRequest hiveRequest,
-                        @RequestParam(value = "executeFrom", defaultValue = "") String executeFrom) throws IOException {
+                        @RequestParam(value = "executeFrom", defaultValue = "", required = false) String executeFrom) throws IOException {
         this.processClientJob(response, hiveRequest, executeFrom);
     }
 
     @RequestMapping(value = "/pig", method = RequestMethod.POST)
     public void runPig(HttpServletResponse response, @RequestBody PigRequest pigRequest,
-                       @RequestParam(value = "executeFrom", defaultValue = "") String executeFrom) throws IOException {
+                       @RequestParam(value = "executeFrom", defaultValue = "", required = false) String executeFrom) throws IOException {
         this.processClientJob(response, pigRequest, executeFrom);
     }
 
     @RequestMapping(value = "/mr", method = RequestMethod.POST)
     public void runMr(HttpServletResponse response, @RequestBody MrRequest mrRequest,
-                      @RequestParam(value = "executeFrom", defaultValue = "") String executeFrom) throws IOException {
+                      @RequestParam(value = "executeFrom", defaultValue = "", required = false) String executeFrom) throws IOException {
         this.processClientJob(response, mrRequest, executeFrom);
     }
 
     @RequestMapping(value = "/spark", method = RequestMethod.POST)
     public void runSpark(HttpServletResponse response, @RequestBody SparkRequest sparkRequest,
-                         @RequestParam(value = "executeFrom", defaultValue = "") String executeFrom) throws IOException {
+                         @RequestParam(value = "executeFrom", defaultValue = "", required = false) String executeFrom) throws IOException {
         this.processClientJob(response, sparkRequest, executeFrom);
     }
 
     @RequestMapping(value = "/python", method = RequestMethod.POST)
     public void runPython(HttpServletResponse response, @RequestBody PythonRequest pythonRequest,
-                          @RequestParam(value = "executeFrom", defaultValue = "") String executeFrom) throws IOException {
+                          @RequestParam(value = "executeFrom", defaultValue = "", required = false) String executeFrom) throws IOException {
         this.processClientJob(response, pythonRequest, executeFrom);
     }
 
     @RequestMapping(value = "/shell", method = RequestMethod.POST)
     public void runShell(HttpServletResponse response, @RequestBody ShellRequest shellRequest,
-                         @RequestParam(value = "executeFrom", defaultValue = "") String executeFrom) throws IOException {
+                         @RequestParam(value = "executeFrom", defaultValue = "", required = false) String executeFrom) throws IOException {
         this.processClientJob(response, shellRequest, executeFrom);
     }
 
     @RequestMapping(value = "/java", method = RequestMethod.POST)
     public void runJava(HttpServletResponse response, @RequestBody JavaRequest javaRequest,
-                        @RequestParam(value = "executeFrom", defaultValue = "") String executeFrom) throws IOException {
+                        @RequestParam(value = "executeFrom", defaultValue = "", required = false) String executeFrom) throws IOException {
         this.processClientJob(response, javaRequest, executeFrom);
     }
 
