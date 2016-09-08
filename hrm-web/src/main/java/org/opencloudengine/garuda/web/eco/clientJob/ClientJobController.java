@@ -165,7 +165,7 @@ public class ClientJobController {
     }
 
 
-    @RequestMapping(value = "/curl", method = RequestMethod.GET)
+    @RequestMapping(value = "/curl", method = RequestMethod.POST)
     public ResponseEntity<String> getCurl(HttpServletRequest req, @RequestBody Map map,
                                           @RequestParam(value = "jobType", defaultValue = "") String jobType) {
         try {

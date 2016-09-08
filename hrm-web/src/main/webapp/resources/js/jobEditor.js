@@ -316,7 +316,36 @@ $(function () {
                 killArea.parent().parent().show();
             });
 
+            $('#curlBtn').click(function () {
+                me.openCurl();
+            });
+
             me.intervalTrigger();
+        },
+        /**
+         * 폼의 정보를 취합하여 curl 명령어로 변환한다.
+         */
+        openCurl: function () {
+            var me = this;
+            var formData = me.getFormData();
+            var modal = $('#curlModal');
+            modal.find('[name=body]').val('');
+            $.ajax({
+                type: "POST",
+                url: "/eco/clientJob/curl?jobType=" + jobType,
+                data: JSON.stringify(formData),
+                dataType: "text",
+                contentType: "application/json; charset=utf-8",
+                success: function (response) {
+                    modal.find('[name=body]').val(response);
+                    modal.modal({
+                        show: true
+                    });
+                },
+                error: function (request, status, errorThrown) {
+                    msgBox('Failed to convert curl');
+                }
+            });
         },
         /**
          * 현재 활성화되어있는 탭의 잡아이디가 존재한다면 클라이언트잡을 불러와서
@@ -882,8 +911,33 @@ $(function () {
                 if (tabCount >= 7) {
                     $('.history-tab').first().remove();
                 }
-                tab = $('<li class="history-tab"><a style="width: 80px;overflow: hidden;white-space: nowrap;text-overflow: ellipsis;display: block;" href="#editorPanel" data-toggle="tab" aria-expanded="false"></a></li>');
+                tab = $('<li class="history-tab">' +
+                    '<a style="width: 80px;overflow: hidden;white-space: nowrap;text-overflow: ellipsis;display: block;" href="#editorPanel" data-toggle="tab" aria-expanded="false"></a>' +
+                    '<div name="closeBtn" style="position:absolute;top:-15px;right:0%"><i class="fa fa-times-circle"></i></div>' +
+                    '</li>');
                 tab.insertBefore($('#history-tab-plus'));
+                tab.find('[name=closeBtn]').click(function (event) {
+                    event.stopPropagation();
+                    var index = tab.index();
+                    var alltabs = me.getAlltabs();
+                    var nextTab;
+                    var nextIndex;
+                    if (index == 0) {
+                        nextIndex = index + 1;
+                    } else if (index > 0) {
+                        nextIndex = index - 1;
+                    }
+                    alltabs.each(function () {
+                        if($(this).index() == nextIndex){
+                            nextTab = $(this);
+                        }
+                    });
+                    console.log(nextIndex);
+                    if(nextTab){
+                        nextTab.click();
+                    }
+                    tab.remove();
+                })
             }
             /**
              * 데이터 바인딩 과정:
@@ -896,8 +950,12 @@ $(function () {
             tab.click(function () {
                 me.getAlltabs().each(function () {
                     $(this).data('active', false);
+                    $(this).removeClass('active');
+                    $(this).find('[name=closeBtn]').hide();
                 });
                 tab.data('active', true);
+                $(this).addClass('active');
+                tab.find('[name=closeBtn]').show();
                 var collectionData = tab.data('collection');
                 var clientJobData = tab.data('clientJob');
                 if (collectionData) {

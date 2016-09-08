@@ -274,4 +274,27 @@
         </div>
     </div>
 </div>
+<div class="modal fade" id="curlModal" tabindex="-1" role="dialog" aria-labelledby="myModalLabel"
+     aria-hidden="true">
+    <div class="modal-dialog">
+        <div class="modal-content">
+            <div class="modal-header">
+                <button aria-hidden="true" data-dismiss="modal" class="close" type="button">×</button>
+                <h4 class="modal-title">Curl Command</h4>
+            </div>
+            <div class="modal-body">
+                <form action="#" class="form-horizontal" role="form">
+                    <div class="form-group">
+                        <div class="col-md-12">
+                            <textarea name="body" rows="12" class="form-control" readonly></textarea>
+                        </div>
+                    </div>
+                </form>
+            </div>
+            <div class="modal-footer">
+                <button class="btn-u" type="button" name="close">Close</button>
+            </div>
+        </div>
+    </div>
+</div>
 </html>
