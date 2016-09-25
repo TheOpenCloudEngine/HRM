@@ -19,7 +19,7 @@ public class Hdfs {
          * HrmJobRequest 세팅
          */
         //HrmJobRequest request = new HrmJobRequest("52.78.88.87", 8080);
-        HrmJobRequest request = new HrmJobRequest("52.78.88.87", 8080);
+        HrmJobRequest request = new HrmJobRequest("localhost", 8080);
 
         /**
          * Hdfs 컨트롤

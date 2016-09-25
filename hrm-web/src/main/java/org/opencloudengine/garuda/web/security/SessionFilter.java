@@ -57,12 +57,13 @@ public class SessionFilter implements Filter {
         HttpServletRequest req = (HttpServletRequest) request;
         HttpSession session = req.getSession(false);
 
-        if(session == null){
+        //session 이 없는 경우
+        if (session == null) {
             filterChain.doFilter(request, response);
         }
 
         //session에 User 객체가 있는경우 SessionUtils 유저 등록
-        if (session != null && session.getAttribute("user") != null) {
+        else if (session != null && session.getAttribute("user") != null) {
             User user = (User) session.getAttribute("user");
 
             SessionUtils.put(user);
@@ -73,9 +74,9 @@ public class SessionFilter implements Filter {
         //session에 User 객체가 없는경우
         else {
             SecurityContext securityContext = (SecurityContext) session.getAttribute("SPRING_SECURITY_CONTEXT");
-            if(securityContext == null){
+            if (securityContext == null) {
                 filterChain.doFilter(request, response);
-            }else{
+            } else {
                 Authentication auth = securityContext.getAuthentication();
                 //로그인에 성공한 상태인 경우에 한해 session에  User 객체를 넣어준다.
                 if (!(auth instanceof AnonymousAuthenticationToken) && auth != null) {
