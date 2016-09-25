@@ -32,10 +32,10 @@ public class HdfsRestController {
 
     @RequestMapping(value = "/status/list", method = RequestMethod.GET, produces = "application/json")
     public ResponseEntity<HdfsListInfo> list(HttpServletRequest request,
-                                                   @RequestParam(defaultValue = "") String path,
-                                                   @RequestParam(defaultValue = "1") int start,
-                                                   @RequestParam(defaultValue = "10") int end,
-                                                   @RequestParam(defaultValue = "") String filter) {
+                                             @RequestParam(defaultValue = "") String path,
+                                             @RequestParam(defaultValue = "1") int start,
+                                             @RequestParam(defaultValue = "10") int end,
+                                             @RequestParam(defaultValue = "") String filter) {
         try {
             HdfsListInfo hdfsListInfo = hdfsService.list(path, start, end, filter);
             return new ResponseEntity<>(hdfsListInfo, HttpStatus.OK);
@@ -69,7 +69,7 @@ public class HdfsRestController {
             hdfsService.createFile(path, request.getInputStream(), owner, group, permission, overwrite);
 
             HttpHeaders headers = new HttpHeaders();
-            headers.setLocation(ucBuilder.path("/rest/v1/file?path={path}").buildAndExpand(path).toUri());
+            headers.setLocation(ucBuilder.path("/rest/v1/hdfs/file?path={path}").buildAndExpand(path).toUri());
             return new ResponseEntity<>(headers, HttpStatus.CREATED);
         } catch (Exception ex) {
             ex.printStackTrace();
@@ -85,7 +85,7 @@ public class HdfsRestController {
             hdfsService.appendFile(path, request.getInputStream());
 
             HttpHeaders headers = new HttpHeaders();
-            headers.setLocation(ucBuilder.path("/rest/v1/file?path={path}").buildAndExpand(path).toUri());
+            headers.setLocation(ucBuilder.path("/rest/v1/hdfs/file?path={path}").buildAndExpand(path).toUri());
             return new ResponseEntity<>(headers, HttpStatus.OK);
         } catch (Exception ex) {
             ex.printStackTrace();
@@ -133,7 +133,7 @@ public class HdfsRestController {
             hdfsService.createEmptyFile(path, owner, group, permission, overwrite);
 
             HttpHeaders headers = new HttpHeaders();
-            headers.setLocation(ucBuilder.path("/rest/v1/file?path={path}").buildAndExpand(path).toUri());
+            headers.setLocation(ucBuilder.path("/rest/v1/hdfs/file?path={path}").buildAndExpand(path).toUri());
             return new ResponseEntity<>(headers, HttpStatus.CREATED);
         } catch (Exception ex) {
             ex.printStackTrace();
@@ -152,7 +152,7 @@ public class HdfsRestController {
             hdfsService.createDirectory(path, owner, group, permission);
 
             HttpHeaders headers = new HttpHeaders();
-            headers.setLocation(ucBuilder.path("/rest/v1/file?path={path}").buildAndExpand(path).toUri());
+            headers.setLocation(ucBuilder.path("/rest/v1/hdfs/file?path={path}").buildAndExpand(path).toUri());
             return new ResponseEntity<>(headers, HttpStatus.CREATED);
         } catch (Exception ex) {
             ex.printStackTrace();
@@ -170,7 +170,7 @@ public class HdfsRestController {
             String newPath = path1.toUri().getPath().toString();
 
             HttpHeaders headers = new HttpHeaders();
-            headers.setLocation(ucBuilder.path("/rest/v1/file?path={path}").buildAndExpand(newPath).toUri());
+            headers.setLocation(ucBuilder.path("/rest/v1/hdfsfile?path={path}").buildAndExpand(newPath).toUri());
             return new ResponseEntity<>(headers, HttpStatus.OK);
         } catch (Exception ex) {
             ex.printStackTrace();

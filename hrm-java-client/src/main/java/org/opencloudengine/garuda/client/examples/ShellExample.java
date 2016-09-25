@@ -3,15 +3,13 @@ package org.opencloudengine.garuda.client.examples;
 
 import org.opencloudengine.garuda.client.HrmJobRequest;
 import org.opencloudengine.garuda.model.clientJob.ClientJob;
-import org.opencloudengine.garuda.model.clientJob.ClientResult;
-import org.opencloudengine.garuda.model.request.HiveRequest;
+import org.opencloudengine.garuda.model.request.PythonRequest;
 import org.opencloudengine.garuda.model.request.ShellRequest;
-import org.opencloudengine.garuda.model.request.SparkRequest;
 
 /**
  * Created by uengine on 2016. 9. 8..
  */
-public class Hdfs {
+public class ShellExample {
     public static void main(String[] args) throws Exception {
 
 
@@ -19,21 +17,15 @@ public class Hdfs {
          * HrmJobRequest 세팅
          */
         HrmJobRequest request = new HrmJobRequest("52.78.88.87", 8080);
-        //HrmJobRequest request = new HrmJobRequest("localhost", 8080);
-
-        /**
-         * Hdfs 컨트롤
-         */
 
 
         /**
-         * 하이브 잡 실행
+         * 배쉬 쉘 잡 실행
          */
-        HiveRequest hiveRequest = new HiveRequest();
-        hiveRequest.setDoAs("ubuntu");
-        hiveRequest.setSql("select count(*) from invites;");
+        ShellRequest shellRequest = new ShellRequest();
+        shellRequest.setScript("pwd");
 
-        request.setRequest(hiveRequest);
+        request.setRequest(shellRequest);
         ClientJob job = request.createJob();
 
         //잡 아이디
@@ -66,18 +58,13 @@ public class Hdfs {
         //로그
         runningJob.getStdout();
 
-        //(하이브 only) 결과받기
-        ClientResult clientResult = runningJob.getClientResult();
-        clientResult.getCsv();
-
-
-
         /**
          * 잡 Kill
          */
         ClientJob killJob = request.killJob(clientJobId);
 
         //종료 로그
-        killJob.getKillLog();
+        String killLog = killJob.getKillLog();
+        System.out.println(killLog);
     }
 }
