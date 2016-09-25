@@ -94,12 +94,6 @@ public abstract class InterceptorAbstractTask extends AbstractTask {
 
     private void preRunClientJob() {
 
-        //스테이터스 RUNNING 등록
-        clientJob.setStatus(ClientStatus.RUNNING);
-
-        //저장소 인서트
-        clientJob = clientJobService.insert(clientJob);
-
         //TODO 서비스 훅이 있다면 잡이 시작되었음을 통지한다.
     }
 

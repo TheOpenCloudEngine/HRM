@@ -96,8 +96,11 @@ public class ClientJobServiceImpl implements ClientJobService {
         //워킹 디렉토리 등록
         clientJob.setWorkingDir(clientJobBasePath(config.getProperty("application.home"), clientJobId, currentDate));
 
-        //스테이터스 등록
-        clientJob.setStatus(ClientStatus.STANDBY);
+        //스테이터스 RUNNING 등록
+        clientJob.setStatus(ClientStatus.RUNNING);
+
+        //저장소 인서트
+        clientJob = this.insert(clientJob);
 
         //클라이언트 잡 시작
         Map params = new HashMap();
