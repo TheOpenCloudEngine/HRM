@@ -1,44 +1,83 @@
 package org.opencloudengine.garuda.client.examples;
 
-import org.apache.http.HttpEntity;
-import org.apache.http.HttpResponse;
-import org.apache.http.client.HttpClient;
-import org.apache.http.client.methods.HttpGet;
-import org.apache.http.client.methods.HttpPost;
-import org.apache.http.entity.StringEntity;
-import org.apache.http.impl.client.DefaultHttpClient;
-import org.apache.http.util.EntityUtils;
+
 import org.opencloudengine.garuda.client.HrmJobRequest;
 import org.opencloudengine.garuda.model.clientJob.ClientJob;
+import org.opencloudengine.garuda.model.clientJob.ClientResult;
 import org.opencloudengine.garuda.model.request.HiveRequest;
 import org.opencloudengine.garuda.model.request.ShellRequest;
-import org.opencloudengine.garuda.util.HttpUtils;
-import org.opencloudengine.garuda.util.JsonUtils;
+import org.opencloudengine.garuda.model.request.SparkRequest;
 
 /**
  * Created by uengine on 2016. 9. 8..
  */
 public class Hdfs {
     public static void main(String[] args) throws Exception {
-//        HrmJobRequest request = new HrmJobRequest("localhost", 8080);
-//        ShellRequest shellRequest = new ShellRequest();
-//        shellRequest.setScript("pwd");
-//        request.setRequest(shellRequest);
-//        ClientJob job = request.createJob();
-//        System.out.println(job);
 
-        ShellRequest shellRequest = new ShellRequest();
-        shellRequest.setScript("pwd");
-        String marshal = JsonUtils.marshal(shellRequest);
-        HttpClient client = new DefaultHttpClient();
-        HttpPost post = new HttpPost("http://52.78.88.87:8080/rest/v1/clientJob/shell");
 
-        HttpGet get = new HttpGet("http://52.78.88.87:8080/rest/v1/clientJob/job/a86b97b7-ec32-47ae-b5ee-cf24223eebb1");
-        HttpResponse response = client.execute(get);
-//        HttpEntity entity = new StringEntity(marshal);
-//        post.setEntity(entity);
-        //HttpResponse response = client.execute(post);
-        String result = EntityUtils.toString(response.getEntity());
-        System.out.println("result : " + result);
+        /**
+         * HrmJobRequest 세팅
+         */
+        //HrmJobRequest request = new HrmJobRequest("52.78.88.87", 8080);
+        HrmJobRequest request = new HrmJobRequest("52.78.88.87", 8080);
+
+        /**
+         * Hdfs 컨트롤
+         */
+
+
+        /**
+         * 하이브 잡 실행
+         */
+        HiveRequest hiveRequest = new HiveRequest();
+        hiveRequest.setDoAs("ubuntu");
+        hiveRequest.setSql("select count(*) from invites;");
+
+        request.setRequest(hiveRequest);
+        ClientJob job = request.createJob();
+
+        //잡 아이디
+        String clientJobId = job.getClientJobId();
+
+
+        /**
+         * 잡 진행상태 보기
+         */
+        ClientJob runningJob = request.getJob(clientJobId);
+
+        //진행상태
+        runningJob.getStatus();
+
+        //얀 어플리케이션 아이디 목록
+        runningJob.getApplicationIds();
+
+        //맵리듀스 아이디 목록
+        runningJob.getMapreduceIds();
+
+        //잡 시작시간
+        runningJob.getStartDate();
+
+        //실행 스크립트
+        runningJob.getExecuteScript();
+
+        //실행 커맨드
+        runningJob.getExecuteCli();
+
+        //로그
+        runningJob.getStdout();
+
+        //(하이브 only) 결과받기
+        ClientResult clientResult = runningJob.getClientResult();
+        clientResult.getCsv();
+
+
+
+        /**
+         * 잡 Kill
+         */
+        ClientJob killJob = request.killJob(clientJobId);
+
+        //종료 로그
+        killJob.getKillLog();
     }
 }

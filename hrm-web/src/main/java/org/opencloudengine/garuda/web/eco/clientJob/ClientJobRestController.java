@@ -80,6 +80,7 @@ public class ClientJobRestController {
     }
 
     private void processClientJob(HttpServletResponse response, BasicClientRequest clientRequest, String executeFrom) throws IOException {
+        logger.info("processClientJob : {}", JsonUtils.marshal(clientRequest));
         try {
             String clientJobId = clientRequest.getClientJobId();
             if (!StringUtils.isEmpty(clientJobId)) {
@@ -125,7 +126,7 @@ public class ClientJobRestController {
 
     @RequestMapping(value = "/kill/{clientJobId}", method = RequestMethod.DELETE)
     public ResponseEntity<ClientJob> killClientJob(HttpServletRequest request,
-                                                  @PathVariable("clientJobId") String clientJobId) {
+                                                   @PathVariable("clientJobId") String clientJobId) {
         try {
             ClientJob clientJob = clientJobService.selectByClientJobId(clientJobId);
             if (clientJob == null) {

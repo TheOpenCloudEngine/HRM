@@ -36,7 +36,7 @@ public class HrmJobRequest {
 
     private Integer port;
 
-    private String basePath = "/rest/v1/clientJob";
+    private String basePath = "/rest/v1";
 
     public String getSchema() {
         return schema;
@@ -118,25 +118,41 @@ public class HrmJobRequest {
         String marshal = JsonUtils.marshal(map);
 
         HttpUtils httpUtils = new HttpUtils();
+        String url = createBaseUrl() + "/clientJob/" + jobType;
+
+        HttpResponse response = httpUtils.makeRequest("POST", url, marshal, createHeaders());
+        return this.responseToClientJob(response);
+    }
+
+    public ClientJob getJob(String clientJobId) throws Exception {
+        HttpUtils httpUtils = new HttpUtils();
+        HttpResponse response = httpUtils.makeRequest("GET", createBaseUrl() + "/clientJob/job/" + clientJobId, null, createHeaders());
+        return this.responseToClientJob(response);
+    }
+
+    public ClientJob killJob(String clientJobId) throws Exception {
+        HttpUtils httpUtils = new HttpUtils();
+        HttpResponse response = httpUtils.makeRequest("DELETE", createBaseUrl() + "/clientJob/kill/" + clientJobId, null, createHeaders());
+        return this.responseToClientJob(response);
+    }
+
+    private String createBaseUrl() {
         String portUrl = "";
         if (this.port != null) {
             portUrl = ":" + this.port;
         }
-        String url = this.schema + "://" + this.host + portUrl + this.basePath + "/" + jobType;
-        System.out.println("url" + url);
+        return this.schema + "://" + this.host + portUrl + this.basePath;
+    }
 
+    private Map<String, String> createHeaders() {
         Map<String, String> headers = new HashMap();
         headers.put("Content-Type", "application/json");
-        //headers.put("Cache-Control", "no-cache");
+        return headers;
+    }
 
-        HttpResponse response = httpUtils.makeRequest("POST", url, marshal, headers);
+    private ClientJob responseToClientJob(HttpResponse response) throws Exception {
         HttpEntity entity = response.getEntity();
         String responseText = EntityUtils.toString(entity);
-        System.out.println("responseText "  + responseText);
-        HttpResponse post = httpUtils.makeRequest("POST", url, marshal, headers);
-        HttpEntity entity2 = post.getEntity();
-        String responseText2 = EntityUtils.toString(entity2);
-        System.out.println("responseText2 "  + responseText2);
 
         Map unmarshal = JsonUtils.unmarshal(responseText);
         ObjectMapper objectMapper = new ObjectMapper();
