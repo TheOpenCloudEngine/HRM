@@ -212,6 +212,33 @@ Native Client Parameter 는 HRM 이 설치된 Native Client 의 CLI(Command Line
 | arguments  | List<String> | arguments. bin/sh file [arg] ...                                                                   |
 
 
+### Toolbar
+
+ - Send : 잡을 실행합니다.
+ - Save : Collections 잡일 경우 현재 파라미터를 선택된 Collection 에 덮어씁니다.
+ - Save as : 새로운 Collection 잡으로 저장합니다.
+ - Curl : 현재 파라미터들을 Curl 커맨드로 생성해 줍니다.
+ 
+### Collections
+
+콜렌션 메뉴는 작성한 파라미터 내용을 저장하여 재 호출 할 수 있도록 하는 기능입니다.
+
+ - Edit : 콜렉션 이름을 변경합니다.
+ - Duplicate : 콜렉션을 복사합니다.
+ - Delete : 콜렉션을 삭제합니다.
+ 
+## Hdfs Browser
+
+Hdfs 브라우저 메뉴는 Hdfs 슈퍼유저로 관리되는 하둡 파일시트템 매니지먼트 콘솔입니다.
+
+ - New Folder : 새로운 폴더를 생성합니다.
+ - Upload : 파일을 업로드 합니다.
+ - Download : 파일을 다운로드 합니다.
+ - Rename : 이름을 변경합니다.
+ - Owner : 파일의 소유권자 (Owner,Group) 을 변경합니다. Recursive 를 체크할 경우 하위 폴더 및 파일들도 함께 변경합니다.
+ - Permission : 파일의 퍼미션을 변경합니다.(1~755) Recursive 를 체크할 경우 하위 폴더 및 파일들도 함께 변경합니다.
+ 
+
 
 
 
