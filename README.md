@@ -6,9 +6,12 @@
 
 [Native Client Parameters](document/native.md)
 
+[Rest Api](document/api.md)
+
+[Java Api](document/javaApi.md)
+
 [CouchDB Schema And View](document/couchdb-schema.md)
 
-[Rest Api](document/api.md)
 
 ## HRM (Hadoop Remote Management) 
 
