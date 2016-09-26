@@ -26,6 +26,7 @@ public class SparkExample {
          * 스파크 잡 실행
          */
         SparkRequest sparkRequest = new SparkRequest();
+
         sparkRequest.setDoAs("ubuntu");
         sparkRequest.setClassName("org.apache.spark.examples.SparkPi");
         sparkRequest.setApplicationJar("/usr/hdp/2.4.2.0-258/spark/lib/spark-examples*.jar");
@@ -37,6 +38,7 @@ public class SparkExample {
         sparkRequest.setMaster("yarn");
         sparkRequest.setDeployMode("cluster");
 
+        //호출(Send)
         request.setRequest(sparkRequest);
         ClientJob job = request.createJob();
 
@@ -73,10 +75,10 @@ public class SparkExample {
         /**
          * 잡 Kill
          */
-        ClientJob killJob = request.killJob(clientJobId);
-
-        //종료 로그
-        String killLog = killJob.getKillLog();
-        System.out.println(killLog);
+//        ClientJob killJob = request.killJob(clientJobId);
+//
+//        //종료 로그
+//        String killLog = killJob.getKillLog();
+//        System.out.println(killLog);
     }
 }
