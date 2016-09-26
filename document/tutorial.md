@@ -162,7 +162,6 @@ Native Client Parameter 는 HRM 이 설치된 Native Client 의 CLI(Command Line
 | mainClass  | String              | Main class of jar. ex) Usage: hadoop jar <jar> [mainClass] args...                                                          |
 | arguments  | List<String>        | arguments of jar. ex) Usage: hadoop jar <jar> [mainClass] args...                                                           |
 
-
 ### Pig
 
 | 파리미터      | 타입                | 설명                                                                                                    |
@@ -181,7 +180,6 @@ Native Client Parameter 는 HRM 이 설치된 Native Client 의 CLI(Command Line
 | stopOnFailure | boolean             | Aborts execution on the first failed job. default is off. ex) -stop_on_failure                          |
 | noMultiquery  | boolean             | Turn multiquery optimization off. default is on. ex) -no_multiquery                                     |
 | noFetch       | boolean             | Turn fetch optimization off. default is on. ex) -no_fetch                                               |
-
 
 ### Java
 
