@@ -10,8 +10,6 @@
 
 [Java Api](document/javaApi.md)
 
-[CouchDB Schema And View](document/couchdb-schema.md)
-
 
 ## HRM (Hadoop Remote Management) 
 
