@@ -47,7 +47,7 @@ Configuration 메뉴에서 하둡 에코 시스템의 홈 디렉토리와 HDFS �
 
 콘솔 메뉴의 파라미터는 Basic Parameter 와 Native Client Parameter 메뉴로 나뉩니다.
 
-#### Basic Parameter
+### Basic Parameter
 
 Basic Parameter 는 공통 파라미터로서, Job 의 이벤트 훅 및 디폴트 유저를 설정할 수 있습니다. 
 
@@ -57,13 +57,13 @@ Basic Parameter 는 공통 파라미터로서, Job 의 이벤트 훅 및 디폴�
  - doAs (optional) : 잡이 실행되는 동안 적용될 리눅스 시스템의 하둡 사용자 입니다. ex)ubuntu 
  - eventHook (optional) : 잡이 실행되는 동안 status 변화가 생길 때 지정된 url 로 송출합니다.
  
-#### Native Client Parameter
+### Native Client Parameter
 
 Native Client Parameter 는 각 에코 시스템에 특화된 파라미터들입니다.
 
 Native Client Parameter 는 HRM 이 설치된 Native Client 의 CLI(Command Line Interface) 의 파라미터들을 웹으로 구현한 것입니다.
 
-##### Hive
+### Hive
 
 | 파리미터          | 타입                | 설명                                                                                                                        |
 |-------------------|---------------------|-----------------------------------------------------------------------------------------------------------------------------|
@@ -74,7 +74,10 @@ Native Client Parameter 는 HRM 이 설치된 Native Client 의 CLI(Command Line
 | hiveconf          | Map<String, String> | Use value for given property.  ex) --hiveconf <property=value> --hiveconf <property=value>                                  |
 | hivevar           | Map<String, String> | Variable subsitution to apply to hive commands. e.g. --hivevar A=B.   ex) --hivevar <key=value> --hivevar <key=value>       |
 
-##### Spark
+
+### Spark
+
+========= Normal parameters ========
 
 | 파리미터             | 타입                | 설명                                                                                                                                                                                                                                                                                                                                                                |
 |----------------------|---------------------|---------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------|
