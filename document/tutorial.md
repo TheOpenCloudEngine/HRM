@@ -167,20 +167,20 @@ Native Client Parameter 는 HRM 이 설치된 Native Client 의 CLI(Command Line
 
 | 파리미터      | 타입                | 설명                                                                                                    |
 |---------------|---------------------|---------------------------------------------------------------------------------------------------------|
-| script        | String              | The script to execute                                                                                   |
+| script        | String              | The script to execute.                                                                                  |
 | scriptPath    | String              | Path to the script to execute. It overrides script parameter. ex) -file <script path>                   |
-| properties    | Map<String, String> | Key value pair of properties; It will store as a file. ex) -propertyFile <generated property file path> |
+| properties    | Map<String, String> | Key value pair of properties. It will store as a file. ex) -propertyFile <generated property file path> |
 | propertyFile  | String              | Path to property file It overrides properties parameter. ex) -propertyFile <exist property file path>   |
 | log4jconf     | String              | Log4j configuration file, overrides log conf. ex) -log4jconf <conf path>                                |
-| check         | boolean             | Syntax check ex) -check                                                                                 |
+| check         | boolean             | Syntax check. ex) -check                                                                                |
 | param         | Map<String, String> | Key value pair of the form param=val. ex) -param date1=20080201 -param date2=20080202                   |
 | paramPath     | String              | Path to the parameter file. It overrides param parameter. ex) -param_file <parameter file path>         |
 | dryrun        | boolean             | Produces script with substituted parameters. Script is not executed. ex) -dryrun                        |
 | verbose       | boolean             | Print all error messages to screen. ex) -verbose                                                        |
-| warning       | boolean             | Turn warning logging on; also turns warning aggregation off. ex) -warning                               |
-| stopOnFailure | boolean             | Aborts execution on the first failed job; default is off. ex) -stop_on_failure                          |
-| noMultiquery  | boolean             | Turn multiquery optimization off; default is on. ex) -no_multiquery                                     |
-| noFetch       | boolean             | Turn fetch optimization off; default is on. ex) -no_fetch                                               |
+| warning       | boolean             | Turn warning logging on. also turns warning aggregation off. ex) -warning                               |
+| stopOnFailure | boolean             | Aborts execution on the first failed job. default is off. ex) -stop_on_failure                          |
+| noMultiquery  | boolean             | Turn multiquery optimization off. default is on. ex) -no_multiquery                                     |
+| noFetch       | boolean             | Turn fetch optimization off. default is on. ex) -no_fetch                                               |
 
 
 ### Java
