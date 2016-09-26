@@ -145,3 +145,74 @@ Native Client Parameter 는 HRM 이 설치된 Native Client 의 CLI(Command Line
 | archives        | List<String> | Comma separated list of archives to be extracted into the working directory of each executor. ex) --archives ARCHIVES                                                                                                                                                                    |
 | principal       | String       | Principal to be used to login to KDC, while running on secure HDFS. ex) --principal PRINCIPAL                                                                                                                                                                                            |
 | keytab          | String       | The full path to the file that contains the keytab for the principal specified above. This keytab will be copied to the node running the Application Master via the Secure Distributed Cache, for renewing the login tickets and the delegation tokens periodically. ex) --keytab KEYTAB |
+
+
+### Map reduce
+
+| 파리미터   | 타입                | 설명                                                                                                                        |
+|------------|---------------------|-----------------------------------------------------------------------------------------------------------------------------|
+| conf       | String              | specify an application configuration file. ex) -conf <configuration file>                                                   |
+| properties | Map<String, String> | Use value for given property. ex) -D <property=value> -D <property=value>                                                   |
+| fs         | String              | Specify a namenode. ex) -fs <local|namenode:port>                                                                           |
+| jt         | String              | Specify a job tracker. -jt <local|jobtracker:port>                                                                          |
+| files      | List<String>        | Specify comma separated files to be copied to the map reduce cluster. ex) -files <comma separated list of files>            |
+| libjars    | List<String>        | Specify comma separated jar files to include in the classpath. ex) -libjars <comma seperated list of jars>                  |
+| archives   | List<String>        | Specify comma separated archives to be unarchived on the compute machines. ex) -archives <comma separated list of archives> |
+| jar        | String              | Runs a jar file. ex) Usage: hadoop jar <jar> [mainClass] args...                                                            |
+| mainClass  | String              | Main class of jar. ex) Usage: hadoop jar <jar> [mainClass] args...                                                          |
+| arguments  | List<String>        | arguments of jar. ex) Usage: hadoop jar <jar> [mainClass] args...                                                           |
+
+
+### Pig
+
+| 파리미터      | 타입                | 설명                                                                                                    |
+|---------------|---------------------|---------------------------------------------------------------------------------------------------------|
+| script        | String              | The script to execute                                                                                   |
+| scriptPath    | String              | Path to the script to execute. It overrides script parameter. ex) -file <script path>                   |
+| properties    | Map<String, String> | Key value pair of properties; It will store as a file. ex) -propertyFile <generated property file path> |
+| propertyFile  | String              | Path to property file It overrides properties parameter. ex) -propertyFile <exist property file path>   |
+| log4jconf     | String              | Log4j configuration file, overrides log conf. ex) -log4jconf <conf path>                                |
+| check         | boolean             | Syntax check ex) -check                                                                                 |
+| param         | Map<String, String> | Key value pair of the form param=val. ex) -param date1=20080201 -param date2=20080202                   |
+| paramPath     | String              | Path to the parameter file. It overrides param parameter. ex) -param_file <parameter file path>         |
+| dryrun        | boolean             | Produces script with substituted parameters. Script is not executed. ex) -dryrun                        |
+| verbose       | boolean             | Print all error messages to screen. ex) -verbose                                                        |
+| warning       | boolean             | Turn warning logging on; also turns warning aggregation off. ex) -warning                               |
+| stopOnFailure | boolean             | Aborts execution on the first failed job; default is off. ex) -stop_on_failure                          |
+| noMultiquery  | boolean             | Turn multiquery optimization off; default is on. ex) -no_multiquery                                     |
+| noFetch       | boolean             | Turn fetch optimization off; default is on. ex) -no_fetch                                               |
+
+
+### Java
+
+| 파리미터  | 타입                | 설명                                                                                                                                                             |
+|-----------|---------------------|------------------------------------------------------------------------------------------------------------------------------------------------------------------|
+| className | String              | class execute. It can not be used with <jar> parameter. ex) java [-options] class [args...] (to execute a class)                                                 |
+| jar       | String              | jar execute. It can not be used with <className> parameter. ex) java [-options] -jar jarfile [args...] (to execute a jar file)                                   |
+| arguments | List<String>        | arguments. ex) java [-options] class [args...]                                                                                                                   |
+| classPath | List<String>        | ex) -classpath <class search path of directories and zip/jar files> A : separated list of directories, JAR archives, and ZIP archives to search for class files. |
+| javaOpts  | Map<String, String> | ex) -D<name>=<value> set a system property                                                                                                                       |
+
+
+### Python
+
+| 파리미터   | 타입         | 설명                                                                                                                                         |
+|------------|--------------|----------------------------------------------------------------------------------------------------------------------------------------------|
+| script     | String       | The script to execute. python [option] ... [-c cmd | -m mod | <generated script file> | -] [arg] ...                                         |
+| scriptPath | String       | Path to the script to execute. It overrides script parameter. python [option] ... [-c cmd | -m mod | <exist script file path> | -] [arg] ... |
+| arguments  | List<String> | arguments. ex) python [option] ... [-c cmd | -m mod | file | -] [arg] ...                                                                    |
+
+
+### Shell
+
+| 파리미터   | 타입         | 설명                                                                                               |
+|------------|--------------|----------------------------------------------------------------------------------------------------|
+| script     | String       | The script to execute. bin/sh <generated script file> [arg] ...                                    |
+| scriptPath | String       | Path to the script to execute. It overrides script parameter. bin/sh <exist script file> [arg] ... |
+| arguments  | List<String> | arguments. bin/sh file [arg] ...                                                                   |
+
+
+
+
+
+
