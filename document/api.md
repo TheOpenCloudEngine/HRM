@@ -65,11 +65,11 @@ mr 잡을 실행합니다.
 
 자바 잡을 실행합니다.
 
-### GET /rest/v1/clientJob/job/{clientJobId}
+#### GET /rest/v1/clientJob/job/{clientJobId}
 
 주어진 clientJobId 로 잡의 정보를 얻습니다.
 
-### DELETE /rest/v1/clientJob/kill/{clientJobId}
+#### DELETE /rest/v1/clientJob/kill/{clientJobId}
 
 주어진 clientJobId 로 잡을 강제 종료시킵니다.
 
@@ -78,7 +78,7 @@ mr 잡을 실행합니다.
 
 HDFS 파일 시스템을 컨트롤 할 수 있습니다.
 
-### GET /rest/v1/hdfs/status/list
+#### GET /rest/v1/hdfs/status/list
 
 주어진 패스의 하위 폴더 또는 파일 스테이터스를 반환합니다.
 start 와 end 값이 주어지지 않을 경우 default 는 각각 1, 100 입니다.
@@ -93,8 +93,8 @@ start 와 end 값이 주어지지 않을 경우 default 는 각각 1, 100 입니
 | end      | int    | 조회 종료 인덱스 |
 | filter   | String | 파일 이름 필터   |
 
-
-### GET /rest/v1/hdfs/status
+  
+#### GET /rest/v1/hdfs/status
 
 주어진 패스 한건의 파일 스테이터스를 반환합니다.
 
@@ -105,7 +105,7 @@ start 와 end 값이 주어지지 않을 경우 default 는 각각 1, 100 입니
 | path     | String | Hdfs 파일 패스   |
 
 
-### POST /rest/v1/hdfs/file
+#### POST /rest/v1/hdfs/file
 
 신규 파일을 생성하며, POST 로 전송된 바이너리를 파일에 기록합니다.
 
@@ -120,12 +120,110 @@ start 와 end 값이 주어지지 않을 경우 default 는 각각 1, 100 입니
 | overwrite  | boolean | 기존 파일 덮어쓰기 |
 
 
-### PUT /rest/v1/hdfs/file
+#### PUT /rest/v1/hdfs/file
 
 POST 로 전송된 바이너리를 기존에 존재하는 파일에 이어서 기록합니다.
 
 리퀘스트 파라미터 (?key=val&key=val...) 로 구성합니다.
 
+| 파리미터   | 타입    | 설명               |
+|------------|---------|--------------------|
+| path       | String  | Hdfs 파일 패스     |
 
 
+#### DELETE /rest/v1/hdfs/file
+
+파일을 삭제합니다.
+
+리퀘스트 파라미터 (?key=val&key=val...) 로 구성합니다.
+
+| 파리미터   | 타입    | 설명               |
+|------------|---------|--------------------|
+| path       | String  | Hdfs 파일 패스     |
+
+
+#### GET /rest/v1/hdfs/file
+
+파일의 내용을 내려받습니다.
+
+브라우저에서 입력될 경우 파일이 다운로드 되며, Rest api 로 호출될 경우 다음의 헤더 형태로 바이너리가 전송되게 됩니다.
+
+```
+Content-Transfer-Encoding: binary
+Content-Type: application/force-download
+```
+
+리퀘스트 파라미터 (?key=val&key=val...) 로 구성합니다.
+
+| 파리미터   | 타입    | 설명               |
+|------------|---------|--------------------|
+| path       | String  | Hdfs 파일 패스     |
+
+
+#### GET /rest/v1/hdfs/emptyfile
+
+빈 파일을 하나 생성합니다.
+
+리퀘스트 파라미터 (?key=val&key=val...) 로 구성합니다.
+
+| 파리미터   | 타입    | 설명               |
+|------------|---------|--------------------|
+| path       | String  | Hdfs 파일 패스     |
+| owner      | String  | 파일 소유자        |
+| group      | String  | 파일 소유자 그룹   |
+| permission | String  | 파일 퍼미션(1~755) |
+| overwrite  | boolean | 기존 파일 덮어쓰기 |
+
+#### POST /rest/v1/hdfs/directory
+
+디렉토리를 생성합니다. 덮어쓰기 옵션은 존재하지 않습니다.
+
+리퀘스트 파라미터 (?key=val&key=val...) 로 구성합니다.
+
+| 파리미터   | 타입    | 설명               |
+|------------|---------|--------------------|
+| path       | String  | Hdfs 파일 패스     |
+| owner      | String  | 파일 소유자        |
+| group      | String  | 파일 소유자 그룹   |
+| permission | String  | 파일 퍼미션(1~755) |
+
+#### PUT /rest/v1/hdfs/rename
+
+파일 또는 폴더의 이름을 변경합니다.
+
+리퀘스트 파라미터 (?key=val&key=val...) 로 구성합니다.
+
+| 파리미터   | 타입    | 설명               |
+|------------|---------|--------------------|
+| path       | String  | Hdfs 파일 패스     |
+| rename     | String  | 변경 될 이름       |
+
+#### PUT /rest/v1/hdfs/owner
+
+파일의 소유권자를 변경합니다.
+
+recursive 를 true 로 설정 할 경우 하위 폴더 및 파일에 모두 적용됩니다.
+
+리퀘스트 파라미터 (?key=val&key=val...) 로 구성합니다.
+
+| 파리미터   | 타입    | 설명               |
+|------------|---------|--------------------|
+| path       | String  | Hdfs 파일 패스     |
+| owner      | String  | 파일 소유자        |
+| group      | String  | 파일 소유자 그룹   |
+| recursive  | boolean | 하위 폴더 및 파일에 모두 적용 |
+
+#### PUT /rest/v1/hdfs/permission
+
+파일의 퍼미션을 변경합니다. (1~755)
+
+recursive 를 true 로 설정 할 경우 하위 폴더 및 파일에 모두 적용됩니다.
+
+리퀘스트 파라미터 (?key=val&key=val...) 로 구성합니다.
+
+| 파리미터   | 타입    | 설명               |
+|------------|---------|--------------------|
+| path       | String  | Hdfs 파일 패스     |
+| permission | String  | 파일 퍼미션(1~755)  |
+| recursive  | boolean | 하위 폴더 및 파일에 모두 적용 |
 
