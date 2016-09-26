@@ -138,6 +138,7 @@ Native Client Parameter 는 HRM 이 설치된 Native Client 의 CLI(Command Line
 | 파리미터      | 타입                | 설명                                                                                                    |
 |---------------|---------------------|---------------------------------------------------------------------------------------------------------|
 | script        | String              | The script to execute.                                                                                  |
+| scriptPath    | String              | Path to the script to execute. It overrides script parameter. ex) -file <script path>                   |
 | propertyFile  | String              | Path to property file It overrides properties parameter. ex) -propertyFile <exist property file path>   |
 | log4jconf     | String              | Log4j configuration file, overrides log conf. ex) -log4jconf <conf path>                                |
 | check         | boolean             | Syntax check. ex) -check                                                                                |
