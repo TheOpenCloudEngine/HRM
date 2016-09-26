@@ -30,7 +30,6 @@ sudo yum install openssl-devel.x86_64
 
 javac 없이 open-jdk 만 설치되어 있을 경우, 다음을 설치
 
-```
 $ yum list java*jdk-devel
 Loaded plugins: fastestmirror Loading mirror speeds from cached hostfile Available Packages...
 
@@ -116,6 +115,7 @@ $ mvn install
 ```
 
 ### Ubuntu
+
 
 ```
 $ sudo apt-get install software-properties-common -y
