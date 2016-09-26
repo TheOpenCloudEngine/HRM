@@ -4,6 +4,8 @@
 
 [Tutorial](document/tutorials.md)
 
+[Native Client Parameters](document/native.md)
+
 [CouchDB Schema And View](document/couchdb-schema.md)
 
 [Rest Api](document/api.md)
