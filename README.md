@@ -2,7 +2,7 @@
 
 [Installation](document/install.md)
 
-[Tutorial](document/tutorial.md)
+[Tutorial](document/tutorials.md)
 
 [CouchDB Schema And View](document/couchdb-schema.md)
 
