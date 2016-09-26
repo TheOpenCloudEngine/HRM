@@ -4,9 +4,11 @@
 ### CentOS
 
 
-```
-# install dependency
+#### install dependency
 
+카우치 데이터베이스의 디펜던시를 인스톨합니다.
+
+```
 sudo yum install autoconf
 sudo yum install autoconf-archive
 sudo yum install automake
@@ -21,15 +23,23 @@ sudo yum install js-devel
 sudo yum install libicu-devel
 sudo yum install libtool
 sudo yum install perl-Test-Harness
+```
 
-# Could not find the Erlang crypto library => Fix.
+#### add erlang dependency
 
+openssl 을 설치하지 않을 경우 카우치 데이터베이스 인스톨 과정 중 Could not find the Erlang crypto library 오류가 납니다.
+
+```
 sudo yum install openssl-devel.x86_64
+```
 
-# install javac
+#### install javac
 
-javac 없이 open-jdk 만 설치되어 있을 경우, 다음을 설치
+javac 없이 open-jdk 만 설치되어 있을 경우가 있습니다.
 
+인스톨 과정 중 javac 를 사용하게 됨으로 필요 패키지를 설치하도록 합니다.
+
+```
 $ yum list java*jdk-devel
 Loaded plugins: fastestmirror Loading mirror speeds from cached hostfile Available Packages...
 
@@ -37,9 +47,14 @@ $ yum install java-1.7.0-openjdk-devel
 
 $ javac -version
 javac 1.7.0_09
+```
 
-# install erlang
+#### install erlang
 
+Erlang 을 설치합니다.
+
+
+```
 $ wget http://www.erlang.org/download/otp_src_R14B01.tar.gz
 
 $ tar -xvf otp_src_R14B01.tar.gz
@@ -49,10 +64,13 @@ $ cd otp_src_R14B01
 $ ./configure
 
 $ make && make install
+```
 
+##### install couchdb
 
-# install couchdb
+카우치 데이터베이스 소스를 빌드하고 설치합니다.
 
+```
 $ wget http://apache.tt.co.kr/couchdb/source/1.6.1/apache-couchdb-1.6.1.tar.gz
 
 $ ./configure
@@ -67,13 +85,42 @@ $ sudo chkconfig --add couchdb
 $ sudo chkconfig couchdb on
 $ sudo vi /usr/local/etc/couchdb/local.ini
 $ sudo service couchdb start
+
+# Test
 $ curl http://localhost:5984
+```
 
 # security couchdb
 
-$ chown -R couchdb:couchdb /usr/local/etc/couchdb
+어드민 사용자와 패스워드를 등록시 http://localhost:5984/_utils 화면에서 설정할 수 있지만, config 설정을 수행하는 동안 접근권한이 없다는 오류가 나오게 됩니다.
 
-# log couchdb
+이를 방지하기 위해 다음을 수행합니다.
+
+```
+$ chown -R couchdb:couchdb /usr/local/etc/couchdb
+```
+
+바인드 어드레스를 0.0.0.0 으로 설정을 원하는 경우 다음을 수정합니다.
+
+```
+$ vi /usr/local/etc/couchdb/local.ini
+
+.
+.
+[httpd]
+port = 5984
+bind_address = 0.0.0.0
+```
+
+
+#### logging couchdb
+
+카우치 데이터베이스의 로그파일을 설정하기 위해서 /var/log/couchdb 폴더를 생성하고, local.ini 파일의 설정을 추가합니다.
+
+```
+$ mkdir /var/log/couchdb
+
+$ chown couchdb:couchdb /var/log/couchdb
 
 $ vi /usr/local/etc/couchdb/local.ini
 .
@@ -83,16 +130,23 @@ $ vi /usr/local/etc/couchdb/local.ini
 file = /var/log/couchdb/couch.log
 .
 .
+```
 
+#### install tomcat7
 
-# install tomcat7
+톰캣을 다운받아 압축을 풉니다.
 
-wget http://apache.tt.co.kr/tomcat/tomcat-7/v7.0.72/bin/apache-tomcat-7.0.72.tar.gz
+```
+$ wget http://apache.tt.co.kr/tomcat/tomcat-7/v7.0.72/bin/apache-tomcat-7.0.72.tar.gz
 
-tar xvf apache-tomcat-7.0.72.tar.gz
+$ tar xvf apache-tomcat-7.0.72.tar.gz
+```
 
-# Maven install
+#### Maven install
 
+메이븐 인스톨을 수행합니다.
+
+```
 $ wget http://mirror.cc.columbia.edu/pub/software/apache/maven/maven-3/3.0.5/binaries/apache-maven-3.0.5-bin.tar.gz
 $ sudo tar xzf apache-maven-3.0.5-bin.tar.gz -C /usr/local
 $ cd /usr/local
@@ -101,9 +155,13 @@ $ sudo ln -s apache-maven-3.0.5 maven
 $ sudo vi /etc/profile.d/maven.sh
 export M2_HOME=/usr/local/maven 
 export PATH=${M2_HOME}/bin:${PATH}
+```
 
-# download hrm source
+#### download hrm source
 
+HRM 소스코드를 다운로드 받습니다.
+
+```
 $ yum install git
 
 $ git clone https://github.com/SeungpilPark/HRM
@@ -111,7 +169,6 @@ $ git clone https://github.com/SeungpilPark/HRM
 $ cd HRM
 
 $ mvn install
-
 ```
 
 ### Ubuntu
@@ -246,20 +303,27 @@ mr.agent.path=/root/hrm-mr-agent-2.1.0-SNAPSHOT.jar
 
 ```
 
-### 톰캣에 하둡 슈퍼 유저 설정하기 및 권한
+### Configuration tomcat and Launch
+
+톰캣의 catalina.sh 파일의 첫번째 라인에 하둡 슈퍼유저를 설정하는 내용을 넣습니다. 
 
 ```
-톰캣의 catalina.sh 파일의 첫번째 라인에...
-
 $ vi catalina.sh
 
 export HADOOP_USER_NAME=hdfs
 JAVA_OPTS="-Djava.awt.headless=true -Xmx1024m -XX:+UseConcMarkSweepGC"
+```
 
+톰캣 폴더의 접근권한을 추가합니다.
 
-톰캣 폴더를 +x 권한 주기
-
+```
 $ chmod -R +x tomcat
+```
+
+빌드한 소스코드를 webapps 폴더로 복사하고, *root* 권한으로 톰캣을 실행하도록 합니다.
+
+```
+$ sh bin/startup.sh
 ```
 
 
