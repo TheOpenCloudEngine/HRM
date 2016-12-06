@@ -10,7 +10,7 @@
                 <!-- About -->
                 <div class="col-md-3 md-margin-bottom-40">
                     <a href="index.html"><img id="logo-footer" class="footer-logo" src="/resources/images/oce-logo.png" alt="Footer Logo"></a>
-                    <p><uengine:message code="introduction"/></p>
+                    <p>나무 시스템입니다.</p>
                 </div><!--/col-md-3-->
                 <!-- End About -->
 

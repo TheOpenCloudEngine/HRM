@@ -98,9 +98,8 @@ public class ClientJobRestController {
             ClientJob clientJob = clientJobService.run(clientRequest, executeFrom);
 
             String marshal = JsonUtils.marshal(clientJob);
-            String prettyPrint = JsonFormatterUtils.prettyPrint(marshal);
             response.setStatus(201);
-            response.getWriter().write(prettyPrint);
+            response.getWriter().write(marshal);
 
         } catch (Exception ex) {
             ex.printStackTrace();

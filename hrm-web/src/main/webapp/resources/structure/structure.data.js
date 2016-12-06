@@ -27,7 +27,7 @@ structure.data = {
          */
         {
             title: 'Web Console',
-            href: '/console'
+            href: '/terminal/terminal'
         },
         /*
          Eco System

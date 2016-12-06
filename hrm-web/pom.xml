@@ -254,7 +254,7 @@
         </dependency>
 
         <dependency>
-            <groupId>org.opencloudengine.garuda</groupId>
+            <groupId>org.uengine.garuda</groupId>
             <artifactId>hrm-common</artifactId>
             <version>1.0.0-SNAPSHOT</version>
         </dependency>

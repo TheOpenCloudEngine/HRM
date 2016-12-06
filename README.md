@@ -1,5 +1,7 @@
 # OCE HRM
 
+[Ambari Install](document/ambari.md)
+
 [Installation](document/install.md)
 
 [Tutorial](document/tutorials.md)
@@ -9,6 +11,8 @@
 [Rest Api](document/api.md)
 
 [Java Api](document/javaApi.md)
+
+[Service recovery](document/recovery.md)
 
 
 ## HRM (Hadoop Remote Management) 
