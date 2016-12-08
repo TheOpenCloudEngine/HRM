@@ -153,8 +153,9 @@ public class PhoenixTask extends InterceptorAbstractTask {
                 } else {
                     if (PhoenixSource.CSV.equals(type) && !StringUtils.isEmpty(tableName)) {
                         saveToFileSingleOption(command, source, workingDir + "/" + tableName + "." + type);
+                    }else{
+                        saveToFileSingleOption(command, source, workingDir + "/source.phoenix." + i + "." + type);
                     }
-                    saveToFileSingleOption(command, source, workingDir + "/source.phoenix." + i + "." + type);
                 }
             }
         }
