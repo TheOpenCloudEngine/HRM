@@ -41,6 +41,7 @@ public class PhoenixExample {
 
         PhoenixSource source2 = new PhoenixSource();
         source2.setType(PhoenixSource.CSV);
+        source2.setTableName("us_population");
         source2.setValue("NY,New York,8143197\n" +
                 "CA,Los Angeles,3844829\n" +
                 "IL,Chicago,2842518\n" +

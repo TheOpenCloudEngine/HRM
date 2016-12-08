@@ -87,6 +87,9 @@ $(function () {
                 '</select>' +
                 '</div>' +
                 '<div class="col-md-10 col-sm-10">' +
+                '<input type="text" name="" class="form-control" placeholder="Table Name(CSV only)">' +
+                '</div>' +
+                '<div class="col-md-10 col-sm-10">' +
                 '<textarea name="" rows="8" class="form-control" placeholder=""></textarea>' +
                 '</div>' +
                 '<div class="col-md-1 col-sm-1">' +
@@ -158,6 +161,7 @@ $(function () {
                         var complexItem = me.newComplexItem(field, type);
                         complexItem.find('select').val(data[i]['type']);
                         complexItem.find('textarea').val(data[i]['value']);
+                        complexItem.find('input[type="text"]').val(data[i]['tableName']);
                     }
                 }
             }
@@ -778,10 +782,12 @@ $(function () {
                         $(this).find('.template-item').each(function () {
                             var itemType = $(this).find('select').val();
                             var itemVal = $(this).find('textarea').val();
+                            var tableName = $(this).find('input[type="text"]').val();
                             if (!me.emptyString(itemVal) && !me.emptyString(itemType)) {
                                 value.push({
                                     type: itemType,
-                                    value: itemVal
+                                    value: itemVal,
+                                    tableName: tableName
                                 });
                             }
                         });

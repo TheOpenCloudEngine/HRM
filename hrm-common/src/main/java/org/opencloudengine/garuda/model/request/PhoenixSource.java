@@ -12,6 +12,7 @@ public class PhoenixSource {
 
     private String type = SQL;
     private String value;
+    private String tableName;
 
     public String getType() {
         return type;
@@ -27,5 +28,13 @@ public class PhoenixSource {
 
     public void setValue(String value) {
         this.value = value;
+    }
+
+    public String getTableName() {
+        return tableName;
+    }
+
+    public void setTableName(String tableName) {
+        this.tableName = tableName;
     }
 }

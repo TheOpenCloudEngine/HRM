@@ -145,11 +145,15 @@ public class PhoenixTask extends InterceptorAbstractTask {
             PhoenixSource phoenixSource = sources.get(i);
             String type = phoenixSource.getType();
             String source = phoenixSource.getValue();
+            String tableName = phoenixSource.getTableName();
             if (!StringUtils.isEmpty(source)) {
                 if (source.startsWith("local:")) {
                     source = source.replace("local:", "");
                     buildSingleOption(command, source);
                 } else {
+                    if (PhoenixSource.CSV.equals(type) && !StringUtils.isEmpty(tableName)) {
+                        saveToFileSingleOption(command, source, workingDir + "/" + tableName + "." + type);
+                    }
                     saveToFileSingleOption(command, source, workingDir + "/source.phoenix." + i + "." + type);
                 }
             }
