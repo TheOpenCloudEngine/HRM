@@ -110,6 +110,15 @@ public class HrmJobRequest {
         if (request instanceof ShellRequest) {
             jobType = ClientStatus.JOB_TYPE_SHELL;
         }
+        if (request instanceof HbaseShellRequest) {
+            jobType = ClientStatus.JOB_TYPE_HBASE_SHELL;
+        }
+        if (request instanceof HbaseClassRequest) {
+            jobType = ClientStatus.JOB_TYPE_HBASE_CLASS;
+        }
+        if (request instanceof PhoenixRequest) {
+            jobType = ClientStatus.JOB_TYPE_PHOENIX;
+        }
         if (StringUtils.isEmpty(jobType)) {
             throw new Exception("Failed to parse Job Type from request.");
         }
