@@ -65,6 +65,18 @@ mr 잡을 실행합니다.
 
 자바 잡을 실행합니다.
 
+#### POST /rest/v1/clientJob/hbaseShell
+
+Hbase Shell 잡을 실행합니다.
+
+#### POST /rest/v1/clientJob/hbaseClass
+
+Hbase Class 잡을 실행합니다.
+
+#### POST /rest/v1/clientJob/phoenix
+
+Phoenix 잡을 실행합니다.
+
 #### GET /rest/v1/clientJob/job/{clientJobId}
 
 주어진 clientJobId 로 잡의 정보를 얻습니다.

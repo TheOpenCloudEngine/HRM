@@ -18,6 +18,9 @@ Configuration 메뉴에서 하둡 에코 시스템의 홈 디렉토리와 HDFS �
  - Hdfs Home : Hdfs 홈
  - Mapreduce Home : 맵리듀스 홈
  - Yarn Home : 얀 홈
+ - Hbase Home : Hbase 홈
+ - Phoenix Home : 피닉스 홈
+ - Java Home : 자바 홈
 
 ![](images/configuration.png)
 
@@ -38,6 +41,9 @@ Configuration 메뉴에서 하둡 에코 시스템의 홈 디렉토리와 HDFS �
  - Java
  - Python
  - Shell
+ - Hbase Shell
+ - Hbase Class
+ - Phoenix
  
 각 콘솔 메뉴 클릭시, 다음과 같은 화면이 나타납니다.
 

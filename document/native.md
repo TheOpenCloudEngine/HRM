@@ -151,3 +151,58 @@ Native Client Parameter 는 HRM 이 설치된 Native Client 의 CLI(Command Line
 | stopOnFailure | boolean             | Aborts execution on the first failed job. default is off. ex) -stop_on_failure                          |
 | noMultiquery  | boolean             | Turn multiquery optimization off. default is on. ex) -no_multiquery                                     |
 | noFetch       | boolean             | Turn fetch optimization off. default is on. ex) -no_fetch                                               |
+
+
+### Hbase Shell
+
+| 파라미터       | 타입         | 설명                                                                                                                 |
+|----------------|--------------|----------------------------------------------------------------------------------------------------------------------|
+| configDir      | String       | Configuration direction to use. Default: ./conf ex) --config DIR                                                     |
+| hosts          | List<String> | Specify comma separated host to override the list in regionservers file. ex) --hosts <comma separated list of hosts> |
+| authAsServer   | boolean      | Authenticate to ZooKeeper using servers configuration ex) --auth-as-server                                           |
+| script         | String       | The script to execute ex) echo [SCRIPT] | hbase shell [OPTIONS]                                                      |
+| scriptPath     | String       | Path to the script to execute. It overrides script parameter. ex) echo [SCRIPTFILE] | hbase shell [OPTIONS]          |
+| format         | String       | Formatter for outputting results. Valid options are: console, html. (Default: console) ex) --format=OPTION           |
+| debug          | boolean      | Set DEBUG log levels. ex) --debug                                                                                    |
+| noninteractive | boolean      | Do not run within an IRB session and exit with non-zero status on first error. ex) --noninteractive                  |
+
+
+### Hbase Class
+
+| 파라미터     | 타입         | 설명                                                                                                                 |
+|--------------|--------------|----------------------------------------------------------------------------------------------------------------------|
+| configDir    | String       | Configuration direction to use. Default: ./conf ex) --config DIR                                                     |
+| hosts        | List<String> | Specify comma separated host to override the list in regionservers file. ex) --hosts <comma separated list of hosts> |
+| authAsServer | boolean      | Authenticate to ZooKeeper using servers configuration ex) --auth-as-server                                           |
+| className    | String       | Run the class named CLASSNAME ex) hbase [<options>] CLASSNAME [<args>]                                               |
+| arguments    | List<String> | arguments. ex) hbase [<options>] CLASSNAME [<args>]                                                                  |
+
+
+### Phoenix
+
+| 파라미터          | 타입                | 설명                                                                                                                                                              |
+|-------------------|---------------------|-------------------------------------------------------------------------------------------------------------------------------------------------------------------|
+| zookeeper         | String              | Define zookeeper, defaults to localhost[:default port] ex) psql <zookeeper> <path-to-sql-or-csv-file>...                                                          |
+| sources           | List<PhoenixSource> | array of sql-or-csv source. if source start with "local:", it will take sql-or-csv source from local filesystem ex) psql <zookeeper> <path-to-sql-or-csv-file>... |
+| arraySeparator    | String              | Define the array element separator, defaults to : ex) --array-separator <arg>                                                                                     |
+| bypassUpgrade     | boolean             | Used in conjunction with the -u option to bypass the rewrite during upgrade if you know that your data does not need to be upgrade. ex) --bypass-upgrade          |
+| delimiter         | String              | Field delimiter for CSV loader. A digit is interpreted as 1 -> ctrl A, 2 -> ctrl B ...  9 -> ctrl I. ex) --delimiter <arg>                                        |
+| escapeCharacter   | String              | Escape character for CSV loader. A digit is interpreted as a control character ex) --escape-character <arg>                                                       |
+| header            | String              | Overrides the column names to which the CSV data maps and is case sensitive. ex) --header <arg>                                                                   |
+| localIndexUpgrade | boolean             | Used to upgrade local index data by moving index data from separate table to separate column families in the same table. ex) --local-index-upgrade                |
+| mapNamespace      | String              | Used to map table to a namespace matching with schema, require phoenix.schema.isNamespaceMappingEnabled to be enabled ex) --map-namespace <arg>                   |
+| quoteCharacter    | String              | Quote character for CSV loader. A digit is interpreted as a control character ex) --quote-character <arg>                                                         |
+| strict            | boolean             | Use strict mode by throwing an exception if a column name doesn't match during CSV loading ex) --strict                                                           |
+| table             | String              | Overrides the table into which the CSV data is loaded and is case sensitive ex) --table <arg>                                                                     |
+| upgrade           | boolean             | Upgrades tables specified as arguments by rewriting them with the correct row key for descending columns. ex) --upgrade                                           |
+
+#### PhoenixSource
+
+| 파라미터  | 타입   | 설명                                                                                             |
+|-----------|--------|--------------------------------------------------------------------------------------------------|
+| type      | String | sql or csv                                                                                       |
+| value     | String | sql or csv content. if start with 'local:', it will take sql-or-csv source from local filesystem |
+| tableName | String | Table name for load csv data (csv only)                                                          |
+
+
+
