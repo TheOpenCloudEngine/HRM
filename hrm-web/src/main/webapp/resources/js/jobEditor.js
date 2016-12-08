@@ -77,9 +77,15 @@ $(function () {
                 '</div>' +
                 '</div>'
         },
-        textareaListItem: function () {
+        phoenixSourceListItem: function () {
             return '' +
                 '<div class="row template-item" style="margin-bottom: 10px;">' +
+                '<div class="col-md-10 col-sm-10">' +
+                '<select name="" class="form-control">' +
+                '<option value="sql" selected>SQL</option>' +
+                '<option value="csv">CSV</option>' +
+                '</select>' +
+                '</div>' +
                 '<div class="col-md-10 col-sm-10">' +
                 '<textarea name="" rows="8" class="form-control" placeholder=""></textarea>' +
                 '</div>' +
@@ -108,8 +114,8 @@ $(function () {
             if (type == 'textList') {
                 item = $(me.textListItem());
             }
-            else if (type == 'textareaList') {
-                item = $(me.textareaListItem());
+            else if (type == 'phoenixSourceList') {
+                item = $(me.phoenixSourceListItem());
             }
             else if (type == 'map') {
                 item = $(me.mapItem());
@@ -144,13 +150,14 @@ $(function () {
                     }
                 }
             }
-            else if (type == 'textareaList') {
+            else if (type == 'phoenixSourceList') {
                 if (!data || !data.length) {
                     me.newComplexItem(field, type);
                 } else {
                     for (var i = 0; i < data.length; i++) {
                         var complexItem = me.newComplexItem(field, type);
-                        complexItem.find('textarea').val(data[i])
+                        complexItem.find('select').val(data[i]['type']);
+                        complexItem.find('textarea').val(data[i]['value']);
                     }
                 }
             }
@@ -212,7 +219,7 @@ $(function () {
             var type = data.type;
             var description = data.description;
             var field;
-            if (type == 'textList' || type == 'map' || type == 'textareaList') {
+            if (type == 'textList' || type == 'map' || type == 'phoenixSourceList') {
                 field = me.createComplexField(element, type, formData[name]);
                 field.data('data', data);
             } else if (type == 'text') {
@@ -385,25 +392,31 @@ $(function () {
                 var activeTab = me.getActiveTab();
                 if (activeTab && activeTab.data('clientJob')) {
                     clientJobId = activeTab.data('clientJob')['clientJobId'];
-                    $.ajax({
-                        type: "GET",
-                        url: "/rest/v1/clientJob/job/" + clientJobId,
-                        data: '',
-                        dataType: "text",
-                        contentType: "application/json; charset=utf-8",
-                        success: function (response) {
-                            activeTab.data('clientJob', JSON.parse(response));
-                            me.updateFormDetail(JSON.parse(response));
-                        },
-                        error: function (request, status, errorThrown) {
+                    if(clientJobId){
+                        $.ajax({
+                            type: "GET",
+                            url: "/rest/v1/clientJob/job/" + clientJobId,
+                            data: '',
+                            dataType: "text",
+                            contentType: "application/json; charset=utf-8",
+                            success: function (response) {
+                                activeTab.data('clientJob', JSON.parse(response));
+                                me.updateFormDetail(JSON.parse(response));
+                            },
+                            error: function (request, status, errorThrown) {
 
-                        },
-                        complete: function () {
-                            setTimeout(function () {
-                                interval();
-                            }, 1000);
-                        }
-                    });
+                            },
+                            complete: function () {
+                                setTimeout(function () {
+                                    interval();
+                                }, 1000);
+                            }
+                        });
+                    }else{
+                        setTimeout(function () {
+                            interval();
+                        }, 1000);
+                    }
                 } else {
                     setTimeout(function () {
                         interval();
@@ -760,12 +773,16 @@ $(function () {
                         if (value.length) {
                             formData[fieldName] = value;
                         }
-                    } else if (type == 'textareaList') {
+                    } else if (type == 'phoenixSourceList') {
                         value = [];
                         $(this).find('.template-item').each(function () {
+                            var itemType = $(this).find('select').val();
                             var itemVal = $(this).find('textarea').val();
-                            if (!me.emptyString(itemVal)) {
-                                value.push(itemVal);
+                            if (!me.emptyString(itemVal) && !me.emptyString(itemType)) {
+                                value.push({
+                                    type: itemType,
+                                    value: itemVal
+                                });
                             }
                         });
                         if (value.length) {
@@ -969,7 +986,6 @@ $(function () {
                             nextTab = $(this);
                         }
                     });
-                    console.log(nextIndex);
                     if (nextTab) {
                         nextTab.click();
                     }

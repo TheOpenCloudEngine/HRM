@@ -20,6 +20,7 @@ import org.apache.commons.io.FileUtils;
 import org.opencloudengine.garuda.model.request.BasicClientRequest;
 import org.opencloudengine.garuda.model.request.HbaseClassRequest;
 import org.opencloudengine.garuda.model.request.PhoenixRequest;
+import org.opencloudengine.garuda.model.request.PhoenixSource;
 import org.opencloudengine.garuda.util.StringUtils;
 import org.opencloudengine.garuda.util.cli.FileWriter;
 import org.opencloudengine.garuda.util.cli.ManagedProcess;
@@ -139,15 +140,17 @@ public class PhoenixTask extends InterceptorAbstractTask {
         buildSingleOption(command, phoenixRequest.getZookeeper());
 
         //source
-        List<String> sources = phoenixRequest.getSources();
+        List<PhoenixSource> sources = phoenixRequest.getSources();
         for (int i = 0; i < sources.size(); i++) {
-            String source = sources.get(i);
+            PhoenixSource phoenixSource = sources.get(i);
+            String type = phoenixSource.getType();
+            String source = phoenixSource.getValue();
             if (!StringUtils.isEmpty(source)) {
                 if (source.startsWith("local:")) {
                     source = source.replace("local:", "");
                     buildSingleOption(command, source);
                 } else {
-                    saveToFileSingleOption(command, source, workingDir + "/source.phoenix." + i);
+                    saveToFileSingleOption(command, source, workingDir + "/source.phoenix." + i + "." + type);
                 }
             }
         }

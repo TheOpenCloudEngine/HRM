@@ -76,7 +76,11 @@ public class JobCollectionRepositoryImpl implements JobCollectionRepository {
                     build().getResponse().getRows();
 
             for (ViewResponse.Row<Key.ComplexKey, JobCollection> row : rows) {
-                list.add(row.getValue());
+                try {
+                    list.add(row.getValue());
+                } catch (Exception ex) {
+
+                }
             }
             return list;
         } catch (Exception ex) {

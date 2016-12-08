@@ -5,6 +5,7 @@ import org.opencloudengine.garuda.client.HrmJobRequest;
 import org.opencloudengine.garuda.model.clientJob.ClientJob;
 import org.opencloudengine.garuda.model.request.HbaseShellRequest;
 import org.opencloudengine.garuda.model.request.PhoenixRequest;
+import org.opencloudengine.garuda.model.request.PhoenixSource;
 
 import java.util.ArrayList;
 
@@ -18,7 +19,7 @@ public class PhoenixExample {
         /**
          * HrmJobRequest 세팅
          */
-        HrmJobRequest request = new HrmJobRequest("52.78.88.87", 8080);
+        HrmJobRequest request = new HrmJobRequest("ambari.essencia.live", 80);
 
 
         /**
@@ -28,14 +29,19 @@ public class PhoenixExample {
 
         phoenixRequest.setDoAs("ubuntu");
 
-        String source1 = "DROP TABLE us_population;\n" +
+        PhoenixSource source1 = new PhoenixSource();
+        source1.setType(PhoenixSource.SQL);
+        source1.setValue("DROP TABLE us_population;\n" +
                 "CREATE TABLE IF NOT EXISTS us_population (\n" +
                 "      state CHAR(2) NOT NULL,\n" +
                 "      city VARCHAR NOT NULL,\n" +
                 "      population BIGINT\n" +
-                "      CONSTRAINT my_pk PRIMARY KEY (state, city));";
+                "      CONSTRAINT my_pk PRIMARY KEY (state, city));");
 
-        String source2 = "NY,New York,8143197\n" +
+
+        PhoenixSource source2 = new PhoenixSource();
+        source2.setType(PhoenixSource.CSV);
+        source2.setValue("NY,New York,8143197\n" +
                 "CA,Los Angeles,3844829\n" +
                 "IL,Chicago,2842518\n" +
                 "TX,Houston,2016582\n" +
@@ -44,14 +50,16 @@ public class PhoenixExample {
                 "TX,San Antonio,1256509\n" +
                 "CA,San Diego,1255540\n" +
                 "TX,Dallas,1213825\n" +
-                "CA,San Jose,912332";
+                "CA,San Jose,912332");
 
-        String source3 = "SELECT state as \"State\",count(city) as \"City Count\",sum(population) as \"Population Sum\"\n" +
+        PhoenixSource source3 = new PhoenixSource();
+        source3.setType(PhoenixSource.SQL);
+        source3.setValue("SELECT state as \"State\",count(city) as \"City Count\",sum(population) as \"Population Sum\"\n" +
                 "FROM us_population\n" +
                 "GROUP BY state\n" +
-                "ORDER BY sum(population) DESC;";
+                "ORDER BY sum(population) DESC;");
 
-        ArrayList<String> sources = new ArrayList<>();
+        ArrayList<PhoenixSource> sources = new ArrayList<>();
         sources.add(source1);
         sources.add(source2);
         sources.add(source3);

@@ -33,19 +33,19 @@ public class PhoenixRequest extends BasicClientRequest {
      * if source start with 'local:', it will take sql-or-csv source from local filesystem
      * ex) psql <zookeeper> <path-to-sql-or-csv-file>...
      */
-    private List<String> sources;
+    private List<PhoenixSource> sources;
 
-    @FieldType(type = "textareaList",
+    @FieldType(type = "phoenixSourceList",
             description = "/**\n" +
                     "     * array of sql-or-csv source\n" +
                     "     * if source start with 'local:', it will take sql-or-csv source from local filesystem\n" +
                     "     * ex) psql <zookeeper> <path-to-sql-or-csv-file>...\n" +
                     "     */")
-    public List<String> getSources() {
+    public List<PhoenixSource> getSources() {
         return sources;
     }
 
-    public void setSources(List<String> sources) {
+    public void setSources(List<PhoenixSource> sources) {
         this.sources = sources;
     }
 

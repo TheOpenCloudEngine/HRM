@@ -18,7 +18,7 @@ public class HdfsExample {
         /**
          * HrmJobRequest 세팅
          */
-        HdfsRequest request = new HdfsRequest("52.78.88.87", 8080);
+        HdfsRequest request = new HdfsRequest("ambari.essencia.live", 80);
 
         //단일 상태 보기
         HdfsFileStatus status = request.getStatus("/user");

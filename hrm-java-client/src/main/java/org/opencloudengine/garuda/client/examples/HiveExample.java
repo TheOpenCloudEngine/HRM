@@ -18,7 +18,7 @@ public class HiveExample {
         /**
          * HrmJobRequest 세팅
          */
-        HrmJobRequest request = new HrmJobRequest("52.78.88.87", 8080);
+        HrmJobRequest request = new HrmJobRequest("ambari.essencia.live", 80);
 
 
         /**

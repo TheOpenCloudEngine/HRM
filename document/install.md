@@ -209,7 +209,7 @@ HRM 소스코드를 다운로드 받습니다.
 ```
 $ yum install git
 
-$ git clone https://github.com/SeungpilPark/HRM
+$ git clone https://github.com/TheOpenCloudEngine/HRM
 
 $ cd HRM
 
