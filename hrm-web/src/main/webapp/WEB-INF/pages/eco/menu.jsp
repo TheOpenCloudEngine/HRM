@@ -34,4 +34,13 @@
     <li class="list-group-item" name="list-menu-shell">
         <a href="/eco/clientJob/editor/shell"><i class="fa fa-cubes"></i> Shell </a>
     </li>
+    <li class="list-group-item" name="list-menu-hbaseShell">
+        <a href="/eco/clientJob/editor/hbaseShell"><i class="fa fa-cubes"></i> Hbase - Shell </a>
+    </li>
+    <li class="list-group-item" name="list-menu-hbaseClass">
+        <a href="/eco/clientJob/editor/hbaseClass"><i class="fa fa-cubes"></i> Hbase - Class </a>
+    </li>
+    <li class="list-group-item" name="list-menu-phoenix">
+        <a href="/eco/clientJob/editor/phoenix"><i class="fa fa-cubes"></i> Phoenix </a>
+    </li>
 </ul>

@@ -11,5 +11,6 @@ public interface EcoConfService {
     void update(EcoConf iam);
 
     void update(String hdfsSuperUser, String hadoopHome, String hiveHome, String pigHome,
-                String sparkHome, String hdfsHome, String mapreduceHome, String yarnHome);
+                String sparkHome, String hdfsHome, String mapreduceHome, String yarnHome,
+                String hbaseHome,String phoenixHome,String javaHome);
 }

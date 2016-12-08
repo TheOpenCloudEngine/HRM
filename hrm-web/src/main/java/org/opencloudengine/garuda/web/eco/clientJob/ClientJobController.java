@@ -87,6 +87,27 @@ public class ClientJobController {
         mav.addObject("jobType", "shell");
         return mav;
     }
+    @RequestMapping(value = "/editor/hbaseShell", method = RequestMethod.GET)
+    @ResponseStatus(HttpStatus.OK)
+    public ModelAndView hbaseShell() {
+        ModelAndView mav = new ModelAndView("/eco/clientJob/editor");
+        mav.addObject("jobType", "hbaseShell");
+        return mav;
+    }
+    @RequestMapping(value = "/editor/hbaseClass", method = RequestMethod.GET)
+    @ResponseStatus(HttpStatus.OK)
+    public ModelAndView hbaseClass() {
+        ModelAndView mav = new ModelAndView("/eco/clientJob/editor");
+        mav.addObject("jobType", "hbaseClass");
+        return mav;
+    }
+    @RequestMapping(value = "/editor/phoenix", method = RequestMethod.GET)
+    @ResponseStatus(HttpStatus.OK)
+    public ModelAndView phoenix() {
+        ModelAndView mav = new ModelAndView("/eco/clientJob/editor");
+        mav.addObject("jobType", "phoenix");
+        return mav;
+    }
 
 
     @RequestMapping(value = "/requestDesc", method = RequestMethod.GET)
@@ -135,6 +156,15 @@ public class ClientJobController {
             }
             if (ClientStatus.JOB_TYPE_SPARK.equalsIgnoreCase(jobType)) {
                 methods = SparkRequest.class.getDeclaredMethods();
+            }
+            if (ClientStatus.JOB_TYPE_HBASE_SHELL.equalsIgnoreCase(jobType)) {
+                methods = HbaseShellRequest.class.getDeclaredMethods();
+            }
+            if (ClientStatus.JOB_TYPE_HBASE_CLASS.equalsIgnoreCase(jobType)) {
+                methods = HbaseClassRequest.class.getDeclaredMethods();
+            }
+            if (ClientStatus.JOB_TYPE_PHOENIX.equalsIgnoreCase(jobType)) {
+                methods = PhoenixRequest.class.getDeclaredMethods();
             }
             if (methods == null) {
                 return new ResponseEntity<>(HttpStatus.BAD_REQUEST);

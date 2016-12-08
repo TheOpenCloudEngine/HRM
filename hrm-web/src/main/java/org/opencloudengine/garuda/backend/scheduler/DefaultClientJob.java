@@ -55,5 +55,14 @@ public class DefaultClientJob implements Job {
         if(ClientStatus.JOB_TYPE_SHELL.equalsIgnoreCase(clientJob.getClientJobType())){
             new ShellTask().executeClientJob(clientJob);
         }
+        if(ClientStatus.JOB_TYPE_HBASE_SHELL.equalsIgnoreCase(clientJob.getClientJobType())){
+            new HbaseShellTask().executeClientJob(clientJob);
+        }
+        if(ClientStatus.JOB_TYPE_HBASE_CLASS.equalsIgnoreCase(clientJob.getClientJobType())){
+            new HbaseClassTask().executeClientJob(clientJob);
+        }
+        if(ClientStatus.JOB_TYPE_PHOENIX.equalsIgnoreCase(clientJob.getClientJobType())){
+            new PhoenixTask().executeClientJob(clientJob);
+        }
     }
 }

@@ -15,6 +15,9 @@ public class EcoConf extends CouchDAO {
     private String hdfsHome;
     private String mapreduceHome;
     private String yarnHome;
+    private String hbaseHome;
+    private String phoenixHome;
+    private String javaHome;
     private Long regDate;
     private Long updDate;
 
@@ -80,6 +83,30 @@ public class EcoConf extends CouchDAO {
 
     public void setYarnHome(String yarnHome) {
         this.yarnHome = yarnHome;
+    }
+
+    public String getHbaseHome() {
+        return hbaseHome;
+    }
+
+    public void setHbaseHome(String hbaseHome) {
+        this.hbaseHome = hbaseHome;
+    }
+
+    public String getPhoenixHome() {
+        return phoenixHome;
+    }
+
+    public void setPhoenixHome(String phoenixHome) {
+        this.phoenixHome = phoenixHome;
+    }
+
+    public String getJavaHome() {
+        return javaHome;
+    }
+
+    public void setJavaHome(String javaHome) {
+        this.javaHome = javaHome;
     }
 
     public Long getRegDate() {

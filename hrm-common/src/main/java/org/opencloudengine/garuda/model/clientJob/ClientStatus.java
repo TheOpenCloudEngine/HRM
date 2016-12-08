@@ -24,4 +24,7 @@ public class ClientStatus {
     public static String JOB_TYPE_JAVA = "java";
     public static String JOB_TYPE_PYTHON = "python";
     public static String JOB_TYPE_SHELL = "shell";
+    public static String JOB_TYPE_HBASE_SHELL = "hbaseShell";
+    public static String JOB_TYPE_HBASE_CLASS = "hbaseClass";
+    public static String JOB_TYPE_PHOENIX = "phoenix";
 }

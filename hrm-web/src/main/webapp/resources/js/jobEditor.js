@@ -77,6 +77,17 @@ $(function () {
                 '</div>' +
                 '</div>'
         },
+        textareaListItem: function () {
+            return '' +
+                '<div class="row template-item" style="margin-bottom: 10px;">' +
+                '<div class="col-md-10 col-sm-10">' +
+                '<textarea name="" rows="8" class="form-control" placeholder=""></textarea>' +
+                '</div>' +
+                '<div class="col-md-1 col-sm-1">' +
+                '<button type="button" class="btn-u btn-u-default pull-right delBtn">Del</button>' +
+                '</div>' +
+                '</div>'
+        },
         mapItem: function () {
             return '' +
                 '<div class="row template-item" style="margin-bottom: 10px;">' +
@@ -96,7 +107,11 @@ $(function () {
             var item;
             if (type == 'textList') {
                 item = $(me.textListItem());
-            } else if (type == 'map') {
+            }
+            else if (type == 'textareaList') {
+                item = $(me.textareaListItem());
+            }
+            else if (type == 'map') {
                 item = $(me.mapItem());
             } else {
                 return;
@@ -128,7 +143,18 @@ $(function () {
                         complexItem.find('input').val(data[i])
                     }
                 }
-            } else if (type == 'map') {
+            }
+            else if (type == 'textareaList') {
+                if (!data || !data.length) {
+                    me.newComplexItem(field, type);
+                } else {
+                    for (var i = 0; i < data.length; i++) {
+                        var complexItem = me.newComplexItem(field, type);
+                        complexItem.find('textarea').val(data[i])
+                    }
+                }
+            }
+            else if (type == 'map') {
                 if (!data || $.isEmptyObject(data)) {
                     me.newComplexItem(field, type);
                 } else {
@@ -186,7 +212,7 @@ $(function () {
             var type = data.type;
             var description = data.description;
             var field;
-            if (type == 'textList' || type == 'map') {
+            if (type == 'textList' || type == 'map' || type == 'textareaList') {
                 field = me.createComplexField(element, type, formData[name]);
                 field.data('data', data);
             } else if (type == 'text') {
@@ -734,6 +760,17 @@ $(function () {
                         if (value.length) {
                             formData[fieldName] = value;
                         }
+                    } else if (type == 'textareaList') {
+                        value = [];
+                        $(this).find('.template-item').each(function () {
+                            var itemVal = $(this).find('textarea').val();
+                            if (!me.emptyString(itemVal)) {
+                                value.push(itemVal);
+                            }
+                        });
+                        if (value.length) {
+                            formData[fieldName] = value;
+                        }
                     } else if (type == 'map') {
                         value = {};
                         $(this).find('.template-item').each(function () {
@@ -928,12 +965,12 @@ $(function () {
                         nextIndex = index - 1;
                     }
                     alltabs.each(function () {
-                        if($(this).index() == nextIndex){
+                        if ($(this).index() == nextIndex) {
                             nextTab = $(this);
                         }
                     });
                     console.log(nextIndex);
-                    if(nextTab){
+                    if (nextTab) {
                         nextTab.click();
                     }
                     tab.remove();

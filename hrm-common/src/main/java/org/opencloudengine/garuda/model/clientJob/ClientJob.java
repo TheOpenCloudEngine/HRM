@@ -44,6 +44,9 @@ public class ClientJob extends CouchDAO {
     private JavaRequest javaRequest;
     private PythonRequest pythonRequest;
     private ShellRequest shellRequest;
+    private HbaseShellRequest hbaseShellRequest;
+    private HbaseClassRequest hbaseClassRequest;
+    private PhoenixRequest phoenixRequest;
     private ClientResult clientResult;
 
     private Long regDate;
@@ -209,6 +212,22 @@ public class ClientJob extends CouchDAO {
         this.stdout = stdout;
     }
 
+    public String getKillLog() {
+        return killLog;
+    }
+
+    public void setKillLog(String killLog) {
+        this.killLog = killLog;
+    }
+
+    public String getSignal() {
+        return signal;
+    }
+
+    public void setSignal(String signal) {
+        this.signal = signal;
+    }
+
     public List<String> getApplicationIds() {
         return applicationIds;
     }
@@ -281,6 +300,30 @@ public class ClientJob extends CouchDAO {
         this.shellRequest = shellRequest;
     }
 
+    public HbaseShellRequest getHbaseShellRequest() {
+        return hbaseShellRequest;
+    }
+
+    public void setHbaseShellRequest(HbaseShellRequest hbaseShellRequest) {
+        this.hbaseShellRequest = hbaseShellRequest;
+    }
+
+    public HbaseClassRequest getHbaseClassRequest() {
+        return hbaseClassRequest;
+    }
+
+    public void setHbaseClassRequest(HbaseClassRequest hbaseClassRequest) {
+        this.hbaseClassRequest = hbaseClassRequest;
+    }
+
+    public PhoenixRequest getPhoenixRequest() {
+        return phoenixRequest;
+    }
+
+    public void setPhoenixRequest(PhoenixRequest phoenixRequest) {
+        this.phoenixRequest = phoenixRequest;
+    }
+
     public ClientResult getClientResult() {
         return clientResult;
     }
@@ -303,21 +346,5 @@ public class ClientJob extends CouchDAO {
 
     public void setUpdDate(Long updDate) {
         this.updDate = updDate;
-    }
-
-    public String getKillLog() {
-        return killLog;
-    }
-
-    public void setKillLog(String killLog) {
-        this.killLog = killLog;
-    }
-
-    public String getSignal() {
-        return signal;
-    }
-
-    public void setSignal(String signal) {
-        this.signal = signal;
     }
 }

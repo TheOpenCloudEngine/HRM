@@ -78,6 +78,21 @@ public class ClientJobRestController {
                         @RequestParam(value = "executeFrom", defaultValue = "", required = false) String executeFrom) throws IOException {
         this.processClientJob(response, javaRequest, executeFrom);
     }
+    @RequestMapping(value = "/hbaseShell", method = RequestMethod.POST)
+    public void runHbaseShell(HttpServletResponse response, @RequestBody HbaseShellRequest hbaseShellRequest,
+                        @RequestParam(value = "executeFrom", defaultValue = "", required = false) String executeFrom) throws IOException {
+        this.processClientJob(response, hbaseShellRequest, executeFrom);
+    }
+    @RequestMapping(value = "/hbaseClass", method = RequestMethod.POST)
+    public void runHbaseClass(HttpServletResponse response, @RequestBody HbaseClassRequest hbaseClassRequest,
+                        @RequestParam(value = "executeFrom", defaultValue = "", required = false) String executeFrom) throws IOException {
+        this.processClientJob(response, hbaseClassRequest, executeFrom);
+    }
+    @RequestMapping(value = "/phoenix", method = RequestMethod.POST)
+    public void runPhoenix(HttpServletResponse response, @RequestBody PhoenixRequest phoenixRequest,
+                        @RequestParam(value = "executeFrom", defaultValue = "", required = false) String executeFrom) throws IOException {
+        this.processClientJob(response, phoenixRequest, executeFrom);
+    }
 
     private void processClientJob(HttpServletResponse response, BasicClientRequest clientRequest, String executeFrom) throws IOException {
         logger.info("processClientJob : {}", JsonUtils.marshal(clientRequest));

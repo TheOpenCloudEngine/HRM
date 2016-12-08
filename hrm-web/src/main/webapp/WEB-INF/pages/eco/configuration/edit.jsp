@@ -127,6 +127,30 @@
                     </div>
 
                     <div class="form-group">
+                        <label class="col-md-2 control-label">Hbase Home <span class="color-red">*</span></label>
+
+                        <div class="col-md-6">
+                            <input name="hbaseHome" type="text" class="form-control" value="${ecoConf.hbaseHome}">
+                        </div>
+                    </div>
+
+                    <div class="form-group">
+                        <label class="col-md-2 control-label">Phoenix Home <span class="color-red">*</span></label>
+
+                        <div class="col-md-6">
+                            <input name="phoenixHome" type="text" class="form-control" value="${ecoConf.phoenixHome}">
+                        </div>
+                    </div>
+
+                    <div class="form-group">
+                        <label class="col-md-2 control-label">Java Home <span class="color-red">*</span></label>
+
+                        <div class="col-md-6">
+                            <input name="javaHome" type="text" class="form-control" value="${ecoConf.javaHome}">
+                        </div>
+                    </div>
+
+                    <div class="form-group">
                         <div class="col-md-offset-2 col-md-10">
                             <button id="submitBtn" type="submit" class="btn-u btn-u-primary">Edit
                             </button>

@@ -46,19 +46,20 @@ public class NetworkUtils {
 
     public static String getCountryCode(String ipaddress) {
         try {
-            String url = "http://ip-api.com/json/" + ipaddress;
-
-            HttpClient client = HttpClientBuilder.create().build();
-            HttpGet request = new HttpGet(url);
-
-            // add request header
-            HttpResponse response = client.execute(request);
-
-            HttpEntity entity = response.getEntity();
-            String resultString = EntityUtils.toString(entity);
-
-            Map unmarshal = JsonUtils.unmarshal(resultString);
-            return unmarshal.get("countryCode").toString();
+//            String url = "http://ip-api.com/json/" + ipaddress;
+//
+//            HttpClient client = HttpClientBuilder.create().build();
+//            HttpGet request = new HttpGet(url);
+//
+//            // add request header
+//            HttpResponse response = client.execute(request);
+//
+//            HttpEntity entity = response.getEntity();
+//            String resultString = EntityUtils.toString(entity);
+//
+//            Map unmarshal = JsonUtils.unmarshal(resultString);
+//            return unmarshal.get("countryCode").toString();
+            return "US";
         } catch (Exception ex) {
             //아이피를 못찾을 경우 디폴트 국가
             return "US";

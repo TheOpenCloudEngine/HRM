@@ -228,6 +228,16 @@ public class ClientJobServiceImpl implements ClientJobService {
         if (clientRequest instanceof ShellRequest) {
             return ClientStatus.JOB_TYPE_SHELL;
         }
+        if (clientRequest instanceof HbaseShellRequest) {
+            return ClientStatus.JOB_TYPE_HBASE_SHELL;
+        }
+        if (clientRequest instanceof HbaseClassRequest) {
+            return ClientStatus.JOB_TYPE_HBASE_CLASS;
+        }
+        if (clientRequest instanceof PhoenixRequest) {
+            return ClientStatus.JOB_TYPE_PHOENIX;
+        }
+
         logger.warn("Failed to parse jobType : {}", clientJobId);
         throw new ServiceException("Failed to parse jobType : " + clientJobId);
     }
@@ -253,6 +263,15 @@ public class ClientJobServiceImpl implements ClientJobService {
         }
         if (clientRequest instanceof ShellRequest) {
             clientJob.setShellRequest((ShellRequest) clientRequest);
+        }
+        if (clientRequest instanceof HbaseShellRequest) {
+            clientJob.setHbaseShellRequest((HbaseShellRequest) clientRequest);
+        }
+        if (clientRequest instanceof HbaseClassRequest) {
+            clientJob.setHbaseClassRequest((HbaseClassRequest) clientRequest);
+        }
+        if (clientRequest instanceof PhoenixRequest) {
+            clientJob.setPhoenixRequest((PhoenixRequest) clientRequest);
         }
     }
 

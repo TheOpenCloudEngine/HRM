@@ -57,9 +57,13 @@ public class EcoConfController {
                              @RequestParam(defaultValue = "") String sparkHome,
                              @RequestParam(defaultValue = "") String hdfsHome,
                              @RequestParam(defaultValue = "") String mapreduceHome,
-                             @RequestParam(defaultValue = "") String yarnHome) {
+                             @RequestParam(defaultValue = "") String yarnHome,
+                             @RequestParam(defaultValue = "") String hbaseHome,
+                             @RequestParam(defaultValue = "") String phoenixHome,
+                             @RequestParam(defaultValue = "") String javaHome) {
 
-        ecoConfService.update(hdfsSuperUser, hadoopHome, hiveHome, pigHome, sparkHome, hdfsHome, mapreduceHome, yarnHome);
+        ecoConfService.update(hdfsSuperUser, hadoopHome, hiveHome, pigHome,
+                sparkHome, hdfsHome, mapreduceHome, yarnHome, hbaseHome, phoenixHome, javaHome);
 
         ModelAndView mav = new ModelAndView("/eco/configuration/info");
         EcoConf ecoConf = ecoConfService.select();

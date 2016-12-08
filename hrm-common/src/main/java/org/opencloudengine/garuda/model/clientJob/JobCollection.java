@@ -20,6 +20,9 @@ public class JobCollection extends CouchDAO{
     private JavaRequest javaRequest;
     private PythonRequest pythonRequest;
     private ShellRequest shellRequest;
+    private HbaseShellRequest hbaseShellRequest;
+    private HbaseClassRequest hbaseClassRequest;
+    private PhoenixRequest phoenixRequest;
 
     private Long regDate;
     private Long updDate;
@@ -94,6 +97,30 @@ public class JobCollection extends CouchDAO{
 
     public void setShellRequest(ShellRequest shellRequest) {
         this.shellRequest = shellRequest;
+    }
+
+    public HbaseShellRequest getHbaseShellRequest() {
+        return hbaseShellRequest;
+    }
+
+    public void setHbaseShellRequest(HbaseShellRequest hbaseShellRequest) {
+        this.hbaseShellRequest = hbaseShellRequest;
+    }
+
+    public HbaseClassRequest getHbaseClassRequest() {
+        return hbaseClassRequest;
+    }
+
+    public void setHbaseClassRequest(HbaseClassRequest hbaseClassRequest) {
+        this.hbaseClassRequest = hbaseClassRequest;
+    }
+
+    public PhoenixRequest getPhoenixRequest() {
+        return phoenixRequest;
+    }
+
+    public void setPhoenixRequest(PhoenixRequest phoenixRequest) {
+        this.phoenixRequest = phoenixRequest;
     }
 
     public Long getRegDate() {

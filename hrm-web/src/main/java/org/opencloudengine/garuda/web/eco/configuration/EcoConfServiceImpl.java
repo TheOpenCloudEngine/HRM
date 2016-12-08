@@ -37,7 +37,8 @@ public class EcoConfServiceImpl implements EcoConfService {
 
     @Override
     public void update(String hdfsSuperUser, String hadoopHome, String hiveHome, String pigHome,
-                       String sparkHome, String hdfsHome, String mapreduceHome, String yarnHome) {
+                       String sparkHome, String hdfsHome, String mapreduceHome, String yarnHome,
+                       String hbaseHome,String phoenixHome,String javaHome) {
         EcoConf ecoConf = new EcoConf();
         ecoConf.setHdfsSuperUser(hdfsSuperUser);
         ecoConf.setHadoopHome(hadoopHome);
@@ -47,6 +48,9 @@ public class EcoConfServiceImpl implements EcoConfService {
         ecoConf.setHdfsHome(hdfsHome);
         ecoConf.setMapreduceHome(mapreduceHome);
         ecoConf.setYarnHome(yarnHome);
+        ecoConf.setHbaseHome(hbaseHome);
+        ecoConf.setPhoenixHome(phoenixHome);
+        ecoConf.setJavaHome(javaHome);
         ecoConfRepository.update(ecoConf);
     }
 }

@@ -1,16 +1,16 @@
 /**
  * Copyright (C) 2011 Flamingo Project (http://www.cloudine.io).
- * <p/>
+ * <p>
  * This program is free software: you can redistribute it and/or modify
  * it under the terms of the GNU General Public License as published by
  * the Free Software Foundation, either version 3 of the License, or
  * (at your option) any later version.
- * <p/>
+ * <p>
  * This program is distributed in the hope that it will be useful,
  * but WITHOUT ANY WARRANTY; without even the implied warranty of
  * MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the
  * GNU General Public License for more details.
- * <p/>
+ * <p>
  * You should have received a copy of the GNU General Public License
  * along with this program.  If not, see <http://www.gnu.org/licenses/>.
  */
@@ -97,6 +97,11 @@ public abstract class AbstractTask {
         return properties;
     }
 
+    /**
+     * 값들이 순차 배열되는 옵션을 구성한다.
+     * @param command
+     * @param value
+     */
     public void buildArgs(List<String> command, List<String> value) {
         if (value != null) {
             for (int i = 0; i < value.size(); i++) {
@@ -105,6 +110,12 @@ public abstract class AbstractTask {
         }
     }
 
+    /**
+     * 값들이 콤마로 구분되는 옵션을 구성한다.
+     * @param command
+     * @param option
+     * @param value
+     */
     public void buildCommaSeparatedOptions(List<String> command, String option, List<String> value) {
         if (value != null) {
             command.add(option);
@@ -121,6 +132,12 @@ public abstract class AbstractTask {
         }
     }
 
+    /**
+     * 값들이 스페이스값으로 구분되는 옵션을 구성한다.
+     * @param command
+     * @param option
+     * @param value
+     */
     public void buildSpaceSeparatedOptions(List<String> command, String option, List<String> value) {
         if (value != null) {
             command.add(option);
@@ -137,12 +154,23 @@ public abstract class AbstractTask {
         }
     }
 
+    /**
+     * Args 가 없는 싱글 옵션을 구성한다.
+     * @param command
+     * @param option
+     */
     public void buildSingleOption(List<String> command, String option) {
         if (!StringUtils.isEmpty(option)) {
             command.add(option);
         }
     }
 
+    /**
+     * Args 가 하나인 싱글 옵션을 구성한다.
+     * @param command
+     * @param option
+     * @param value
+     */
     public void buildBasicOption(List<String> command, String option, String value) {
         if (!StringUtils.isEmpty(value)) {
             command.add(option);
@@ -150,6 +178,13 @@ public abstract class AbstractTask {
         }
     }
 
+    /**
+     * Args 가 하나인 싱글 옵션을 구성한다.(디폴트 값 지정)
+     * @param command
+     * @param option
+     * @param value
+     * @param dafultValue
+     */
     public void buildBasicOption(List<String> command, String option, String value, String dafultValue) {
         if (!StringUtils.isEmpty(value)) {
             command.add(option);
@@ -162,6 +197,12 @@ public abstract class AbstractTask {
         }
     }
 
+    /**
+     * 키-벨류 형식의 옵션을 구성한다.
+     * @param command
+     * @param option
+     * @param value
+     */
     public void buildMapToMultipleOption(List<String> command, String option, Map<String, String> value) {
         if (value != null) {
             Set<String> keySet = value.keySet();
@@ -172,6 +213,11 @@ public abstract class AbstractTask {
         }
     }
 
+    /**
+     * 키-벨류 형식의 값을 -D키-벨류 형식의 옵션으로 구성한다.
+     * @param command
+     * @param value
+     */
     public void buildJavaOpts(List<String> command, Map<String, String> value) {
         if (value != null) {
             Set<String> keySet = value.keySet();
@@ -181,12 +227,34 @@ public abstract class AbstractTask {
         }
     }
 
+    /**
+     * 주어진 내용을 파일로 저장하고 파일명을 옵션으로 구성한다.
+     * @param command
+     * @param option
+     * @param value
+     * @param filePath
+     * @throws IOException
+     */
     public void saveToFileOption(List<String> command, String option, String value, String filePath) throws IOException {
         if (!StringUtils.isEmpty(value)) {
             FileCopyUtils.copy(value.getBytes(), new File(filePath));
-            if(!StringUtils.isEmpty(option)){
+            if (!StringUtils.isEmpty(option)) {
                 command.add(option);
             }
+            command.add(filePath);
+        }
+    }
+
+    /**
+     * 주어진 내용을 파일로 저장하고 파일명을 싱글옵션으로 구성한다.
+     * @param command
+     * @param value
+     * @param filePath
+     * @throws IOException
+     */
+    public void saveToFileSingleOption(List<String> command, String value, String filePath) throws IOException {
+        if (!StringUtils.isEmpty(value)) {
+            FileCopyUtils.copy(value.getBytes(), new File(filePath));
             command.add(filePath);
         }
     }
